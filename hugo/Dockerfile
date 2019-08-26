@@ -22,7 +22,7 @@ RUN set -ex \
         && git clone https://github.com/gohugoio/hugo.git \
         && cd hugo \
         && go install \
-        && mv $HOME/go/hugo /usr/local/bin/hugo \
+        && mv $HOME/go/bin/hugo /usr/local/bin/hugo \
         && rm -rf $HOME/go/ $HOME/src/
 
 EXPOSE 1313
