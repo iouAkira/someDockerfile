@@ -1,4 +1,4 @@
-FROM golang:alpine
+FROM alpine
 MAINTAINER AKira <e.akimoto.akira@gmail.com>
 
 ENV LANG C.UTF-8
@@ -8,6 +8,8 @@ RUN set -ex \
         && apk add --no-cache udns ca-certificates py-pygments \
         && apk add py-pygments --virtual .build-deps \
                 git \
+                go \
+                musl-dev \
                 tzdata \
                 iproute2 \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
@@ -20,11 +22,12 @@ RUN set -ex \
         && git clone https://github.com/gohugoio/hugo.git \
         && cd hugo \
         && go install \
-        && rm -rf $HOME/src/hugo/
+        && mv $HOME/go/hugo /usr/local/bin/hugo \
+        && rm -rf $HOME/go/ $HOME/src/
 
 EXPOSE 1313
 
-WORKDIR /hugosite
+WORKDIR /site
 
 ENTRYPOINT ["hugo"]
 
