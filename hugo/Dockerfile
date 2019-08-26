@@ -6,7 +6,7 @@ ENV LANG C.UTF-8
 RUN set -ex \
         && apk update && apk upgrade \
         && apk add --no-cache udns ca-certificates py-pygments \
-        && apk add py-pygments --virtual .build-deps \
+        && apk add --virtual .build-deps \
                 git \
                 go \
                 musl-dev \
