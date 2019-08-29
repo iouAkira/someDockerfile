@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine
 MAINTAINER AKira <e.akimoto.akira@gmail.com>
 
 ENV LANG C.UTF-8
@@ -34,7 +34,7 @@ RUN set -ex \
 
 RUN set -ex \
         && pip3 install --upgrade pip \
-        && pip3 install ehforwarderbot==2.0.0b17  \
+        && pip3 install ehforwarderbot==2.0.0b15  \
         && pip3 install efb-wechat-slave==2.0.0a22 \
         && pip3 install efb-telegram-master==2.0.0b22 \
         && pip3 install python-telegram-bot==10.1.0 --upgrade
