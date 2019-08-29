@@ -34,18 +34,9 @@ RUN set -ex \
 
 RUN set -ex \
         && pip3 install --upgrade pip \
-        && pip3 install ehforwarderbot  \
-        && pip3 install efb-wechat-slave \
-        && pip3 install efb-telegram-master \
-        && pip3 install python-telegram-bot==10.1.0 --upgrade \
-        && git clone https://github.com/catbaron0/efb-voice_recog-middleware \
-        && git clone https://github.com/catbaron0/efb-link_preview-middleware \
-        && git clone https://github.com/catbaron0/efb-msg_blocker-middleware \
-        && cd /efb-voice_recog-middleware \
-        && python3 setup.py install \
-        && cd /efb-link_preview-middleware \
-        && python3 setup.py install \
-        && cd /efb-msg_blocker-middleware \
-        && python3 setup.py install
+        && pip install ehforwarderbot==2.0.0b17  \
+        && pip install efb-wechat-slave==2.0.0a22 \
+        && pip install efb-telegram-master==2.0.0b22 \
+        && pip3 install python-telegram-bot==10.1.0 --upgrade
 
 CMD ["ehforwarderbot"]
