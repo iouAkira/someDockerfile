@@ -10,7 +10,8 @@ RUN set -ex \
 RUN git clone https://github.com/DesertsP/Valine-Admin.git /Valine-Admin \
         && cd /Valine-Admin \
         && npm audit fix \
-        && npm install 
+        && npm install
+COPY ./resend_mail.js /Valine-Admin/resend_mail.js
 
 WORKDIR /Valine-Admin
 
