@@ -17,6 +17,6 @@ RUN crontab /Valine-Admin/crontabList.txt
 
 WORKDIR /Valine-Admin
 
-ENTRYPOINT ["crond"]
+ENTRYPOINT ["crond","&&"]
 
-CMD ["&&","node", "server.js"]
+CMD ["node", "server.js"]
