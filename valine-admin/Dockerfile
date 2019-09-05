@@ -19,5 +19,4 @@ WORKDIR /Valine-Admin
 
 ENTRYPOINT ["crond"]
 
-#请使用command参数覆盖此CMD
 CMD ["node", "server.js"]
