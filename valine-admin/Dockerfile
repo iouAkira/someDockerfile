@@ -19,4 +19,4 @@ WORKDIR /Valine-Admin
 
 ENTRYPOINT ["crond"]
 
-CMD ["node", "server.js"]
+CMD ["&&","node", "server.js"]
