@@ -13,10 +13,8 @@ RUN git clone https://github.com/DesertsP/Valine-Admin.git /Valine-Admin \
         && npm install
 COPY ./ /Valine-Admin/
 
-RUN crontab /Valine-Admin/crontabList.txt
+RUN crontab /Valine-Admin/crontabList.txt 
 
 WORKDIR /Valine-Admin
-
-ENTRYPOINT ["crond","&&"]
 
 CMD ["node", "server.js"]
