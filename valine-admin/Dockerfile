@@ -11,11 +11,13 @@ RUN git clone https://github.com/DesertsP/Valine-Admin.git /Valine-Admin \
         && cd /Valine-Admin \
         && npm audit fix \
         && npm install
-COPY ./send-notification.js /Valine-Admin/send-notification.js
+COPY ./ /Valine-Admin/
+
+RUN crontab crontabList.txt
 
 WORKDIR /Valine-Admin
 
-ENTRYPOINT ["node"]
+ENTRYPOINT ["crond"]
 
 #请使用command参数覆盖此CMD
-CMD ["server.js"]
+CMD ["node", "server.js"]

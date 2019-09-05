@@ -1,0 +1,2 @@
+## 每5分钟执行一次邮件发送任务
+*/5 * * * * node /Valine-Admin/send-notification.js >> /Valine-Admin/send.log 2>&1
