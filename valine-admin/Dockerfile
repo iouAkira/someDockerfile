@@ -7,11 +7,11 @@ RUN set -ex \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone
 
-RUN git clone https://github.com/DesertsP/Valine-Admin.git /Valine-Admin \
+RUN git clone https://github.com/iouAkira/Valine-Admin.git /Valine-Admin \
         && cd /Valine-Admin \
         && npm audit fix \
         && npm install
-COPY ./ /Valine-Admin/
+COPY ./crontabList.txt  /Valine-Admin/crontabList.txt 
 
 RUN crontab /Valine-Admin/crontabList.txt 
 
