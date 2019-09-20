@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine
 MAINTAINER Akyakya <e.akimoto.akira@gmail.com>
 
 ENV LANG C.UTF-8
@@ -11,7 +11,8 @@ RUN set -ex \
                 libmagic \
                 python3 \
                 py3-numpy \
-                py3-pillow
+                py3-pillow \
+                gcc
 
 RUN set -ex \
         && apk add --update --no-cache --virtual .fetch-deps \
