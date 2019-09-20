@@ -11,8 +11,7 @@ RUN set -ex \
                 libmagic \
                 python3 \
                 py3-numpy \
-                py3-pillow \
-                gcc
+                py3-pillow
 
 RUN set -ex \
         && apk add --update --no-cache --virtual .fetch-deps \
@@ -26,7 +25,15 @@ RUN set -ex \
         && rm EFB-latest.tar.gz \
         && apk del .fetch-deps \
         && pip3 install --upgrade pip \
-        && pip3 install -r /opt/ehForwarderBot/requirements.txt \
+        && pip3 install moviepy \
+        && pip3 install peewee \
+        && pip3 install pydub \
+        && pip3 install requests \
+        && pip3 install python-telegram-bot==10.1.0 \
+        && pip3 install xmltodict \
+        && pip3 install Pillow \
+        && pip3 install python_magic \
+        && pip3 install itchat>=1.2.24 \
         && rm -rf /root/.cache
 
 WORKDIR /opt/ehForwarderBot
