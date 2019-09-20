@@ -25,6 +25,7 @@ RUN set -ex \
         && tar -xzf EFB-latest.tar.gz --strip-components=1 -C /opt/ehForwarderBot \
         && rm EFB-latest.tar.gz \
         && apk del .fetch-deps \
+        && pip3 install --upgrade pip \
         && pip3 install -r /opt/ehForwarderBot/requirements.txt \
         && rm -rf /root/.cache
 
