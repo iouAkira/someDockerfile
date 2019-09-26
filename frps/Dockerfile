@@ -2,7 +2,7 @@ FROM alpine
 MAINTAINER Akyakya <e.akimoto.akira@gmail.com>
 ENV LANG C.UTF-8
 
-RUN apk add --update --no-cache tzdata
+RUN apk add --update --no-cache curl tzdata
 ENV TZ=Asia/Shanghai
 
 ENV FRP_VERSION 0.29.0
