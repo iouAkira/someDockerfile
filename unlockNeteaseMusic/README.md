@@ -4,7 +4,7 @@
 `docker-compose.yml`文件参考：
 ```
 unblockneteasemusic:
-  image: akyakya/unblockneteasemusic
+  image: akyakya/unlockneteasemusic-ss
   container_name: unem
   restart: always
   ports:
