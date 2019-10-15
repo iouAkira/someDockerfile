@@ -19,3 +19,4 @@ unblockneteasemusic:
       nohup ./glider -listen ss://AES-256-CFB:$SS_PWD@:8082 -forward http://0.0.0.0:8080 -verbose >> glider.output.log 2>&1 &
       node app.js
 ```
+> glider 还可以转`SSR`、`VMess`等。具体可以看[Glider Usage](https://github.com/nadoo/glider#usage)，然后修改`nohup ./glider -listen ` 后面的参数就行。
