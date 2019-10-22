@@ -53,5 +53,4 @@ RUN set -ex \
         && rm -rf /tmp/*
 RUN npm i -g shadowsocks-manager --unsafe-perm
 ENTRYPOINT ["ssmgr","-c"]
-#创建启动容器时候如果配置文件名字不同，请使用command参数覆盖此CMD
 CMD ["/root/.ssmgr/shad.yml","-r"]
