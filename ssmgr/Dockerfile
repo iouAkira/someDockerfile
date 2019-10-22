@@ -51,6 +51,8 @@ RUN set -ex \
         && apk add --no-cache --virtual .run-deps $runDeps \
         && apk del .build-deps \
         && rm -rf /tmp/*
-RUN npm i -g shadowsocks-manager --unsafe-perm
+RUN npm i -g shadowsocks-manager@0.33.32 --unsafe-perm
+
 ENTRYPOINT ["ssmgr","-c"]
+
 CMD ["/root/.ssmgr/shad.yml","-r"]
