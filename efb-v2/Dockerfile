@@ -29,6 +29,17 @@ RUN set -ex \
                 zlib-dev \
                 tzdata \
                 iproute2 \
+                cairo-dev \
+                cairo \
+                cairo-tools \
+                jpeg-dev \
+                zlib-dev \
+                freetype-dev \
+                lcms2-dev \
+                openjpeg-dev \ 
+                tiff-dev \
+                tk-dev \
+                tcl-dev \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone
 
