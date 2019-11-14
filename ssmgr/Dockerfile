@@ -51,7 +51,7 @@ RUN set -ex \
         && apk add --no-cache --virtual .run-deps $runDeps \
         && apk del .build-deps \
         && rm -rf /tmp/*
-RUN npm i -g shadowsocks-manager@0.33.39 --unsafe-perm
+RUN npm i -g shadowsocks-manager@0.33.43 --unsafe-perm
 
 ENTRYPOINT ["ssmgr","-c"]
 
