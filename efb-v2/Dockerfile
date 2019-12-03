@@ -45,9 +45,9 @@ RUN set -ex \
 
 RUN set -ex \
         && pip3 install --upgrade pip \
-        && pip3 install ehforwarderbot==2.0.0b21 \
-        && pip3 install efb-telegram-master==2.0.0b28 \
-        && pip3 install efb-wechat-slave==2.0.0a31 \
+        && pip3 install ehforwarderbot==2.0.0b22 \
+        && pip3 install efb-telegram-master==2.0.0b33 \
+        && pip3 install efb-wechat-slave==2.0.0a34 \
         && pip3 install efb-qq-slave==2.0.0a12
 
 CMD ["ehforwarderbot"]
