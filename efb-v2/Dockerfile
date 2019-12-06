@@ -33,7 +33,6 @@ RUN set -ex \
                 cairo \
                 cairo-tools \
                 jpeg-dev \
-                zlib-dev \
                 freetype-dev \
                 lcms2-dev \
                 openjpeg-dev \ 
@@ -50,6 +49,6 @@ RUN set -ex \
         && pip3 install efb-wechat-slave==2.0.0a34 \
         && pip3 install efb-qq-slave==2.0.0a12 \
         && sed -i 's/channel_emoji = "💬"/channel_emoji = "𝙒𝙚𝙘𝙝𝙖𝙩"/g' /usr/lib/python3.7/site-packages/efb_wechat_slave/__init__.py \
-        && sed -i "s/Emoji.get_source_emoji(self.chat_type)/'｜'/g" /usr/lib/python3.7/site-packages/efb_telegram_master/chat.py
+        && sed -i "s/Emoji.get_source_emoji(self.chat_type)/' |'/g" /usr/lib/python3.7/site-packages/efb_telegram_master/chat.py
 
 CMD ["ehforwarderbot"]
