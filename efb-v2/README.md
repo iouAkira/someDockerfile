@@ -73,10 +73,10 @@ flags:
     animated_stickers: true #启用对动态贴纸的实验支持。注意：您可能需要安装二进制依赖 ``libcairo`` 才能启用此功能。
     send_to_last_chat: true #在未绑定的会话中快速回复。enabled：启用此功能并关闭警告。warn：启用该功能，并在自动发送至不同收件人时发出警告。disabled：禁用此功能。
 ```
-- 目录文件配置好之后在 `ews-v2`目录执行
- `docker-compose up -d` 启动；
- `docker-compose logs` 打印日志扫码登录；
- `docker-compose pull` 更新镜像
- `docker-compose stop` 停止容器
- `docker-compose restart` 重启容器
- `docker-compose down` 停止并删除容器	
+- 目录文件配置好之后在 `ews-v2`目录执行  
+ `docker-compose up -d` 启动；  
+ `docker-compose logs` 打印日志扫码登录；  
+ `docker-compose pull` 更新镜像；  
+ `docker-compose stop` 停止容器；  
+ `docker-compose restart` 重启容器；  
+ `docker-compose down` 停止并删除容器；  
