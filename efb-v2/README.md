@@ -5,7 +5,7 @@
 - `docker-compose` 安装
 ```
 sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-# 添加权限
+#添加权限
 sudo chmod +x /usr/local/bin/docker-compose
 ```
 ### 创建一个目录`ews-v2`用于存放备份配置等数据
