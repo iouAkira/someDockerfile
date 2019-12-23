@@ -2,13 +2,13 @@
 ![Automated build](https://img.shields.io/docker/cloud/automated/akyakya/efb-v2?style=flat-square)![Build Status](https://img.shields.io/docker/cloud/build/akyakya/efb-v2?label=&style=flat-square)   ![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/akyakya/efb-v2?&style=flat-square)   ![Docker Pulls](https://img.shields.io/docker/pulls/akyakya/efb-v2?&style=flat-square)
 ### Usage
 > 推荐使用`docker-compose`所以这里只介绍`docker-compose`使用方式
+
 - `docker-compose` 安装
 ```
 sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-#添加权限
 sudo chmod +x /usr/local/bin/docker-compose
 ```
-### 创建一个目录`ews-v2`用于存放备份配置等数据
+### 创建一个目录`ews-v2`用于存放备份配置等数据，迁移重装的时候只需要备份整个ews-v2目录即可
 需要新建的目录文件结构参考如下:
 ```
 ews-v2
