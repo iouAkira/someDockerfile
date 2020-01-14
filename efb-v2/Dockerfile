@@ -20,7 +20,6 @@ RUN set -ex \
                 openblas \
                 py3-numpy \
                 py3-pillow \
-                py3-yaml \
                 py3-requests \
                 py3-cryptography \
                 py3-decorator \
