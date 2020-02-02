@@ -48,6 +48,6 @@ RUN set -ex \
         && pip3 install efb-wechat-slave==2.0.0 \
         && pip3 install efb-qq-slave==2.0.0b2 \
         && sed -i 's/channel_emoji = "💬"/channel_emoji = "𝙒𝙚𝙘𝙝𝙖𝙩"/g' /usr/lib/python3.8/site-packages/efb_wechat_slave/__init__.py \
-        && sed -i "s/{self.chat_type_emoji}/' |'/g" /usr/lib/python3.8/site-packages/efb_telegram_master/chat.py
+        && sed -i "s/{self.chat_type_emoji}/丨/g" /usr/lib/python3.8/site-packages/efb_telegram_master/chat.py
 
 CMD ["ehforwarderbot"]
