@@ -43,11 +43,11 @@ RUN set -ex \
 
 RUN set -ex \
         && pip3 install --upgrade pip \
-        && pip3 install ehforwarderbot==2.0.0b28 \
-        && pip3 install efb-telegram-master==2.0.0b46 \
-        && pip3 install efb-wechat-slave==2.0.0a43 \
+        && pip3 install ehforwarderbot==2.0.0 \
+        && pip3 install efb-telegram-master==2.0.0 \
+        && pip3 install efb-wechat-slave==2.0.0 \
         && pip3 install efb-qq-slave==2.0.0b2 \
         && sed -i 's/channel_emoji = "💬"/channel_emoji = "𝙒𝙚𝙘𝙝𝙖𝙩"/g' /usr/lib/python3.8/site-packages/efb_wechat_slave/__init__.py \
-        && sed -i "s/Emoji.get_source_emoji(self.chat_type)/' |'/g" /usr/lib/python3.8/site-packages/efb_telegram_master/chat.py
+        && sed -i "s/{self.chat_type_emoji}/' |'/g" /usr/lib/python3.8/site-packages/efb_telegram_master/chat.py
 
 CMD ["ehforwarderbot"]
