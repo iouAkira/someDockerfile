@@ -49,10 +49,11 @@ RUN set -ex \
         && pip3 install efb-qq-slave==2.0.0b2 \
         && sed -i 's/channel_emoji = "💬"/channel_emoji = "𝙒𝙚𝙘𝙝𝙖𝙩"/g' /usr/lib/python3.8/site-packages/efb_wechat_slave/__init__.py \
         && sed -i "s/{self.chat_type_emoji}/丨/g" /usr/lib/python3.8/site-packages/efb_telegram_master/chat.py \
-        && git clone https://github.com/catbaron0/efb-mp-instanceview-middleware \
+        && cd ~ \
+        && git clone https://github.com/catbaron0/efb-mp-instanceview-middleware.git \
         && git clone https://github.com/catbaron0/efb-link_preview-middleware.git \
-        && python3 efb-mp-instanceview-middleware/setup.py install \
-        && python3 efb-link_preview-middleware/setup.py install \
-        && rm -rf efb-mp-instanceview-middleware/ efb-link_preview-middleware/
+        && cd ~/efb-mp-instanceview-middleware/ && python3 setup.py install \
+        && cd ~/efb-link_preview-middleware/ && python3 setup.py install \
+        && rm -rf ~/efb-mp-instanceview-middleware/ ~/efb-link_preview-middleware/
 
 CMD ["ehforwarderbot"]
