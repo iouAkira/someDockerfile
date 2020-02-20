@@ -36,7 +36,8 @@ master_channel: blueset.telegram
 slave_channels:
   - blueset.wechat
 middlewares:
- # - filter.FilterMiddleware  
+ # - catbaron.link_preview    #根据自己的情况决定是否启用
+ # - catbaron.mp_instanceview #根据自己的情况决定是否启用
 ```
 - `ews-v2/blueset.wechat/config.yaml` 参考内容如下：
 ```yaml
