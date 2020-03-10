@@ -1,5 +1,5 @@
 ### Docker image status:
-![Automated build](https://img.shields.io/docker/cloud/automated/akyakya/frps?style=flat-square)![Build Status](https://img.shields.io/docker/cloud/build/akyakya/frps?label=&style=flat-square)   ![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/akyakya/frps?&style=flat-square)   ![Docker Pulls](https://img.shields.io/docker/pulls/akyakya/frps?&style=flat-square)
+![Automated build](https://img.shields.io/docker/cloud/automated/akyakya/frp?style=flat-square)![Build Status](https://img.shields.io/docker/cloud/build/akyakya/frp?label=&style=flat-square)   ![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/akyakya/frp?&style=flat-square)   ![Docker Pulls](https://img.shields.io/docker/pulls/akyakya/frp?&style=flat-square)
 ### Usage
 > 推荐使用`docker-compose`所以这里只介绍`docker-compose`使用方式
 
@@ -8,15 +8,15 @@
 sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 ```
-### 创建一个目录`frps`用于存放备份配置等数据，迁移重装的时候只需要备份整个frps目录即可
+### 创建一个目录`frp`用于存放备份配置等数据，迁移重装的时候只需要备份整个`frp`目录即可
 需要新建的目录文件结构参考如下:
 ```
-frps
+frp
 ├── docker-compose.yml
 ├── frpc.ini
 └── frps.ini
 ```
-- `frps/docker-compose.yml` 做服务端参考内容如下：
+- `frp/docker-compose.yml` 做服务端参考内容如下：
 ```yaml
 frp:
   image: akyakya/frp
@@ -30,10 +30,10 @@ frp:
     - 60080:60080
     - 60443:60443
   volumes:
-    - ./frps.ini:/frps/frps.ini
-  command: ["-c", "/frps/frps.ini"]
+    - ./frps.ini:/frp/frps.ini
+  command: ["-c", "/frp/frps.ini"]
 ```
-- `frps/docker-compose.yml` 做客户端参考内容如下：
+- `frp/docker-compose.yml` 做客户端参考内容如下：
 ```yaml
 frp:
   image: akyakya/frp
@@ -47,10 +47,10 @@ frp:
     - 60080:60080
     - 60443:60443
   volumes:
-    - ./frpc.ini:/frps/frpc.ini
-  command: ["-c", "/frps/frpc.ini"]
+    - ./frpc.ini:/frp/frpc.ini
+  command: ["-c", "/frp/frpc.ini"]
 ```
-- `frps/frps.ini` 参考内容如下：
+- `frp/frps.ini` 参考内容如下：
 ```ini
 # frps.ini
 [common]
@@ -66,15 +66,11 @@ dashboard_pwd = password
 #秘钥,客户端与服务端链接认证
 token = token123
 
-[lede.frp]
+[x.frp]
 type = http
-custom_domains = lede.frp.akyakya.com
-
-[nas.frp]
-type = http
-custom_domains = nas.frp.akyakya.com
+custom_domains = x.frp.ayaya.com
 ```
-- `frps/frpc.ini` 参考内容如下：
+- `frp/frpc.ini` 参考内容如下：
 ```ini
 [common]
 #VPS服务器ip  
@@ -114,7 +110,7 @@ local_port = 80
 custom_domains = x.frp.ayaya.com
 ```
 
-- 目录文件配置好之后在 `frps`目录执行  
+- 目录文件配置好之后在 `frp`目录执行  
  `docker-compose up -d` 启动；  
  `docker-compose logs` 打印日志扫码登录；  
  `docker-compose pull` 更新镜像；  
