@@ -112,7 +112,7 @@ custom_domains = x.frp.ayaya.com
 
 - 目录文件配置好之后在 `frp`目录执行  
  `docker-compose up -d` 启动；  
- `docker-compose logs` 打印日志扫码登录；  
+ `docker-compose logs` 查看打印日志；  
  `docker-compose pull` 更新镜像；  
  `docker-compose stop` 停止容器；  
  `docker-compose restart` 重启容器；  
