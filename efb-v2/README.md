@@ -22,22 +22,22 @@ ews-v2
 - `ews-v2/docker-compose.yml` 参考内容如下：
 ```yaml
 ews_v2:
-  image: akyakya/efb-v2
-  container_name: ews-v2
-  restart: always
-  volumes:
-    - .:/root/.ehforwarderbot/profiles/default/
-    - /etc/localtime:/etc/localtime:ro
-    - /etc/timezone:/etc/timezone:ro
+    image: akyakya/efb-v2
+    container_name: ews-v2
+    restart: always
+    volumes:
+        - .:/root/.ehforwarderbot/profiles/default/
+        - /etc/localtime:/etc/localtime:ro
+        - /etc/timezone:/etc/timezone:ro
 ```
 - `ews-v2/config.yaml` 参考内容如下：
 ```yaml
 master_channel: blueset.telegram
 slave_channels:
-  - blueset.wechat
+    - blueset.wechat
 middlewares:
- # - catbaron.link_preview    #根据自己的情况决定是否启用[使用参考]
- # - catbaron.mp_instanceview #根据自己的情况决定是否启用[使用参考](https://github.com/catbaron0/efb-mp-instanceview-middleware#enable)
+    #- catbaron.link_preview    #根据自己的情况决定是否启用[使用参考]
+    #- catbaron.mp_instanceview #根据自己的情况决定是否启用[使用参考](https://github.com/catbaron0/efb-mp-instanceview-middleware#enable)
 ```
 - `ews-v2/blueset.wechat/config.yaml` 参考内容如下：
 ```yaml
@@ -60,7 +60,7 @@ flags:
 ```yaml
 token: "1111111:AAGFhy874QdsfdsfdsBPEomYgeGJUE"#替换为自己的bot Token
 admins:
- - 2132132312 #替换为自己的Telegram UID 
+    - 2132132312 #替换为自己的Telegram UID 
 flags:
     chats_per_page: 20 #选择/ chat和/ link命令时显示的聊天次数。过大的值可能导致这些命令的故障
     network_error_prompt_interval: 100 #每收到n个错误后再通知用户有关网络错误的信息。 设置为0可禁用它
