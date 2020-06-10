@@ -1,7 +1,7 @@
 FROM node:12-alpine
 MAINTAINER Akira <e.akimoto.akira@gmail.com>
 
-ENV VERSION 0.35.15
+ENV VERSION 0.36.13
 
 RUN set -ex \
         && apk update && apk upgrade\
