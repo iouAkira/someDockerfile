@@ -69,8 +69,7 @@ RUN set -ex \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "user_allow_other" >> /etc/fuse.conf
 
-RUN set -ex apk del gcc musl-dev libffi-dev openssl-dev \
-        && touch /root/.config/rclone/rclone.conf
+RUN set -ex apk del gcc musl-dev libffi-dev openssl-dev
 
 COPY --from=rclone /usr/src/rclone/rclone /usr/local/bin/rclone
 COPY --from=gclone /usr/bin/gclone /usr/local/bin/gclone
