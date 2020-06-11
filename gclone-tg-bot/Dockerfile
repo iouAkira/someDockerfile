@@ -1,4 +1,4 @@
-FROM alpine AS builder
+FROM alpine AS rclone
 MAINTAINER AKira <e.akimoto.akira@gmail.com>
 
 RUN set -ex \
@@ -24,8 +24,38 @@ WORKDIR /usr/src/rclone/
 
 RUN \
   CGO_ENABLED=0 \
-  make
+  make \
+  && apk del .build-deps
+
 RUN ./rclone version
+
+
+FROM golang:alpine AS gclone
+ENV CGO_ENABLED=0
+ENV GO111MODULE=on
+
+RUN set -ex \
+        && apk update && apk upgrade \
+        && apk add --no-cache udns ca-certificates py-pygments \
+        && apk add --virtual .build-deps \
+                git \
+                go \
+                gcc \
+                g++ \
+                make \
+                libffi-dev \
+                openssl-dev \
+                libtool \
+                musl-dev
+RUN set -ex \
+        && mkdir -p /usr/src \
+        && cd /usr/src \
+        && git clone https://github.com/donwa/gclone.git \
+        && cd gclone \
+        && LDFLAGS="-s -w" \
+        && go build -ldflags "$LDFLAGS" -v -o /usr/bin/gclone \
+        && upx --lzma /usr/bin/gclone \
+        && apk del .build-deps
 
 
 FROM alpine:latest
@@ -49,7 +79,9 @@ RUN set -ex \
 
 RUN set -ex apk del gcc musl-dev libffi-dev openssl-dev
 
-COPY --from=builder /usr/src/rclone/rclone /usr/local/bin/
+COPY --from=rclone /usr/src/rclone/rclone /usr/local/bin/rclone
+COPY --from=gclone /usr/bin/gclone /usr/local/bin/gclone
+
 COPY gclone_telegram_bot.py /usr/bot/
 
 ENTRYPOINT ["python3","/usr/bot/gclone_telegram_bot.py"]
