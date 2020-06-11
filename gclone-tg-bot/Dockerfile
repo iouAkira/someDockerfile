@@ -1,10 +1,11 @@
-FROM alpine AS rclone
+FROM alpine:latest AS rclone
 MAINTAINER AKira <e.akimoto.akira@gmail.com>
 
 RUN set -ex \
-        && apk update && apk upgrade \
-        && apk add --no-cache udns ca-certificates py-pygments \
-        && apk add --virtual .build-deps \
+        && apk update \
+        && apk upgrade \
+        && apk add --no-cache \
+                --virtual .build-deps \
                 git \
                 go \
                 gcc \
@@ -13,45 +14,36 @@ RUN set -ex \
                 libffi-dev \
                 openssl-dev \
                 libtool \
-                musl-dev
-
-RUN set -ex \
-        && mkdir -p /usr/src \
-        && cd /usr/src \
-        && git clone https://github.com/rclone/rclone.git
+                musl-dev \
+        && git clone https://github.com/rclone/rclone.git /usr/src/rclone 
 
 WORKDIR /usr/src/rclone/
 
-RUN \
-  CGO_ENABLED=0 \
-  make \
-  && apk del .build-deps
+RUN set -ex \
+        && CGO_ENABLED=0 \
+        && make \
+        && apk del .build-deps
 
 RUN ./rclone version
 
 
-FROM golang:alpine AS gclone
+FROM alpine:latest AS gclone
 ENV CGO_ENABLED=0
 ENV GO111MODULE=on
 
 RUN set -ex \
-        && apk update && apk upgrade \
-        && apk add --no-cache udns ca-certificates py-pygments \
-        && apk add --virtual .build-deps \
+        && apk update \
+        && apk upgrade \
+        && apk add --no-cache \
+                --virtual .build-deps \
                 git \
                 go \
-                gcc \
-                g++ \
-                make \
-                libffi-dev \
-                openssl-dev \
-                libtool \
-                musl-dev
+                upx \
+        && git clone https://github.com/donwa/gclone.git /usr/src/gclone
+
+WORKDIR /usr/src/gclone/
+
 RUN set -ex \
-        && mkdir -p /usr/src \
-        && cd /usr/src \
-        && git clone https://github.com/donwa/gclone.git \
-        && cd gclone \
         && LDFLAGS="-s -w" \
         && go build -ldflags "$LDFLAGS" -v -o /usr/bin/gclone \
         && upx --lzma /usr/bin/gclone \
