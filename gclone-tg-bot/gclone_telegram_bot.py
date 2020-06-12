@@ -25,7 +25,7 @@ def start(update, context):
     from_user_id = update.message.from_user.id
     if admin_id == str(from_user_id):
         context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text='%s\n%s\n%s\n' % ('限制自己使用的Google Drive 转存机器人',
+                                 text='%s\n%s\n%s\n%s' % ('限制自己使用的Google Drive 转存机器人',
                                                         '/start 开始',
                                                         '/copy 转存Google drive文件。参考：/copy 要复制的文件夹ID 自己盘ID /绝对路径目录/',
                                                         '/bash 执行执行命令 /bash完整的命令就行。参考：/bash ls -l'))
@@ -64,7 +64,7 @@ def bash(update, context):
     if admin_id == str(from_user_id):
         commands = update.message.text.split()
         commands.remove('/bash')
-        if len(commands) < 1:
+        if len(commands) > 1:
             command_list = ['ls', 'rclone', 'gclone', 'cat', 'history']
             if commands[0] in command_list:
                 rsl = subprocess.Popen(' '.join(commands), shell=True, stdout=subprocess.PIPE,
