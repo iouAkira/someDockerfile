@@ -25,8 +25,10 @@ def start(update, context):
     from_user_id = update.message.from_user.id
     if admin_id == str(from_user_id):
         context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text='%s\n%s\n%s' % ('限制自己使用的Google Drive 转存机器人', '/start_round 开始',
-                                                      '/copy 转存Google drive文件，例如:/copy 共享的文件夹ID 自己文件TeamDrive/xxx/xxx'))
+                                 text='%s\n%s\n%s\n' % ('限制自己使用的Google Drive 转存机器人',
+                                                        '/start 开始',
+                                                        '/copy 转存Google drive文件。参考：/copy 要复制的文件夹ID 自己盘ID /绝对路径目录/',
+                                                        '/bash 执行执行命令 /bash完整的命令就行。参考：/bash ls -l'))
     else:
         update.message.reply_text(text='此为私人使用bot,不能执行您的指令！')
 
@@ -36,15 +38,21 @@ def copy(update, context):
     from_user_id = update.message.from_user.id
 
     if admin_id == str(from_user_id):
-        print(update.message.text)
-        rsl = subprocess.Popen(['ping', 'www.baidu.com'], shell=True, stdout=subprocess.PIPE,
-                               universal_newlines=True)
+        commands = update.message.text.split()
+        commands.remove('/copy')
+        if len(commands) == 3:
+            command = 'gclone copy gc:{%s} gc:{%s}%s --drive-server-side-across-configs -v' % (
+                commands[0], commands[1], commands[2])
+            rsl = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
+                                   universal_newlines=True)
 
-        while True:
-            next_line = rsl.stdout.readline()
-            update.message.reply_text(text=str(next_line.strip()))
-            if next_line == '' and rsl.poll() is not None:
-                break
+            while True:
+                next_line = rsl.stdout.readline()
+                update.message.reply_text(text=str(next_line.strip()))
+                if next_line == '' and rsl.poll() is not None:
+                    break
+        else:
+            update.message.reply_text(text='copy指令格式错误，请重新发送！\n 参考：/copy 要复制的文件夹ID 自己盘ID /绝对路径目录/')
     else:
         update.message.reply_text(text='此为私人使用bot,不能执行您的指令！')
 
@@ -56,15 +64,21 @@ def bash(update, context):
     if admin_id == str(from_user_id):
         commands = update.message.text.split()
         commands.remove('/bash')
-        print(commands)
-        rsl = subprocess.Popen(' '.join(commands), shell=True, stdout=subprocess.PIPE,
-                               universal_newlines=True)
+        if len(commands) < 1:
+            command_list = ['ls', 'rclone', 'gclone', 'cat', 'history']
+            if commands[0] in command_list:
+                rsl = subprocess.Popen(' '.join(commands), shell=True, stdout=subprocess.PIPE,
+                                       universal_newlines=True)
 
-        while True:
-            next_line = rsl.stdout.readline()
-            update.message.reply_text(text=str(next_line.strip()))
-            if next_line == '' and rsl.poll() is not None:
-                break
+                while True:
+                    next_line = rsl.stdout.readline()
+                    update.message.reply_text(text=str(next_line.strip()))
+                    if next_line == '' and rsl.poll() is not None:
+                        break
+            else:
+                update.message.reply_text(text='bot 暂时不支持执行%s指令' % (commands[0]))
+        else:
+            update.message.reply_text(text='bash 指令格式错误，请重新发送！\n 参考：/bash ls -l')
     else:
         update.message.reply_text(text='此为私人使用bot,不能执行您的指令！')
 
