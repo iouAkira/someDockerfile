@@ -9,14 +9,14 @@ RUN set -ex \
         && echo "Asia/Shanghai" > /etc/timezone
 
 RUN set -ex \
-        && git clone https://github.com/iwestlin/gd-utils /gd-utils \
-        && cd /gd-utils \
+        && git clone https://github.com/iwestlin/gd-utils /root/gd-utils \
+        && cd /root/gd-utils \
         && npm audit fix \
         && npm install \
         && apk del .build-deps
 
 EXPOSE 23333
 
-WORKDIR /gd-utils
+WORKDIR /root/gd-utils
 
 CMD ["node", "server.js"]
