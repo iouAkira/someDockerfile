@@ -17,6 +17,8 @@ RUN set -ex \
 
 EXPOSE 23333
 
+VOLUME ["/root/gd-utils/sa"]
+
 WORKDIR /root/gd-utils
 
 CMD ["node", "server.js"]
