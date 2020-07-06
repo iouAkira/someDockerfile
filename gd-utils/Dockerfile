@@ -1,6 +1,8 @@
 FROM alpine
 MAINTAINER Akira <e.akimoto.akira@gmail.com>
 
+ENV BUILD_VERSION 0.2
+
 RUN set -ex \
         && apk update \
         && apk add --no-cache nodejs npm \
@@ -9,6 +11,7 @@ RUN set -ex \
         && echo "Asia/Shanghai" > /etc/timezone
 
 RUN set -ex \
+        && echo ${BUILD_VERSION} \
         && git clone https://github.com/iwestlin/gd-utils /root/gd-utils \
         && cd /root/gd-utils \
         && npm audit fix \
