@@ -10,7 +10,6 @@ RUN set -ex \
                 ca-certificates \
                 ffmpeg \
                 libmagic \
-                python3 \
                 tiff \
                 libwebp \
                 freetype \
@@ -21,6 +20,8 @@ RUN set -ex \
                 py3-numpy \
                 py3-pillow \
                 py3-requests \
+                python3-dev \
+                py3-pip \
                 py3-cryptography \
                 py3-decorator \
                 git \
