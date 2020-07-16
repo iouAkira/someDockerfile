@@ -1,7 +1,7 @@
 FROM alpine
 MAINTAINER Akira <e.akimoto.akira@gmail.com>
 
-ENV BUILD_VERSION 0.2
+ENV BUILD_VERSION 0.2.1
 
 RUN set -ex \
         && apk update \
@@ -14,8 +14,7 @@ RUN set -ex \
         && echo ${BUILD_VERSION} \
         && git clone https://github.com/iwestlin/gd-utils /root/gd-utils \
         && cd /root/gd-utils \
-        && npm audit fix \
-        && npm install \
+        && npm i \
         && apk del .build-deps
 
 EXPOSE 23333
