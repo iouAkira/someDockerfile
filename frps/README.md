@@ -1,5 +1,7 @@
 ### Docker image status:
-![Automated build](https://img.shields.io/docker/cloud/automated/akyakya/frp?style=flat-square)![Build Status](https://img.shields.io/docker/cloud/build/akyakya/frp?label=&style=flat-square)   ![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/akyakya/frp?&style=flat-square)   ![Docker Pulls](https://img.shields.io/docker/pulls/akyakya/frp?&style=flat-square)
+![Automated build](https://img.shields.io/docker/cloud/build/akyakya/frp?label=&style=flat-square) 
+![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/akyakya/frp?&style=flat-square) 
+![Docker Pulls](https://img.shields.io/docker/pulls/akyakya/frp?&style=flat-square)
 ### Usage
 > 推荐使用`docker-compose`所以这里只介绍`docker-compose`使用方式
 
