@@ -1,11 +1,10 @@
 FROM golang:latest as builder
 MAINTAINER AKira <e.akimoto.akira@gmail.com>
 
-RUN go get -u v2ray.com/core/...
-RUN mkdir -p /usr/bin/v2ray/
-RUN CGO_ENABLED=0 go build -o /usr/bin/v2ray/v2ray v2ray.com/core/main
-RUN CGO_ENABLED=0 go build -o /usr/bin/v2ray/v2ctl v2ray.com/core/infra/control/main
-RUN cp -r ${GOPATH}/src/v2ray.com/core/release/config/* /usr/bin/v2ray/
+RUN apk update && apk add --no-cache git bash wget
+WORKDIR /go/src/v2ray.com/core
+RUN git clone --progress https://github.com/v2fly/v2ray-core.git . && \
+    bash ./release/user-package.sh nosource noconf codename=$(git describe --tags) buildname=docker-fly abpathtgz=/tmp/v2ray.tgz
 
 
 FROM alpine
@@ -14,17 +13,15 @@ MAINTAINER AKira <e.akimoto.akira@gmail.com>
 ENV LANG C.UTF-8
 RUN set -ex \
         && apk update && apk upgrade \
-        && apk add --no-cache udns ca-certificates tzdata
+        && apk add --no-cache udns ca-certificates tzdata\
+        && mkdir -p /usr/bin/v2ray && \
 ENV TZ=Asia/Shanghai
 
-RUN rm -rf /var/cache/apk/*
+COPY --from=builder /tmp/v2ray.tgz /tmp
+RUN set -ex \
+        && tar xvfz /tmp/v2ray.tgz -C /usr/bin/v2ray \
+        && rm -rf /tmp/v2ray.tgz
 
-RUN mkdir /usr/bin/v2ray/
-RUN mkdir /etc/v2ray/
-RUN mkdir /var/log/v2ray/
+ENV PATH /usr/bin/v2ray:$PATH
 
-COPY --from=builder /usr/bin/v2ray  /usr/bin/v2ray
-
-ENV PATH /usr/bin/v2ray/:$PATH
-
-CMD ["/usr/bin/v2ray/v2ray", "-config=/etc/v2ray/config.json"]
+CMD ["v2ray", "-config=/etc/v2ray/config.json"]
