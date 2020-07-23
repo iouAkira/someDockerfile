@@ -14,4 +14,4 @@ RUN curl -L -o frp.tar.gz https://github.com/fatedier/frp/releases/download/v${F
 
 WORKDIR /frp
 
-CMD ["./frps","-c","/frps/frps.ini"]
+CMD ["./frps","-c","/frp/frps.ini"]
