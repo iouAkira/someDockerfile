@@ -12,8 +12,6 @@ RUN set -ex \
                 jansson-dev \
                 libconfig-dev \
                 libevent-dev \
-                make \
-                openssl-dev \
                 readline-dev \
                 zlib-dev \
                 gcc \
@@ -39,6 +37,7 @@ RUN apk --no-cache add ca-certificates fuse \
                 libevent \
                 libressl \
                 readline \
+                libgcrypt \
                 tzdata \
         && rm -rf /var/lib/apt/lists/*
 
