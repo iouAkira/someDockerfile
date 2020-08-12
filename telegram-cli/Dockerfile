@@ -1,6 +1,8 @@
 FROM alpine:latest
 MAINTAINER AKira <e.akimoto.akira@gmail.com>
 
+ENV VERSION 1.4.1
+
 RUN set -ex \
         && apk update \
         && apk upgrade \
@@ -21,6 +23,8 @@ RUN set -ex \
                 openssl-dev \
                 libgcrypt-dev \
                 libressl-dev \
+        && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+        && echo "Asia/Shanghai" > /etc/timezone
         && git clone --recursive https://github.com/vysheng/tg.git /tg \
         && cd /tg \
         && ./configure --disable-liblua --disable-openssl --prefix=/usr CFLAGS="$CFLAGS -w" \
