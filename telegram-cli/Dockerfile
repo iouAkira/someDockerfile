@@ -24,7 +24,7 @@ RUN set -ex \
                 libgcrypt-dev \
                 libressl-dev \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-        && echo "Asia/Shanghai" > /etc/timezone
+        && echo "Asia/Shanghai" > /etc/timezone \
         && git clone --recursive https://github.com/vysheng/tg.git /tg \
         && cd /tg \
         && ./configure --disable-liblua --disable-openssl --prefix=/usr CFLAGS="$CFLAGS -w" \
