@@ -59,4 +59,5 @@ RUN set -ex \
         && cd ~/efb-link_preview-middleware/ && python3 setup.py install \
         && rm -rf ~/efb-mp-instanceview-middleware/ ~/efb-link_preview-middleware/
 
+
 CMD ["ehforwarderbot"]

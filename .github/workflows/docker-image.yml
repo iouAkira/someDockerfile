@@ -28,6 +28,7 @@ jobs:
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          dockerfile: efb-v2/Dockerfile
           registry: docker.pkg.github.com
           repository: iouakira/somedockerfile/efb-v2
           tag_with_ref: true
