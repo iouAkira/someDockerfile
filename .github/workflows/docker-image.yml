@@ -13,8 +13,7 @@ jobs:
 
     steps:
       - name: 构建任务
-
-      - uses: actions/checkout@master
+        uses: actions/checkout@master
 
       - name: 构建并推送到Dockerhub官方镜像仓库
         uses: docker/build-push-action@v1
