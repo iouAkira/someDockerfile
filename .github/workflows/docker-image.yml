@@ -1,14 +1,9 @@
-name: Build Docker Image CI
+name: Build efb-v2 Docker Image
 
 on:
   push:
-    branches:
-      - master
     paths:
       - 'efb-v2/Dockerfile'
-  pull_request:
-    branches:
-      - master
 
 jobs:
   build:
@@ -16,10 +11,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@master
-      - name: echo path
-         run: echo ${path}
-
-
-      - uses: actions/checkout@master
       - name: Build the Docker image
         run: docker build . --file ./efb-v2/Dockerfile --tag akyakya/efb-v2:$(date +%s)
+
+      - name: Publish to Registry
+      - uses: iouAkira/efb-v2@master
+        with:
+          name: docker.pkg.github.com/iouAkira/efb-v2
+          username: ${{ github.actor }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+          registry: docker.pkg.github.com
