@@ -2,9 +2,10 @@ name: Build Docker Image CI
 
 on:
   push:
-    branches: [ master ]
-        paths:
-          - 'efb-v2/Dockerfile'
+    branches: 
+      - master
+    paths:
+      - 'efb-v2/Dockerfile'
   pull_request:
     branches: [ master ]
 
@@ -15,4 +16,4 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Build the Docker image
-      run: docker build . --file ./efb-v2/Dockerfile --tag akyakya/efb-v2:$(date +%s)
+        run: docker build . --file ./efb-v2/Dockerfile --tag akyakya/efb-v2:$(date +%s)
