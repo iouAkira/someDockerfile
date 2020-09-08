@@ -10,14 +10,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@master
-      - name: Build the Docker image
+      - name: 构建镜像
+        uses: actions/checkout@master
         run: docker build . --file ./efb-v2/Dockerfile --tag akyakya/efb-v2:$(date +%s)
 
-      - name: Publish to Registry
-      - uses: iouAkira/efb-v2@master
+      - name: 推送到Dockerhub官方镜像仓库
+        uses: docker/build-push-action@v1
         with:
-          name: docker.pkg.github.com/iouAkira/efb-v2
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: akyakya/efb-v2
+          tag_with_ref: true
+
+      - name: 推送到Github镜像仓库
+        uses: docker/build-push-action@v1
+        with:
           username: ${{ github.actor }}
-          password: ${{ secrets.DOCKER_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
+          repository: iouAkira/someDockerfile/efb-v2
+          tag_with_ref: true
