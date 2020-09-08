@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: 拉取代码
-      - uses: actions/checkout@master
+        uses: actions/checkout@master
 
       - name: 构建镜像
         run: docker build . --file ./efb-v2/Dockerfile --tag akyakya/efb-v2:$(date +%s)
