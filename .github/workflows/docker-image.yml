@@ -3,11 +3,12 @@ name: Build Docker Image CI
 on:
   push:
     branches:
-      - dev
+      - master
     paths:
       - 'efb-v2/Dockerfile'
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
 
 jobs:
   build:
@@ -16,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: echo path
-         run: echo $path
+         run: echo ${path}
 
 
       - uses: actions/checkout@master
