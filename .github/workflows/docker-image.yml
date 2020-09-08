@@ -2,6 +2,8 @@ name: Build efb-v2 Docker Image
 
 on:
   push:
+    branches:
+      - master
     paths:
       - 'efb-v2/Dockerfile'
 
