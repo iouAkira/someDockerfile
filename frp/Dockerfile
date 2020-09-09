@@ -1,7 +1,6 @@
 FROM alpine
 MAINTAINER Akyakya <e.akimoto.akira@gmail.com>
 
-
 ENV LANG C.UTF-8
 ENV TZ=Asia/Shanghai
 ENV FRP_VERSION 0.33.0
