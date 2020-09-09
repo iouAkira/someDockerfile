@@ -1,4 +1,4 @@
-name: Build efb-v2 Docker Image
+name: 构建efb-v2 Docker镜像
 
 on:
   push:
@@ -8,12 +8,11 @@ on:
       - 'efb-v2/Dockerfile'
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 构建任务
-        uses: actions/checkout@master
+      - uses: actions/checkout@master
 
       - name: 构建并推送到Dockerhub官方镜像仓库
         uses: docker/build-push-action@v1
@@ -24,7 +23,7 @@ jobs:
           repository: akyakya/efb-v2
           tag_with_ref: true
 
-      - name: 推送到Github镜像仓库
+      - name: 构建并推送到Github Packages
         uses: docker/build-push-action@v1
         with:
           username: ${{ github.actor }}
