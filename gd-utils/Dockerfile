@@ -1,7 +1,7 @@
 FROM alpine
 MAINTAINER Akira <e.akimoto.akira@gmail.com>
 
-ENV BUILD_VERSION 0.3.4
+ENV BUILD_VERSION 0.3.5
 
 RUN set -ex \
         && apk update \

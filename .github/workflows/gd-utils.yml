@@ -14,16 +14,20 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - name: 构建并推送到Dockerhub官方镜像仓库
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          dockerfile: gd-utils/Dockerfile
-          repository: akyakya/gd-utils
-          tag_with_ref: true
+      # - name: 构建并推送到Dockerhub官方镜像仓库
+      #   uses: docker/build-push-action@v1
+      #   with:
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWORD }}
+      #     dockerfile: gd-utils/Dockerfile
+      #     repository: akyakya/gd-utils
+      #     tag_with_ref: true
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
-      - name: 构建并推送到Github Packages
+      -
+        name: 构建并推送到Github Packages
         uses: docker/build-push-action@master
         with:
           context: .
