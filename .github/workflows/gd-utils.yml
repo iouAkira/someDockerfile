@@ -33,4 +33,4 @@ jobs:
           context: .
           file: gd-utils/Dockerfile
           push: true
-          tags: iouAkira/gd-utils:latest
+          tags: iouakira/gd-utils:latest
