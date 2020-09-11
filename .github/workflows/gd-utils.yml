@@ -24,9 +24,9 @@ jobs:
           tag_with_ref: true
 
       - name: 构建并推送到Github Packages
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@master
         with:
           context: .
           file: gd-utils/Dockerfile
           push: true
-          tags: iouakira/gd-utils
+          tags: iouAkira/gd-utils:latest
