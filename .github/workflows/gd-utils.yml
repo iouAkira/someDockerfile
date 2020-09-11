@@ -24,11 +24,11 @@ jobs:
           tag_with_ref: true
 
       - name: 构建并推送到Github Packages
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@master
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: gd-utils/Dockerfile
-          registry: docker.pkg.github.com
+          registry: ghcr.io
           repository: iouakira/somedockerfile/gd-utils
           tag_with_ref: true
