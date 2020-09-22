@@ -1,6 +1,7 @@
 name: 构建frp Docker镜像
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
