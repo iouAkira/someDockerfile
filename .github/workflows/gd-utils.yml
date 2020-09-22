@@ -1,6 +1,7 @@
 name: 构建gd-utils Docker镜像
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
