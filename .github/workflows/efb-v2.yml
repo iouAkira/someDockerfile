@@ -6,7 +6,9 @@ on:
     branches:
       - master
     paths:
-      - 'efb-v2/Dockerfile'
+      - "efb-v2/Dockerfile"
+  repository_dispatch:
+    types: efb-v2
 
 jobs:
   build-and-push:
@@ -24,6 +26,11 @@ jobs:
           repository: akyakya/efb-v2
           tag_with_ref: true
 
+      - id: repo_name
+        uses: ASzc/change-string-case-action@v1
+        with:
+          string: ${{ github.repository }}
+
       - name: 构建并推送到Github Packages
         uses: docker/build-push-action@v1
         with:
@@ -31,5 +38,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: efb-v2/Dockerfile
           registry: docker.pkg.github.com
-          repository: iouakira/somedockerfile/efb-v2
+          repository: ${{ steps.repo_name.outputs.lowercase }}/efb-v2
           tag_with_ref: true

@@ -7,6 +7,8 @@ on:
       - master
     paths:
       - 'ssmgr/Dockerfile'
+  repository_dispatch:
+    types: ssmgr
 
 jobs:
   build-and-push:
@@ -24,6 +26,11 @@ jobs:
           repository: akyakya/ssmgr
           tag_with_ref: true
 
+      - id: repo_name
+        uses: ASzc/change-string-case-action@v1
+        with:
+          string: ${{ github.repository }}
+
       - name: 构建并推送到Github Packages
         uses: docker/build-push-action@v1
         with:
@@ -31,5 +38,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: ssmgr/Dockerfile
           registry: docker.pkg.github.com
-          repository: iouakira/somedockerfile/ssmgr
+          repository: ${{ github.repository }}/ssmgr
           tag_with_ref: true
