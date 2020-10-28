@@ -38,5 +38,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: ssmgr/Dockerfile
           registry: docker.pkg.github.com
-          repository: ${{ github.repository }}/ssmgr
+          repository: ${{ steps.repo_name.outputs.lowercase }}/ssmgr
           tag_with_ref: true

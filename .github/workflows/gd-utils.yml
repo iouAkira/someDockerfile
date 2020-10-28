@@ -38,5 +38,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: gd-utils/Dockerfile
           registry: docker.pkg.github.com
-          repository: ${{ github.repository }}/gd-utils
+          repository: ${{ steps.repo_name.outputs.lowercase }}/gd-utils
           tag_with_ref: true

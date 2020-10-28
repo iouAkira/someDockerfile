@@ -1,8 +1,6 @@
 FROM node:12-alpine
 MAINTAINER Akira <e.akimoto.akira@gmail.com>
 
-ENV VERSION 0.36.44
-
 RUN set -ex \
         && apk update && apk upgrade\
         && apk add --no-cache udns \
@@ -53,7 +51,7 @@ RUN set -ex \
         && apk add --no-cache --virtual .run-deps $runDeps \
         && apk del .build-deps \
         && rm -rf /tmp/*
-RUN npm i -g shadowsocks-manager@${VERSION} --unsafe-perm
+RUN npm i -g shadowsocks-manager --unsafe-perm
 
 ENTRYPOINT ["ssmgr","-c"]
 
