@@ -10,7 +10,11 @@ RUN set -ex \
 RUN git clone https://github.com/lxk0301/scripts /scripts \
         && cd /scripts \
         && mkdir logs \
-        && npm install
+        && npm install \
+        && cd ~ \
+        && npm install request
+
+ENV CDN_JD_DAILYBONUS true
 
 RUN crontab /scripts/docker/crontab_list.sh
 
