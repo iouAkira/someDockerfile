@@ -25,7 +25,7 @@ logging.basicConfig(
     format='%(asctime)s-%(name)s-%(levelname)s-%(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-_base_dir = '/Users/akira-work/scripts/'
+_base_dir = '/scripts/'
 _logs_dir = '%slogs/' % (_base_dir)
 _docker_dir = '%sdocker/' % (_base_dir)
 _bot_dir = '%sbot/' % (_docker_dir)
