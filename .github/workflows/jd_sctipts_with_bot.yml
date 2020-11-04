@@ -23,8 +23,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           dockerfile: jd_scripts/bot/Dockerfile
           repository: akyakya/jd_scripts
-          tag_with_ref: true
-          tags: akyakya/jd_scripts:suportbot
+          tags: suportbot
 
       - id: repo_name
         uses: ASzc/change-string-case-action@v1
@@ -40,5 +39,4 @@ jobs:
           dockerfile: jd_scripts/bot/Dockerfile
           registry: docker.pkg.github.com
           repository: ${{ steps.repo_name.outputs.lowercase }}/jd_scripts
-          tag_with_ref: true
-          tags: akyakya/jd_scripts:suportbot
+          tags: suportbot
