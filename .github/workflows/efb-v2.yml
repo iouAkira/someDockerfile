@@ -39,7 +39,7 @@ jobs:
       - id: repo_name
         uses: ASzc/change-string-case-action@v1
         with:
-          string: ${{ github.repository }}
+          string: ${{ github.repository_owner }}
 
       - name: 构建并推送到Dockerhub和ghcr.io镜像仓库
         uses: docker/build-push-action@v2
