@@ -26,6 +26,7 @@ RUN cd /scripts/docker/ \
 COPY ./* /scripts/docker/bot/
 
 RUN cd /scripts/docker/bot \
+        && ls -al \
         && pip3 install --upgrade pip \
         && pip3 install -r requirements.txt \
         && python3 setup.py install
