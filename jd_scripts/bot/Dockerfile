@@ -23,10 +23,10 @@ RUN git clone https://github.com/lxk0301/scripts /scripts \
 RUN cd /scripts/docker/ \
         && mkdir bot
 
-COPY ./* /scripts/docker/bot/
+COPY ./jd_scripts/bot/* /scripts/docker/bot/
 
 RUN cd /scripts/docker/bot \
-        && ls -al \
+        && ls -a \
         && pip3 install --upgrade pip \
         && pip3 install -r requirements.txt \
         && python3 setup.py install
