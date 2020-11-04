@@ -5,7 +5,11 @@
 # @UpdateTime: 2020-11-03
 
 import math
+from math import e, log
+from subprocess import TimeoutExpired
 import time
+from time import sleep
+from typing import Text
 from telegram import parsemode
 from telegram import replymarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
@@ -20,6 +24,11 @@ import subprocess
 logging.basicConfig(
     format='%(asctime)s-%(name)s-%(levelname)s-%(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+_base_dir = '/Users/akira-work/scripts/'
+_logs_dir = '%slogs/' % (_base_dir)
+_docker_dir = '%sdocker/' % (_base_dir)
+_bot_dir = '%sbot/' % (_docker_dir)
 
 
 def start(update, context):
@@ -38,16 +47,16 @@ def start(update, context):
 
 
 def node(update, context):
-    '''关于/scripts/下nodejs脚本的相关操作
+    '''关于定时任务中nodejs脚本的相关操作
     '''
     if(is_admin(update.message.from_user.id)):
         commands = update.message.text.split()
-        commands.remove('/git')
+        commands.remove('/node')
         if len(commands) > 0:
             try:
                 cmd = 'node %s' % (' '.join(commands))
                 out_bytes = subprocess.check_output(
-                    cmd, shell=True, timeout=10, stderr=subprocess.STDOUT)
+                    cmd, shell=True, timeout=200, stderr=subprocess.STDOUT)
                 out_text = out_bytes.decode('utf-8')
                 update.message.reply_text(text='```{}```'.format(
                     helpers.escape_markdown(' ↓↓↓ %s 命令执行结果 ↓↓↓ \n\n%s ' % (cmd, out_text))), parse_mode=ParseMode.MARKDOWN_V2)
@@ -72,7 +81,7 @@ def git(update, context):
             try:
                 cmd = 'git %s' % (' '.join(commands))
                 out_bytes = subprocess.check_output(
-                    cmd, shell=True, timeout=10, stderr=subprocess.STDOUT)
+                    cmd, shell=True, timeout=200, stderr=subprocess.STDOUT)
                 out_text = out_bytes.decode('utf-8')
                 update.message.reply_text(text='```{}```'.format(
                     helpers.escape_markdown(' ↓↓↓ %s 命令执行结果 ↓↓↓ \n\n%s ' % (cmd, out_text))), parse_mode=ParseMode.MARKDOWN_V2)
@@ -89,7 +98,7 @@ def git(update, context):
 
 
 def logs(update, context):
-    '''关于/scripts/logs目录日志文件的相关操作
+    '''关于_logs_dir目录日志文件的相关操作
     '''
     reply_markup = get_reply_markup_btn('logs')
 
@@ -108,45 +117,50 @@ def callback_run(update, context):
     select_btn_type = query.data.split()[0]
     chat = query.message.chat
     logger.info("callback query.message.chat ==> %s " % chat)
-    if select_btn_type == 'node':
-        logger.info("callback query.data ==> %s " % query.data)
-    elif select_btn_type == 'git':
-        gitCmd = query.data.split()[-1]
-        cmd = 'git -C /scripts/ %s' % (gitCmd)
+    logger.info("callback query.data ==> %s " % query.data)
+    if select_btn_type == 'node' or select_btn_type == 'git':
         try:
             out_bytes = subprocess.check_output(
-                cmd, shell=True, timeout=10, stderr=subprocess.STDOUT)
+                query.data, shell=True, timeout=200, stderr=subprocess.STDOUT)
             out_text = out_bytes.decode('utf-8')
             if len(out_text.split()) > 30:
-                msg = update.message.reply_text(text='```{}```'.format(
-                    helpers.escape_markdown(' ↓↓↓ %s 命令执行结果超过30行请查看文件 ↓↓↓ \n\n%s ' % (gitCmd, out_text))), parse_mode=ParseMode.MARKDOWN_V2)
-                log_name = '/scripts/logs/bot_git_%s%s.log' % (
-                    gitCmd, time.strftime('%Y%m%d%H%M%S', time.gmtime()))
-                lf = open(log_name, 'a')
-                lf.write(out_text)
+                msg = context.bot.sendMessage(text='```{}```'.format(
+                    helpers.escape_markdown(' ↓↓↓ %s 命令执行结果超长,请查看文件 ↓↓↓' % (query.data))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                log_name = '%sbot_%s_%s.log' % (
+                    _logs_dir, select_btn_type, os.path.splitext(query.data.split('/')[-1])[0])
+                logger.info('log_name==>'+log_name)
+
+                with open(log_name, 'a+') as wf:
+                    wf.write(out_text)
+
                 msg.reply_document(
                     reply_to_message_id=msg.message_id, quote=True, document=open(log_name, 'rb'))
+
             else:
-                update.message.reply_text(text='```{}```'.format(
-                    helpers.escape_markdown(' ↓↓↓ %s 命令执行结果 ↓↓↓ \n\n%s ' % (gitCmd, out_text))), parse_mode=ParseMode.MARKDOWN_V2)
+                context.bot.sendMessage(text='```{}```'.format(
+                    helpers.escape_markdown(' ↓↓↓ %s 命令执行结果 ↓↓↓ \n\n%s ' % (query.data, out_text))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+        except TimeoutExpired:
+            logger.error(' →→→ %s 命令执行超时 ←←← ' % (query.data))
+            context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 命令执行超时 ←←← ' % (
+                query.data))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
         except:
-            update.message.reply_text(
-                '```{}```'.format(' →→→ %s 命令执行出错 ←←← ' % (gitCmd)))
+            context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 命令执行出错 ←←← ' % (
+                query.data))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
             raise
-        logger.info("callback query.data ==> %s " % query.data)
+
     elif select_btn_type == 'logs':
         log_file = query.data.split()[-1]
         if log_file == 'clear':
-            cmd = 'rm -rf /scripts/logs/*.log'
+            cmd = 'rm -rf %s*.log' % (_logs_dir)
             try:
                 out_bytes = subprocess.check_output(
-                    cmd, shell=True, timeout=10, stderr=subprocess.STDOUT)
+                    cmd, shell=True, timeout=200, stderr=subprocess.STDOUT)
 
-                context.bot.edit_message_text('```{}```'.format(' →→→ 日志文件已清除 ←←← '), chat_id=query.message.chat_id,
+                context.bot.edit_message_text(text='```{}```'.format(' →→→ 日志文件已清除 ←←← '), chat_id=query.message.chat_id,
                                               message_id=query.message.message_id, parse_mode=ParseMode.MARKDOWN_V2)
             except:
-                update.message.reply_text(
-                    '```{}```'.format(' →→→  清除日志执行出错 ←←← '))
+                context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(
+                    ' →→→  清除日志执行出错 ←←← ')), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
                 raise
         else:
             msg = context.bot.sendMessage(text='```{}```'.format(' ↓↓↓ 下面为下载的%s文件 ↓↓↓ ' % (
@@ -155,12 +169,9 @@ def callback_run(update, context):
             msg.reply_document(
                 reply_to_message_id=msg.message_id, quote=True, document=open(log_file, 'rb'))
 
-            logger.info("callback query.data ==> %s " % query.data)
     else:
-        context.bot.edit_message_text('```{}```'.format(' →→→ 操作已取消 ←←← '), chat_id=query.message.chat_id,
+        context.bot.edit_message_text(text='```{}```'.format(' →→→ 操作已取消 ←←← '), chat_id=query.message.chat_id,
                                       message_id=query.message.message_id, parse_mode=ParseMode.MARKDOWN_V2)
-
-        logger.info("callback query.data ==> %s " % query.data)
 
 
 def get_reply_markup_btn(cmd_type):
@@ -172,13 +183,14 @@ def get_reply_markup_btn(cmd_type):
     """
     reply_markup = ''
     if cmd_type == 'logs':
-        fileList = list(set(get_dir_file_list('/scripts/logs', 'log')))
+        fileList = list(set(get_dir_file_list(_logs_dir, 'log')))
         fileList.sort()
         keyboardLine = []
         for i in range(math.ceil(len(fileList)/2)):
             ret = fileList[0:2]
             keyboardColumn = []
             for i in ret:
+                logger.info('i ===> '+i)
                 keyboardColumn.append(InlineKeyboardButton(
                     i.split('/')[-1], callback_data='logs %s' % (i)))
                 fileList.remove(i)
@@ -188,7 +200,7 @@ def get_reply_markup_btn(cmd_type):
                              InlineKeyboardButton('取消操作', callback_data='cancel')])
         reply_markup = InlineKeyboardMarkup(keyboardLine)
     elif cmd_type == 'node':
-        buttonList = list(set(get_crontabe_list(cmd_type, 6)))
+        buttonList = list(set(get_crontabe_list(cmd_type)))
         buttonList.sort()
         keyboardLine = []
         for i in range(math.ceil(len(buttonList)/2)):
@@ -196,15 +208,16 @@ def get_reply_markup_btn(cmd_type):
             keyboardColumn = []
             for i in ret:
                 keyboardColumn.append(InlineKeyboardButton(
-                    i.split('/')[-1], callback_data='node %s' % (i)))
+                    i.split('/')[-1], callback_data=i))
                 buttonList.remove(i)
             keyboardLine.append(keyboardColumn)
 
         keyboardLine.append(
             [InlineKeyboardButton('取消操作', callback_data='cancel')])
+
         reply_markup = InlineKeyboardMarkup(keyboardLine)
     elif cmd_type == 'git':
-        buttonList = list(set(get_crontabe_list(cmd_type, 8)))
+        buttonList = list(set(get_crontabe_list(cmd_type)))
         buttonList.sort()
         keyboardLine = []
         for i in range(math.ceil(len(buttonList)/2)):
@@ -212,22 +225,23 @@ def get_reply_markup_btn(cmd_type):
             keyboardColumn = []
             for i in ret:
                 keyboardColumn.append(InlineKeyboardButton(
-                    i.split('/')[-1], callback_data='git %s' % (i)))
+                    i.split('/')[-1], callback_data=i))
                 buttonList.remove(i)
             keyboardLine.append(keyboardColumn)
         if len(keyboardLine) < 1:
             keyboardLine.append(
-                [InlineKeyboardButton('pull', callback_data='git pull')])
+                [InlineKeyboardButton('pull', callback_data='git -C %s pull' % _base_dir)])
         keyboardLine.append(
             [InlineKeyboardButton('取消操作', callback_data='cancel')])
         reply_markup = InlineKeyboardMarkup(keyboardLine)
     else:
         reply_markup = InlineKeyboardMarkup(
             [[InlineKeyboardButton('没找到对的命令操作按钮', callback_data='cancel')]])
+
     return reply_markup
 
 
-def get_crontabe_list(cmd_type, item_idx=5):
+def get_crontabe_list(cmd_type):
     '''获取任务列表里面的node相关的定时任务
 
     Parameters
@@ -239,16 +253,18 @@ def get_crontabe_list(cmd_type, item_idx=5):
     -------
     返回一个指定命令类型定时任务列表
     '''
-    base_dir = './'
     crontab_list_file = 'crontab_list.sh'
     buttonList = []
-    with open(base_dir+crontab_list_file) as lines:
+    with open(_docker_dir+crontab_list_file) as lines:
         array = lines.readlines()
         for i in array:
             i = i.strip('\n')
-            items = i.split()
-            if cmd_type in items:
-                buttonList.append(items[item_idx])
+            if i.startswith('#'):
+                pass
+            else:
+                items = i.split('>>')[0].split()[5:]
+                if cmd_type == items[0]:
+                    buttonList.append(' '.join(items))
     return buttonList
 
 
@@ -257,22 +273,23 @@ def get_dir_file_list(dir_path, file_type):
 
     Parameters
     ----------
-    dir_path: 完整的目录路径，不需要最后一个/
+    dir_path: 完整的目录路径，不需要最后一个
     file_type: 或者文件的后缀名字
 
     Returns
     -------
     返回一个完整绝对路径的文件列表，方便读取
     '''
-    cmd = ('ls %s/*.%s') % (dir_path, file_type)
+    cmd = ('ls %s*.%s') % (dir_path, file_type)
     out_text = ''
     try:
+
         out_bytes = subprocess.check_output(
             cmd, shell=True, timeout=5, stderr=subprocess.STDOUT)
         out_text = out_bytes.decode('utf-8')
     except:
         out_text = '%s目录下，不存在%s对应的文件' % (file_type)
-
+    logger.info(out_text.split())
     return out_text.split()
 
 
@@ -316,15 +333,14 @@ def error(update, context):
 
 def main():
 
-    # export TG_BOT_TOKEN=1300000080:AAEkNHuu-7xI***********10zNf91WQ
-    # export TG_USER_ID=120000006
-    #
-
     global admin_id, bot_token, crontab_list_file
+
     if 'TG_BOT_TOKEN' in os.environ:
         bot_token = os.getenv('TG_BOT_TOKEN')
+
     if 'TG_USER_ID' in os.environ:
         admin_id = os.getenv('TG_USER_ID')
+
     if 'CRONTAB_LIST_FILE' in os.environ:
         crontab_list_file = os.getenv('CRONTAB_LIST_FILE')
     else:
