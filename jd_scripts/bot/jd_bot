@@ -191,10 +191,10 @@ def env(update, context):
             else:
 
                 context.bot.sendMessage(text='```{}```'.format(
-                    helpers.escape_markdown(' ↓↓↓ %s 执行结果 ↓↓↓ \n\n%s ' % (env, out_text))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                    helpers.escape_markdown(' ↓↓↓ %s 执行结果 ↓↓↓ \n\n%s ' % ('env', out_text))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
         else:
             context.bot.sendMessage(text='```{}```'.format(
-                helpers.escape_markdown(' →→→ %s 指令不正确，请参考说明输入 ←←← ' % (env))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                helpers.escape_markdown(' →→→ %s 指令不正确，请参考说明输入 ←←← ' % ('env'))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
 
     else:
         update.message.reply_text(text='此为私人使用bot,不能执行您的指令！')
