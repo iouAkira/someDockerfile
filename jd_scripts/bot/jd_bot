@@ -57,7 +57,7 @@ def node(update, context):
             try:
 
                 out_bytes = subprocess.check_output(
-                    cmd, shell=True, timeout=200, stderr=subprocess.STDOUT)
+                    cmd, shell=True, timeout=600, stderr=subprocess.STDOUT)
 
                 out_text = out_bytes.decode('utf-8')
 
@@ -108,7 +108,7 @@ def git(update, context):
             try:
 
                 out_bytes = subprocess.check_output(
-                    cmd, shell=True, timeout=200, stderr=subprocess.STDOUT)
+                    cmd, shell=True, timeout=600, stderr=subprocess.STDOUT)
 
                 out_text = out_bytes.decode('utf-8')
 
@@ -172,7 +172,7 @@ def env(update, context):
 
         elif len(commands) == 0:
             out_bytes = subprocess.check_output(
-                'env', shell=True, timeout=200, stderr=subprocess.STDOUT)
+                'env', shell=True, timeout=600, stderr=subprocess.STDOUT)
 
             out_text = out_bytes.decode('utf-8')
 
@@ -223,7 +223,7 @@ def callback_run(update, context):
     if select_btn_type == 'node' or select_btn_type == 'git':
         try:
             out_bytes = subprocess.check_output(
-                query.data, shell=True, timeout=200, stderr=subprocess.STDOUT)
+                query.data, shell=True, timeout=600, stderr=subprocess.STDOUT)
             out_text = out_bytes.decode('utf-8')
             if len(out_text.split()) > 30:
                 msg = context.bot.sendMessage(text='```{}```'.format(
@@ -256,7 +256,7 @@ def callback_run(update, context):
             cmd = 'rm -rf %s*.log' % (_logs_dir)
             try:
                 out_bytes = subprocess.check_output(
-                    cmd, shell=True, timeout=200, stderr=subprocess.STDOUT)
+                    cmd, shell=True, timeout=600, stderr=subprocess.STDOUT)
 
                 context.bot.edit_message_text(text='```{}```'.format(' →→→ 日志文件已清除 ←←← '), chat_id=query.message.chat_id,
                                               message_id=query.message.message_id, parse_mode=ParseMode.MARKDOWN_V2)
