@@ -2,7 +2,7 @@
 # @Author    : iouAkira(lof)
 # @mail      : e.akimoto.akira@gmail.com
 # @CreateTime: 2020-11-02
-# @UpdateTime: 2020-11-03
+# @UpdateTime: 2020-11-05
 
 import math
 from math import e, log
@@ -25,7 +25,7 @@ logging.basicConfig(
     format='%(asctime)s-%(name)s-%(levelname)s-%(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-_base_dir = '/scripts/'
+_base_dir = '/Users/akira-work/scripts/'
 _logs_dir = '%slogs/' % (_base_dir)
 _docker_dir = '%sdocker/' % (_base_dir)
 _bot_dir = '%sbot/' % (_docker_dir)
@@ -53,15 +53,41 @@ def node(update, context):
         commands = update.message.text.split()
         commands.remove('/node')
         if len(commands) > 0:
+            cmd = 'node %s' % (' '.join(commands))
             try:
-                cmd = 'node %s' % (' '.join(commands))
+
                 out_bytes = subprocess.check_output(
                     cmd, shell=True, timeout=200, stderr=subprocess.STDOUT)
+
                 out_text = out_bytes.decode('utf-8')
-                update.message.reply_text(text='```{}```'.format(
-                    helpers.escape_markdown(' ↓↓↓ %s 命令执行结果 ↓↓↓ \n\n%s ' % (cmd, out_text))), parse_mode=ParseMode.MARKDOWN_V2)
+
+                if len(out_text.split()) > 30:
+
+                    msg = context.bot.sendMessage(text='```{}```'.format(
+                        helpers.escape_markdown(' ↓↓↓ %s 执行结果超长,请查看log ↓↓↓' % (cmd))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+
+                    log_name = '%sbot_%s_%s.log' % (
+                        _logs_dir, 'node', os.path.splitext(commands[-1])[0])
+
+                    with open(log_name, 'a+') as wf:
+                        wf.write(out_text)
+
+                    msg.reply_document(
+                        reply_to_message_id=msg.message_id, quote=True, document=open(log_name, 'rb'))
+                else:
+
+                    context.bot.sendMessage(text='```{}```'.format(
+                        helpers.escape_markdown(' ↓↓↓ %s 执行结果 ↓↓↓ \n\n%s ' % (cmd, out_text))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+
+            except TimeoutExpired:
+
+                context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行超时 ←←← ' % (
+                    cmd))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+
             except:
-                update.message.reply_text('nodejs 命令执行出错，请检查确认命令是否正确')
+
+                context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行出错，请检查确认命令是否正确 ←←← ' % (
+                    cmd))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
                 raise
         else:
             reply_markup = get_reply_markup_btn('node')
@@ -78,21 +104,98 @@ def git(update, context):
         commands = update.message.text.split()
         commands.remove('/git')
         if len(commands) > 0:
+            cmd = 'git %s' % (' '.join(commands))
             try:
-                cmd = 'git %s' % (' '.join(commands))
+
                 out_bytes = subprocess.check_output(
                     cmd, shell=True, timeout=200, stderr=subprocess.STDOUT)
+
                 out_text = out_bytes.decode('utf-8')
-                update.message.reply_text(text='```{}```'.format(
-                    helpers.escape_markdown(' ↓↓↓ %s 命令执行结果 ↓↓↓ \n\n%s ' % (cmd, out_text))), parse_mode=ParseMode.MARKDOWN_V2)
+
+                if len(out_text.split()) > 30:
+
+                    msg = context.bot.sendMessage(text='```{}```'.format(
+                        helpers.escape_markdown(' ↓↓↓ %s 执行结果超长,请查看log ↓↓↓' % (cmd))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+
+                    log_name = '%sbot_%s_%s.log' % (
+                        _logs_dir, 'git', os.path.splitext(commands[-1])[0])
+
+                    with open(log_name, 'a+') as wf:
+                        wf.write(out_text)
+
+                    msg.reply_document(
+                        reply_to_message_id=msg.message_id, quote=True, document=open(log_name, 'rb'))
+                else:
+
+                    context.bot.sendMessage(text='```{}```'.format(
+                        helpers.escape_markdown(' ↓↓↓ %s 执行结果 ↓↓↓ \n\n%s ' % (cmd, out_text))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+
+            except TimeoutExpired:
+
+                context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行超时 ←←← ' % (
+                    cmd))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+
             except:
-                update.message.reply_text('git 命令执行出错，请检查确认命令是否正确')
+
+                context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行出错，请检查确认命令是否正确 ←←← ' % (
+                    cmd))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
                 raise
+
         else:
             reply_markup = get_reply_markup_btn('git')
 
             update.message.reply_text(text='```{}```'.format(helpers.escape_markdown(' ↓↓↓ 请选择想要执行的git指令 ↓↓↓ ')),
                                       reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN_V2)
+    else:
+        update.message.reply_text(text='此为私人使用bot,不能执行您的指令！')
+
+
+def env(update, context):
+    '''env 环境变量相关操作
+    '''
+    if(is_admin(update.message.from_user.id)):
+        commands = update.message.text.split()
+        commands.remove('/env')
+        if len(commands) == 2 and (commands[0]) == 'export':
+
+            try:
+                envs = commands[1].split('=')
+                os.putenv(envs[0], envs[1])
+
+                context.bot.sendMessage(text='```{}```'.format(
+                    helpers.escape_markdown(' ↓↓↓ 环境变量设置成功 ↓↓↓ \n\n%s ' % ('='.join(envs)))),
+                    chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+            except:
+                context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行出错，请检查确认命令是否正确 ←←← ' % (
+                    ' '.join(commands)))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                raise
+
+        elif len(commands) == 0:
+            out_bytes = subprocess.check_output(
+                'env', shell=True, timeout=200, stderr=subprocess.STDOUT)
+
+            out_text = out_bytes.decode('utf-8')
+
+            if len(out_text.split()) > 30:
+
+                msg = context.bot.sendMessage(text='```{}```'.format(
+                    helpers.escape_markdown(' ↓↓↓ %s 执行结果超长,请查看log ↓↓↓' % ('env'))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+
+                log_name = '%sbot_%s.log' % (_logs_dir, 'env')
+
+                with open(log_name, 'a+') as wf:
+                    wf.write(out_text+'\n\n')
+
+                msg.reply_document(
+                    reply_to_message_id=msg.message_id, quote=True, document=open(log_name, 'rb'))
+            else:
+
+                context.bot.sendMessage(text='```{}```'.format(
+                    helpers.escape_markdown(' ↓↓↓ %s 执行结果 ↓↓↓ \n\n%s ' % (env, out_text))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+        else:
+            context.bot.sendMessage(text='```{}```'.format(
+                helpers.escape_markdown(' →→→ %s 指令不正确，请参考说明输入 ←←← ' % (env))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+
     else:
         update.message.reply_text(text='此为私人使用bot,不能执行您的指令！')
 
@@ -110,8 +213,7 @@ def logs(update, context):
 
 
 def callback_run(update, context):
-    """
-    docstring
+    """执行按钮响应回调方法处理按钮点击事件
     """
     query = update.callback_query
     select_btn_type = query.data.split()[0]
@@ -125,7 +227,7 @@ def callback_run(update, context):
             out_text = out_bytes.decode('utf-8')
             if len(out_text.split()) > 30:
                 msg = context.bot.sendMessage(text='```{}```'.format(
-                    helpers.escape_markdown(' ↓↓↓ %s 命令执行结果超长,请查看文件 ↓↓↓' % (query.data))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                    helpers.escape_markdown(' ↓↓↓ %s 执行结果超长,请查看log ↓↓↓' % (query.data))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
                 log_name = '%sbot_%s_%s.log' % (
                     _logs_dir, select_btn_type, os.path.splitext(query.data.split('/')[-1])[0])
                 logger.info('log_name==>'+log_name)
@@ -138,13 +240,13 @@ def callback_run(update, context):
 
             else:
                 context.bot.sendMessage(text='```{}```'.format(
-                    helpers.escape_markdown(' ↓↓↓ %s 命令执行结果 ↓↓↓ \n\n%s ' % (query.data, out_text))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                    helpers.escape_markdown(' ↓↓↓ %s 执行结果 ↓↓↓ \n\n%s ' % (query.data, out_text))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
         except TimeoutExpired:
-            logger.error(' →→→ %s 命令执行超时 ←←← ' % (query.data))
-            context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 命令执行超时 ←←← ' % (
+            logger.error(' →→→ %s 执行超时 ←←← ' % (query.data))
+            context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行超时 ←←← ' % (
                 query.data))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
         except:
-            context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 命令执行出错 ←←← ' % (
+            context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行出错 ←←← ' % (
                 query.data))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
             raise
 
@@ -190,7 +292,6 @@ def get_reply_markup_btn(cmd_type):
             ret = fileList[0:2]
             keyboardColumn = []
             for i in ret:
-                logger.info('i ===> '+i)
                 keyboardColumn.append(InlineKeyboardButton(
                     i.split('/')[-1], callback_data='logs %s' % (i)))
                 fileList.remove(i)
@@ -298,10 +399,6 @@ def is_admin(from_user_id):
         return True
     else:
         return False
-
-
-def env(update, context):
-    pass
 
 
 def unknown(update, context):
