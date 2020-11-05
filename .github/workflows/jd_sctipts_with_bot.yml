@@ -49,5 +49,5 @@ jobs:
           platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x
           push: true
           tags: |
-            akyakya/jd_scripts:suportbot
-            ghcr.io/${{ steps.repo_name.outputs.lowercase }}/jd_scripts:suportbot
+            akyakya/jd_scripts:supportbot
+            ghcr.io/${{ steps.repo_name.outputs.lowercase }}/jd_scripts:supportbot
