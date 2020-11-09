@@ -2,54 +2,61 @@
 # @Author    : iouAkira(lof)
 # @mail      : e.akimoto.akira@gmail.com
 # @CreateTime: 2020-11-02
-# @UpdateTime: 2020-11-05
+# @UpdateTime: 2020-11-09
 
-import math
-from math import e, log
-from subprocess import TimeoutExpired
-import time
-from time import sleep
-from typing import Text
-from telegram import parsemode
-from telegram import replymarkup
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
-import telegram.utils.helpers as helpers
 import logging
-import sys
+import math
 import os
 import subprocess
+from subprocess import TimeoutExpired
+
+import telegram.utils.helpers as helpers
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 
 # 启用日志
 logging.basicConfig(
-    format='%(asctime)s-%(name)s-%(levelname)s-%(message)s', level=logging.INFO)
+    format='%(asctime)s-%(name)s-%(levelname)s- ==> %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 _base_dir = '/scripts/'
-_logs_dir = '%slogs/' % (_base_dir)
-_docker_dir = '%sdocker/' % (_base_dir)
-_bot_dir = '%sbot/' % (_docker_dir)
+_logs_dir = '%slogs/' % _base_dir
+_docker_dir = '%sdocker/' % _base_dir
+_bot_dir = '%sbot/' % _docker_dir
 
 
 def start(update, context):
     from_user_id = update.message.from_user.id
     if admin_id == str(from_user_id):
         context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text='%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s' % ('限制自己使用的JD Scripts拓展机器人',
-                                                                                  '/start \n\t\t开始并获取指令说明',
-                                                                                  '/node \n\t\t获取可执行脚本的列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/node /scripts/jd_818.js)',
-                                                                                  '/git \n\t\t获取可执行git指令列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/git -C /scripts/ pull)',
-                                                                                  '/logs \n\t\t获取logs下的日志文件列表，选择对应名字可以下载日志文件。',
-                                                                                  '/env \n\t\t获取系统环境变量列表。(拓展使用：设置系统环境变量，例：/env export JD_DEBUG=true )',
-                                                                                  '/bash \n\t\t执行执行命令。参考：/bash ls -l 未完善不开放使用'))
+                                 text="""
+限制自己使用的JD Scripts拓展机器人
+/start
+    开始并获取指令说明
+    
+/node
+    获取可执行脚本的列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/node /scripts/jd_818.js)
+    
+/git
+    获取可执行git指令列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/git -C /scripts/ pull)
+    
+/logs
+    获取logs下的日志文件列表，选择对应名字可以下载日志文件
+    
+/env
+    获取系统环境变量列表。(拓展使用：设置系统环境变量，例：/env export JD_DEBUG=true )'
+    
+/bash
+    执行执行命令。参考：/bash ls -l 未完善不开放使用
+""")
     else:
         update.message.reply_text(text='此为私人使用bot,不能执行您的指令！')
 
 
 def node(update, context):
-    '''关于定时任务中nodejs脚本的相关操作
-    '''
-    if(is_admin(update.message.from_user.id)):
+    """关于定时任务中nodejs脚本的相关操作
+    """
+    if is_admin(update.message.from_user.id):
         commands = update.message.text.split()
         commands.remove('/node')
         if len(commands) > 0:
@@ -57,14 +64,15 @@ def node(update, context):
             try:
 
                 out_bytes = subprocess.check_output(
-                    cmd, shell=True, timeout=600, stderr=subprocess.STDOUT)
+                    cmd, shell=True, timeout=200, stderr=subprocess.STDOUT)
 
                 out_text = out_bytes.decode('utf-8')
 
                 if len(out_text.split()) > 30:
 
                     msg = context.bot.sendMessage(text='```{}```'.format(
-                        helpers.escape_markdown(' ↓↓↓ %s 执行结果超长,请查看log ↓↓↓' % (cmd))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                        helpers.escape_markdown(' ↓↓↓ %s 执行结果超长,请查看log ↓↓↓' % cmd)), chat_id=update.effective_chat.id,
+                        parse_mode=ParseMode.MARKDOWN_V2)
 
                     log_name = '%sbot_%s_%s.log' % (
                         _logs_dir, 'node', os.path.splitext(commands[-1])[0])
@@ -77,7 +85,8 @@ def node(update, context):
                 else:
 
                     context.bot.sendMessage(text='```{}```'.format(
-                        helpers.escape_markdown(' ↓↓↓ %s 执行结果 ↓↓↓ \n\n%s ' % (cmd, out_text))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                        helpers.escape_markdown(' ↓↓↓ %s 执行结果 ↓↓↓ \n\n%s ' % (cmd, out_text))),
+                        chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
 
             except TimeoutExpired:
 
@@ -86,8 +95,9 @@ def node(update, context):
 
             except:
 
-                context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行出错，请检查确认命令是否正确 ←←← ' % (
-                    cmd))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                context.bot.sendMessage(
+                    text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行出错，请检查确认命令是否正确 ←←← ' % (
+                        cmd))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
                 raise
         else:
             reply_markup = get_reply_markup_btn('node')
@@ -98,9 +108,9 @@ def node(update, context):
 
 
 def git(update, context):
-    '''关于/scripts仓库的git相关操作
-    '''
-    if(is_admin(update.message.from_user.id)):
+    """关于/scripts仓库的git相关操作
+    """
+    if is_admin(update.message.from_user.id):
         commands = update.message.text.split()
         commands.remove('/git')
         if len(commands) > 0:
@@ -108,14 +118,15 @@ def git(update, context):
             try:
 
                 out_bytes = subprocess.check_output(
-                    cmd, shell=True, timeout=600, stderr=subprocess.STDOUT)
+                    cmd, shell=True, timeout=200, stderr=subprocess.STDOUT)
 
                 out_text = out_bytes.decode('utf-8')
 
                 if len(out_text.split()) > 30:
 
                     msg = context.bot.sendMessage(text='```{}```'.format(
-                        helpers.escape_markdown(' ↓↓↓ %s 执行结果超长,请查看log ↓↓↓' % (cmd))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                        helpers.escape_markdown(' ↓↓↓ %s 执行结果超长,请查看log ↓↓↓' % cmd)), chat_id=update.effective_chat.id,
+                        parse_mode=ParseMode.MARKDOWN_V2)
 
                     log_name = '%sbot_%s_%s.log' % (
                         _logs_dir, 'git', os.path.splitext(commands[-1])[0])
@@ -128,7 +139,8 @@ def git(update, context):
                 else:
 
                     context.bot.sendMessage(text='```{}```'.format(
-                        helpers.escape_markdown(' ↓↓↓ %s 执行结果 ↓↓↓ \n\n%s ' % (cmd, out_text))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                        helpers.escape_markdown(' ↓↓↓ %s 执行结果 ↓↓↓ \n\n%s ' % (cmd, out_text))),
+                        chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
 
             except TimeoutExpired:
 
@@ -137,8 +149,9 @@ def git(update, context):
 
             except:
 
-                context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行出错，请检查确认命令是否正确 ←←← ' % (
-                    cmd))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                context.bot.sendMessage(
+                    text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行出错，请检查确认命令是否正确 ←←← ' % (
+                        cmd))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
                 raise
 
         else:
@@ -151,9 +164,9 @@ def git(update, context):
 
 
 def env(update, context):
-    '''env 环境变量相关操作
-    '''
-    if(is_admin(update.message.from_user.id)):
+    """env 环境变量相关操作
+    """
+    if is_admin(update.message.from_user.id):
         commands = update.message.text.split()
         commands.remove('/env')
         if len(commands) == 2 and (commands[0]) == 'export':
@@ -166,46 +179,65 @@ def env(update, context):
                     helpers.escape_markdown(' ↓↓↓ 环境变量设置成功 ↓↓↓ \n\n%s ' % ('='.join(envs)))),
                     chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
             except:
-                context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行出错，请检查确认命令是否正确 ←←← ' % (
-                    ' '.join(commands)))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                context.bot.sendMessage(
+                    text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行出错，请检查确认命令是否正确 ←←← ' % (
+                        ' '.join(commands)))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
                 raise
 
         elif len(commands) == 0:
             out_bytes = subprocess.check_output(
-                'env', shell=True, timeout=600, stderr=subprocess.STDOUT)
+                'env', shell=True, timeout=200, stderr=subprocess.STDOUT)
 
             out_text = out_bytes.decode('utf-8')
 
             if len(out_text.split()) > 30:
 
                 msg = context.bot.sendMessage(text='```{}```'.format(
-                    helpers.escape_markdown(' ↓↓↓ %s 执行结果超长,请查看log ↓↓↓' % ('env'))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                    helpers.escape_markdown(' ↓↓↓ %s 执行结果超长,请查看log ↓↓↓' % 'env')), chat_id=update.effective_chat.id,
+                    parse_mode=ParseMode.MARKDOWN_V2)
 
                 log_name = '%sbot_%s.log' % (_logs_dir, 'env')
 
                 with open(log_name, 'a+') as wf:
-                    wf.write(out_text+'\n\n')
+                    wf.write(out_text + '\n\n')
 
                 msg.reply_document(
                     reply_to_message_id=msg.message_id, quote=True, document=open(log_name, 'rb'))
             else:
 
                 context.bot.sendMessage(text='```{}```'.format(
-                    helpers.escape_markdown(' ↓↓↓ %s 执行结果 ↓↓↓ \n\n%s ' % ('env', out_text))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                    helpers.escape_markdown(' ↓↓↓ env 执行结果 ↓↓↓ \n\n%s ' % out_text)),
+                    chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
         else:
             context.bot.sendMessage(text='```{}```'.format(
-                helpers.escape_markdown(' →→→ %s 指令不正确，请参考说明输入 ←←← ' % ('env'))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                helpers.escape_markdown(' →→→ env 指令不正确，请参考说明输入 ←←← ')), chat_id=update.effective_chat.id,
+                parse_mode=ParseMode.MARKDOWN_V2)
 
     else:
         update.message.reply_text(text='此为私人使用bot,不能执行您的指令！')
 
 
+def crontab(update, context):
+    """关于crontab 定时任务相关操作
+    """
+    reply_markup = get_reply_markup_btn('crontab_l')
+
+    if is_admin(update.message.from_user.id):
+        try:
+            update.message.reply_text(text='```{}```'.format(helpers.escape_markdown(' ↓↓↓ 下面为定时任务列表，请选择需要的操作 ↓↓↓ ')),
+                                      reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN_V2)
+        except:
+            raise
+    else:
+        update.message.reply_text(text='此为私人使用bot,不能执行您的指令！')
+
+
 def logs(update, context):
-    '''关于_logs_dir目录日志文件的相关操作
-    '''
+    """关于_logs_dir目录日志文件的相关操作
+    """
     reply_markup = get_reply_markup_btn('logs')
 
-    if(is_admin(update.message.from_user.id)):
+    if is_admin(update.message.from_user.id):
         update.message.reply_text(text='```{}```'.format(helpers.escape_markdown(' ↓↓↓ 请选择想想要下载的日志文件或者清除所有日志 ↓↓↓ ')),
                                   reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN_V2)
     else:
@@ -222,54 +254,118 @@ def callback_run(update, context):
     logger.info("callback query.data ==> %s " % query.data)
     if select_btn_type == 'node' or select_btn_type == 'git':
         try:
+            context.bot.edit_message_text(text='```{}```'.format(' ↓↓↓ 任务正在执行 ↓↓↓ \n\n%s' % query.data),
+                                          chat_id=query.message.chat_id,
+                                          message_id=query.message.message_id, parse_mode=ParseMode.MARKDOWN_V2)
             out_bytes = subprocess.check_output(
-                query.data, shell=True, timeout=600, stderr=subprocess.STDOUT)
+                query.data, shell=True, timeout=200, stderr=subprocess.STDOUT)
             out_text = out_bytes.decode('utf-8')
             if len(out_text.split()) > 30:
-                msg = context.bot.sendMessage(text='```{}```'.format(
-                    helpers.escape_markdown(' ↓↓↓ %s 执行结果超长,请查看log ↓↓↓' % (query.data))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                context.bot.edit_message_text(text='```{}```'.format(' ↓↓↓ %s 执行结果超长,请查看log ↓↓↓' % query.data),
+                                              chat_id=query.message.chat_id,
+                                              message_id=query.message.message_id, parse_mode=ParseMode.MARKDOWN_V2)
                 log_name = '%sbot_%s_%s.log' % (
                     _logs_dir, select_btn_type, os.path.splitext(query.data.split('/')[-1])[0])
-                logger.info('log_name==>'+log_name)
+                logger.info('log_name==>' + log_name)
 
                 with open(log_name, 'a+') as wf:
                     wf.write(out_text)
 
-                msg.reply_document(
-                    reply_to_message_id=msg.message_id, quote=True, document=open(log_name, 'rb'))
+                query.message.reply_document(
+                    reply_to_message_id=query.message.message_id, quote=True, document=open(log_name, 'rb'))
 
             else:
-                context.bot.sendMessage(text='```{}```'.format(
-                    helpers.escape_markdown(' ↓↓↓ %s 执行结果 ↓↓↓ \n\n%s ' % (query.data, out_text))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                context.bot.edit_message_text(text='```{}```'.format(
+                    helpers.escape_markdown(' ↓↓↓ %s 执行结果 ↓↓↓ \n\n%s ' % (query.data, out_text))),
+                    chat_id=update.effective_chat.id, message_id=query.message.message_id,
+                    parse_mode=ParseMode.MARKDOWN_V2)
         except TimeoutExpired:
-            logger.error(' →→→ %s 执行超时 ←←← ' % (query.data))
-            context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行超时 ←←← ' % (
-                query.data))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+            logger.error(' →→→ %s 执行超时 ←←← ' % query.data)
+            context.bot.edit_message_text(text='```{}```'.format(' →→→ %s 执行超时 ←←← ' % query.data),
+                                          chat_id=query.message.chat_id,
+                                          message_id=query.message.message_id, parse_mode=ParseMode.MARKDOWN_V2)
         except:
-            context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行出错 ←←← ' % (
-                query.data))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+            context.bot.edit_message_text(text='```{}```'.format(' →→→ %s 执行出错 ←←← ' % query.data),
+                                          chat_id=query.message.chat_id,
+                                          message_id=query.message.message_id, parse_mode=ParseMode.MARKDOWN_V2)
             raise
+    elif select_btn_type.startswith('cl'):
+        if select_btn_type == 'cl':
+            logger.info(f'crontab_l ==> {query.data.split()[1:]}')
+            reply_markup = InlineKeyboardMarkup([
+                [InlineKeyboardButton(' '.join(query.data.split()[1:]), callback_data='pass')],
+                [InlineKeyboardButton('⚡️执行', callback_data='cle %s' % ' '.join(query.data.split()[1:])),
+                 InlineKeyboardButton('❌删除', callback_data='cld %s' % ' '.join(query.data.split()[1:]))]
+            ])
+            context.bot.edit_message_text(text='```{}```'.format(' ↓↓↓ 请选择对该定时任务的操作 ↓↓↓ '),
+                                          chat_id=query.message.chat_id,
+                                          reply_markup=reply_markup, message_id=query.message.message_id,
+                                          parse_mode=ParseMode.MARKDOWN_V2)
+        elif select_btn_type == 'cle':
+            cmd = ' '.join(query.data.split()[6:])
+            try:
+                context.bot.edit_message_text(text='```{}```'.format(' ↓↓↓ 任务正在执行 ↓↓↓ \n\n%s' % cmd),
+                                              chat_id=query.message.chat_id,
+                                              message_id=query.message.message_id, parse_mode=ParseMode.MARKDOWN_V2)
+                out_bytes = subprocess.check_output(cmd, shell=True, timeout=200,
+                                                    stderr=subprocess.STDOUT)
+                out_text = out_bytes.decode('utf-8')
+                if len(out_text.split()) > 30:
+
+                    context.bot.edit_message_text(text='```{}```'.format(
+                        helpers.escape_markdown(' ↓↓↓ %s 执行结果超长,请查看log ↓↓↓' % cmd)),
+                        chat_id=update.effective_chat.id, message_id=query.message.message_id,
+                        parse_mode=ParseMode.MARKDOWN_V2)
+
+                    log_name = '%sbot_%s_%s.log' % (
+                        _logs_dir, select_btn_type, os.path.splitext(cmd.split('/')[-1])[0])
+
+                    with open(log_name, 'a+') as wf:
+                        wf.write(out_text)
+
+                    query.message.reply_document(
+                        reply_to_message_id=query.message.message_id, quote=True, document=open(log_name, 'rb'))
+
+                else:
+                    context.bot.edit_message_text(text='```{}```'.format(
+                        helpers.escape_markdown(' ↓↓↓ %s 执行结果 ↓↓↓ \n\n%s ' % (cmd, out_text))),
+                        chat_id=update.effective_chat.id, message_id=query.message.message_id,
+                        parse_mode=ParseMode.MARKDOWN_V2)
+            except TimeoutExpired:
+                logger.error(' →→→ %s 执行超时 ←←← ' % ' '.join(cmd[6:]))
+                context.bot.edit_message_text(text='```{}```'.format(' →→→ %s 执行超时 ←←← ' % cmd),
+                                              chat_id=query.message.chat_id,
+                                              message_id=query.message.message_id, parse_mode=ParseMode.MARKDOWN_V2)
+            except:
+                context.bot.edit_message_text(text='```{}```'.format(' →→→ %s 执行出错 ←←← ' % cmd),
+                                              chat_id=query.message.chat_id,
+                                              message_id=query.message.message_id, parse_mode=ParseMode.MARKDOWN_V2)
+                raise
+        elif select_btn_type == 'cld':
+            query.answer(text='删除任务功能暂未实现', show_alert=True)
 
     elif select_btn_type == 'logs':
         log_file = query.data.split()[-1]
         if log_file == 'clear':
-            cmd = 'rm -rf %s*.log' % (_logs_dir)
+            cmd = 'rm -rf %s*.log' % _logs_dir
             try:
-                out_bytes = subprocess.check_output(
-                    cmd, shell=True, timeout=600, stderr=subprocess.STDOUT)
+                subprocess.check_output(
+                    cmd, shell=True, timeout=200, stderr=subprocess.STDOUT)
 
-                context.bot.edit_message_text(text='```{}```'.format(' →→→ 日志文件已清除 ←←← '), chat_id=query.message.chat_id,
+                context.bot.edit_message_text(text='```{}```'.format(' →→→ 日志文件已清除 ←←← '),
+                                              chat_id=query.message.chat_id,
                                               message_id=query.message.message_id, parse_mode=ParseMode.MARKDOWN_V2)
             except:
                 context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(
                     ' →→→  清除日志执行出错 ←←← ')), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
                 raise
         else:
-            msg = context.bot.sendMessage(text='```{}```'.format(' ↓↓↓ 下面为下载的%s文件 ↓↓↓ ' % (
-                select_btn_type)),  chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+            context.bot.edit_message_text(text='```{}```'.format(' ↓↓↓ 下面为下载的%s文件 ↓↓↓ ' % select_btn_type),
+                                          chat_id=query.message.chat_id,
+                                          message_id=query.message.message_id, parse_mode=ParseMode.MARKDOWN_V2)
 
-            msg.reply_document(
-                reply_to_message_id=msg.message_id, quote=True, document=open(log_file, 'rb'))
+            query.message.reply_document(reply_to_message_id=query.message.message_id, quote=True,
+                                         document=open(log_file, 'rb'))
 
     else:
         context.bot.edit_message_text(text='```{}```'.format(' →→→ 操作已取消 ←←← '), chat_id=query.message.chat_id,
@@ -283,58 +379,75 @@ def get_reply_markup_btn(cmd_type):
     -------
     返回一个对应命令类型按钮列表，方便读取
     """
-    reply_markup = ''
     if cmd_type == 'logs':
-        fileList = list(set(get_dir_file_list(_logs_dir, 'log')))
-        fileList.sort()
-        keyboardLine = []
-        for i in range(math.ceil(len(fileList)/2)):
-            ret = fileList[0:2]
-            keyboardColumn = []
-            for i in ret:
-                keyboardColumn.append(InlineKeyboardButton(
-                    i.split('/')[-1], callback_data='logs %s' % (i)))
-                fileList.remove(i)
-            keyboardLine.append(keyboardColumn)
+        keyboard_line = []
+        logs_list = get_dir_file_list(_logs_dir, 'log')
+        if (len(logs_list)) > 0:
+            file_list = list(set(get_dir_file_list(_logs_dir, 'log')))
+            file_list.sort()
+            for i in range(math.ceil(len(file_list) / 2)):
+                ret = file_list[0:2]
+                keyboard_column = []
+                for ii in ret:
+                    keyboard_column.append(InlineKeyboardButton(
+                        ii.split('/')[-1], callback_data='logs %s' % ii))
+                    file_list.remove(ii)
+                keyboard_line.append(keyboard_column)
 
-        keyboardLine.append([InlineKeyboardButton('清除日志', callback_data='logs clear'),
-                             InlineKeyboardButton('取消操作', callback_data='cancel')])
-        reply_markup = InlineKeyboardMarkup(keyboardLine)
+            keyboard_line.append([InlineKeyboardButton('清除日志', callback_data='logs clear'),
+                                  InlineKeyboardButton('取消操作', callback_data='cancel')])
+        else:
+            keyboard_line.append([InlineKeyboardButton('未找到相关日志文件', callback_data='cancel')])
+        reply_markup = InlineKeyboardMarkup(keyboard_line)
+    elif cmd_type == 'crontab_l':
+        button_list = list(set(get_crontab_list(cmd_type)))
+        keyboard_line = []
+        if len(button_list) > 0:
+            for i in button_list:
+                keyboard_column = [InlineKeyboardButton(i, callback_data='cl %s' % i)]
+
+                button_list.remove(i)
+                keyboard_line.append(keyboard_column)
+            keyboard_line.append([InlineKeyboardButton('取消操作', callback_data='cancel')])
+        else:
+            keyboard_line.append([InlineKeyboardButton('未从%s获取到任务列表' % crontab_list_file, callback_data='cancel')])
+        reply_markup = InlineKeyboardMarkup(keyboard_line)
     elif cmd_type == 'node':
-        buttonList = list(set(get_crontabe_list(cmd_type)))
-        buttonList.sort()
-        keyboardLine = []
-        for i in range(math.ceil(len(buttonList)/2)):
-            ret = buttonList[0:2]
-            keyboardColumn = []
-            for i in ret:
-                keyboardColumn.append(InlineKeyboardButton(
-                    i.split('/')[-1], callback_data=i))
-                buttonList.remove(i)
-            keyboardLine.append(keyboardColumn)
+        button_list = list(set(get_crontab_list(cmd_type)))
+        button_list.sort()
+        keyboard_line = []
+        for i in range(math.ceil(len(button_list) / 2)):
+            ret = button_list[0:2]
+            keyboard_column = []
+            for ii in ret:
+                keyboard_column.append(InlineKeyboardButton(
+                    ii.split('/')[-1], callback_data=ii))
+                button_list.remove(ii)
+            keyboard_line.append(keyboard_column)
 
-        keyboardLine.append(
+        keyboard_line.append(
             [InlineKeyboardButton('取消操作', callback_data='cancel')])
 
-        reply_markup = InlineKeyboardMarkup(keyboardLine)
+        reply_markup = InlineKeyboardMarkup(keyboard_line)
     elif cmd_type == 'git':
-        buttonList = list(set(get_crontabe_list(cmd_type)))
-        buttonList.sort()
-        keyboardLine = []
-        for i in range(math.ceil(len(buttonList)/2)):
-            ret = buttonList[0:2]
-            keyboardColumn = []
-            for i in ret:
-                keyboardColumn.append(InlineKeyboardButton(
-                    i.split('/')[-1], callback_data=i))
-                buttonList.remove(i)
-            keyboardLine.append(keyboardColumn)
-        if len(keyboardLine) < 1:
-            keyboardLine.append(
-                [InlineKeyboardButton('pull', callback_data='git -C %s pull' % _base_dir)])
-        keyboardLine.append(
-            [InlineKeyboardButton('取消操作', callback_data='cancel')])
-        reply_markup = InlineKeyboardMarkup(keyboardLine)
+        # button_list = list(set(get_crontab_list(cmd_type)))
+        # button_list.sort()
+        keyboard_line = [[InlineKeyboardButton('git pull', callback_data='git -C %s pull' % _base_dir),
+                          InlineKeyboardButton('git reset --hard', callback_data='git -C %s reset --hard' % _base_dir)],
+                         [InlineKeyboardButton('取消操作', callback_data='cancel')]]
+        # for i in range(math.ceil(len(button_list) / 2)):
+        #     ret = button_list[0:2]
+        #     keyboard_column = []
+        #     for ii in ret:
+        #         keyboard_column.append(InlineKeyboardButton(
+        #             ii.split('/')[-1], callback_data=ii))
+        #         button_list.remove(ii)
+        #     keyboard_line.append(keyboard_column)
+        # if len(keyboard_line) < 1:
+        #     keyboard_line.append(
+        #         [InlineKeyboardButton('git pull', callback_data='git -C %s pull' % _base_dir),
+        #          InlineKeyboardButton('git reset --hard', callback_data='git -C %s reset --hard' % _base_dir)])
+        reply_markup = InlineKeyboardMarkup(keyboard_line)
     else:
         reply_markup = InlineKeyboardMarkup(
             [[InlineKeyboardButton('没找到对的命令操作按钮', callback_data='cancel')]])
@@ -342,35 +455,41 @@ def get_reply_markup_btn(cmd_type):
     return reply_markup
 
 
-def get_crontabe_list(cmd_type):
-    '''获取任务列表里面的node相关的定时任务
+def get_crontab_list(cmd_type):
+    """获取任务列表里面的node相关的定时任务
 
     Parameters
     ----------
     cmd_type: 是任务的命令类型
-    item_idx: 确定取的需要取之是定任务里面第几个空格后的值作为后面执行指令参数
+    #item_idx: 确定取的需要取之是定任务里面第几个空格后的值作为后面执行指令参数
 
     Returns
     -------
     返回一个指定命令类型定时任务列表
-    '''
-    crontab_list_file = 'crontab_list.sh'
-    buttonList = []
-    with open(_docker_dir+crontab_list_file) as lines:
-        array = lines.readlines()
-        for i in array:
-            i = i.strip('\n')
-            if i.startswith('#'):
-                pass
-            else:
-                items = i.split('>>')[0].split()[5:]
-                if cmd_type == items[0]:
-                    buttonList.append(' '.join(items))
-    return buttonList
+    """
+    button_list = []
+    try:
+        with open(_docker_dir + crontab_list_file) as lines:
+            array = lines.readlines()
+            for i in array:
+                i = i.strip('\n')
+                if i.startswith('#'):
+                    pass
+                else:
+                    items = i.split('>>')
+                    item_sub = items[0].split()[5:]
+                    if cmd_type == item_sub[0]:
+                        button_list.append(' '.join(item_sub))
+                    elif cmd_type == 'crontab_l':
+                        button_list.append(items[0])
+    except:
+        logger.warning(f'读取定时任务配置文件 {crontab_list_file} 出错')
+    finally:
+        return button_list
 
 
 def get_dir_file_list(dir_path, file_type):
-    '''获取传入的路径下的文件列表
+    """获取传入的路径下的文件列表
 
     Parameters
     ----------
@@ -380,18 +499,18 @@ def get_dir_file_list(dir_path, file_type):
     Returns
     -------
     返回一个完整绝对路径的文件列表，方便读取
-    '''
-    cmd = ('ls %s*.%s') % (dir_path, file_type)
-    out_text = ''
+    """
+    cmd = 'ls %s*.%s' % (dir_path, file_type)
+    file_list = []
     try:
-
         out_bytes = subprocess.check_output(
             cmd, shell=True, timeout=5, stderr=subprocess.STDOUT)
         out_text = out_bytes.decode('utf-8')
+        file_list = out_text.split()
     except:
-        out_text = '%s目录下，不存在%s对应的文件' % (file_type)
-    logger.info(out_text.split())
-    return out_text.split()
+        logger.warning(f'{dir_path}目录下，不存在{file_type}对应的文件')
+    finally:
+        return file_list
 
 
 def is_admin(from_user_id):
@@ -402,20 +521,29 @@ def is_admin(from_user_id):
 
 
 def unknown(update, context):
-    '''回复用户输入不存在的指令
-    '''
+    """回复用户输入不存在的指令
+    """
     from_user_id = update.message.from_user.id
     if admin_id == str(from_user_id):
-        tg_user_name = "%s%s" % (
-            update.message.from_user.last_name if update.message.from_user.last_name is not None else '',
-            update.message.from_user.first_name)
-        update.message.reply_text(text='%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s' % ('⚠️ 您输入了一个错误的指令，请参考说明使用',
-                                                                                   '/start \n\t\t开始并获取指令说明',
-                                                                                   '/node \n\t\t获取可执行脚本的列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/node /scripts/jd_818.js)',
-                                                                                   '/git \n\t\t获取可执行git指令列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/git -C /scripts/ pull)',
-                                                                                   '/logs \n\t\t获取logs下的日志文件列表，选择对应名字可以下载日志文件。',
-                                                                                   '/env \n\t\t获取系统环境变量列表。(拓展使用：设置系统环境变量，例：/env export JD_DEBUG=true )',
-                                                                                   '/bash \n\t\t执行执行命令。参考：/bash ls -l 未完善不开放使用'),
+        update.message.reply_text(text="""
+⚠️ 您输入了一个错误的指令，请参考说明使用
+
+/start 开始并获取指令说明
+/node    
+    获取可执行脚本的列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/node /scripts/jd_818.js)
+    
+/git
+    获取可执行git指令列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/git -C /scripts/ pull)
+    
+/logs
+    获取logs下的日志文件列表，选择对应名字可以下载日志文件
+    
+/env
+    获取系统环境变量列表。(拓展使用：设置系统环境变量，例：/env export JD_DEBUG=true )
+    
+/bash
+    执行执行命令。参考：/bash ls -l 未完善不开放使用
+""",
                                   parse_mode=ParseMode.HTML)
     else:
         update.message.reply_text(text='此为私人使用bot,不能执行您的指令！')
@@ -429,7 +557,6 @@ def error(update, context):
 
 
 def main():
-
     global admin_id, bot_token, crontab_list_file
 
     if 'TG_BOT_TOKEN' in os.environ:
@@ -442,6 +569,8 @@ def main():
         crontab_list_file = os.getenv('CRONTAB_LIST_FILE')
     else:
         crontab_list_file = 'crontab_list.sh'
+
+    logger.info('CRONTAB_LIST_FILE=' + crontab_list_file)
 
     # 创建更新程序并参数为你Bot的TOKEN。
     updater = Updater(bot_token, use_context=True)
@@ -457,6 +586,9 @@ def main():
 
     # 通过 git 函数 响应 '/git' 命令
     dp.add_handler(CommandHandler('git', git))
+
+    # 通过 logs 函数 响应 '/logs' 命令
+    dp.add_handler(CommandHandler('crontab', crontab))
 
     # 通过 logs 函数 响应 '/logs' 命令
     dp.add_handler(CommandHandler('logs', logs))
