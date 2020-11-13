@@ -6,6 +6,7 @@ RUN set -ex \
         && apk add --no-cache tzdata \
                                 git \
                                 nodejs \
+                                moreutils \
                                 npm \
                                 python3-dev \
                                 py3-pip \
@@ -32,9 +33,9 @@ RUN cd /scripts/docker/bot \
         && python3 setup.py install
 
 ENV CDN_JD_DAILYBONUS true
-ENV CRONTAB_LIST_FILE crontab_list.sh
+ENV CRONTAB_LIST_FILE crontab_list_ts.sh
 
-RUN crontab /scripts/docker/crontab_list.sh
+RUN crontab /scripts/docker/crontab_list_ts.sh
 
 WORKDIR /scripts
 
