@@ -472,8 +472,8 @@ def get_crontab_list(cmd_type):
         with open(_docker_dir + crontab_list_file) as lines:
             array = lines.readlines()
             for i in array:
-                i = i.strip('\n')
-                if i.startswith('#'):
+                i = i.replace('|ts', '').strip('\n')
+                if i.startswith('#') or len(i) < 5:
                     pass
                 else:
                     items = i.split('>>')
