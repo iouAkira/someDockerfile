@@ -18,7 +18,7 @@ RUN git clone https://github.com/lxk0301/jd_scripts /scripts \
         && cd /scripts \
         && mkdir logs \
         && npm install \
-        && cd ~ \
+        && cd /tmp \
         && npm install request
 
 RUN cd /scripts/docker/ \
