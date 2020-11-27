@@ -17,6 +17,7 @@ RUN set -ex \
 RUN git clone https://github.com/lxk0301/jd_scripts /scripts \
         && cd /scripts \
         && mkdir logs \
+        && git checkout master \
         && npm install \
         && cd /tmp \
         && npm install request
