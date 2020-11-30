@@ -50,7 +50,7 @@ RUN set -ex \
         && pip3 install efb-qq-slave \
         && pip3 install lottie \
         && pip3 install cairosvg \
-#         && sed -i 's/channel_emoji = "💬"/channel_emoji = "𝙒𝙚𝙘𝙝𝙖𝙩"/g' /usr/lib/python3.8/site-packages/efb_wechat_slave/__init__.py \
+        && sed -i 's/channel_emoji = "💬"/channel_emoji = "𝙒𝙚𝙘𝙝𝙖𝙩"/g' /usr/lib/python3.8/site-packages/efb_wechat_slave/__init__.py \
         && sed -i "s/{self.chat_type_emoji}/丨/g" /usr/lib/python3.8/site-packages/efb_telegram_master/chat.py \
         && cd ~ \
         && git clone https://github.com/catbaron0/efb-mp-instanceview-middleware.git \
