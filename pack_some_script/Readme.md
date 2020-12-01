@@ -1,0 +1,79 @@
+# 打包一些比较好薅的羊毛脚本
+- ### 喜马拉雅极速版 作者：[__@Zero-S1__](https://github.com/Zero-S1)｜[__仓库地址__](https://github.com/Zero-S1/xmly_speed)
+- ### 企鹅阅读(QQ小程序)多账户 作者：[__@QCEnjoyLL__](https://github.com/QCEnjoyLL)｜[__仓库地址__](https://github.com/QCEnjoyLL/qeyd)
+- ### 企鹅阅读(QQ小程序) 脚本原作者：[__@ziye12__](https://github.com/ziye12)｜[__仓库地址__](https://github.com/ziye12/JavaScript)
+___
+# 使用说明
+> 前提：   
+> 一台安装好docker的主机   
+> 这里只介绍`docker-compose`使用方式
+
+### `docker-compose` 安装
+```shell
+sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+### 1. 创建一个目录`my_scripts`用于存放备份配置等数据，迁移重装的时候只需要备份整个`my_scripts`目录即可（`my_scripts`目录名字自己随意定义）
+> 需要新建的目录文件结构参考如下:
+```
+my_scripts
+├── logs/
+└── docker-compose.yml
+```
+### 1. 在`my_scripts`目录创建`logs`目录存放日志;
+### 2. 在`my_scripts`目录创建`docker-compose.yml` 参考内容如下：
+```yaml
+my_script:
+  image: akyakya/pack_some_script:latest
+  container_name: my_script
+  restart: always
+  tty: true
+  volumes:
+    - ./logs:/logs
+  environment:
+    # 注意环境变量填写值的时候一律不需要引号（""或者''）下面这些只是事例，根据自己的需求增加删除
+    # 公用通知相关环境变量
+    # 喜马拉雅用的bark
+    - BARK=
+    # 喜马拉雅用的server酱
+    - SCKEY=
+    # server酱服务
+    - PUSH_KEY=
+    # bark服务
+    - BARK_PUSH=
+    # bark服务通知声音
+    - BARK_SOUND=
+    # tg通知bot token
+    - TG_BOT_TOKEN=
+    # tg通知用户id
+    - TG_USER_ID=
+    # 钉钉通知bot token
+    - DD_BOT_TOKEN=
+    - DD_BOT_SECRET=
+    # 喜马拉雅极速版相关，原作者使用\n换行传入多个cookie，这个环境变量转译麻烦，改为 是用||来连接多个cookies
+    # - XMLY_SPEED_COOKIE=cookie1
+    #                     ||cookie2
+    #                     ||cookie2
+    #                     ||cookie2
+    # # 企鹅阅读相关，原作者使用\n换行传入多个cookie，这个环境变量转译麻烦，改为 是用||来连接多个cookies
+    # - COOKIE_QEYD=cookie1
+    #                 ||cookie2
+    #                 ||cookie2
+    #                 ||cookie2
+    # 镜像里面已经默认配置为原作者(https://raw.githubusercontent.com/ziye12/JavaScript/master/qqread.js)的脚本，如果需要自定配置
+    # - SYNCURL=
+#   command:
+#     - /bin/sh
+#     - -c
+#     - |
+#     - crond
+#     - node
+```
+### 目录文件配置好之后在 `my_scripts`目录执行  
+ `docker-compose up -d` 启动；  
+ `docker-compose logs` 打印日志；  
+ `docker-compose pull` 更新镜像；  
+ `docker-compose stop` 停止容器；  
+ `docker-compose restart` 重启容器；  
+ `docker-compose down` 停止并删除容器；  

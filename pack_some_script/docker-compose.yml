@@ -1,0 +1,45 @@
+my_script:
+  image: akyakya/pack_some_script:latest
+  container_name: my_script
+  restart: always
+  tty: true
+  volumes:
+    - ./logs:/logs
+  environment:
+    # 注意环境变量填写值的时候一律不需要引号（""或者''）下面这些只是事例，根据自己的需求增加删除
+    # 公用通知相关环境变量
+    # 喜马拉雅用的bark
+    - BARK=
+    # 喜马拉雅用的server酱
+    - SCKEY=
+    # server酱服务
+    - PUSH_KEY=
+    # bark服务
+    - BARK_PUSH=
+    # bark服务通知声音
+    - BARK_SOUND=
+    # tg通知bot token
+    - TG_BOT_TOKEN=
+    # tg通知用户id
+    - TG_USER_ID=
+    # 钉钉通知bot token
+    - DD_BOT_TOKEN=
+    - DD_BOT_SECRET=
+    # 喜马拉雅极速版相关，原作者使用\n换行传入多个cookie，这个环境变量转译麻烦，改为 是用||来连接多个cookies
+    # - XMLY_SPEED_COOKIE=cookie1
+    #                     ||cookie2
+    #                     ||cookie2
+    #                     ||cookie2
+    # # 企鹅阅读相关，原作者使用\n换行传入多个cookie，这个环境变量转译麻烦，改为 是用||来连接多个cookies
+    # - COOKIE_QEYD=cookie1
+    #                 ||cookie2
+    #                 ||cookie2
+    #                 ||cookie2
+    # 镜像里面已经默认配置为原作者(https://raw.githubusercontent.com/ziye12/JavaScript/master/qqread.js)的脚本，如果需要自定配置
+    # - SYNCURL=
+#   command:
+#     - /bin/sh
+#     - -c
+#     - |
+#     - crond
+#     - node
