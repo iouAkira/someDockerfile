@@ -39,7 +39,7 @@ RUN mkdir /logs \
         #替换企鹅阅读脚本相关内容以兼容环境变量配置
         && sed -i 's/COOKIE_QEYD.split("\\n")/COOKIE_QEYD.split("|")/g' /qeyd/Scripts/qeyd_replace.js
 
-COPY ./cronlist.sh /cron_list/
+COPY ./pack_some_script/cronlist.sh /cron_list/
 
 # 喜马拉雅极速配置-默认0关闭刷时长
 ENV XMLY_ACCUMULATE_TIME 0
