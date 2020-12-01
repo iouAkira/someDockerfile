@@ -30,15 +30,21 @@ RUN git clone https://github.com/QCEnjoyLL/qeyd.git /qeyd \
 # 创建工作目录，替换多Cookies链接符号
 RUN mkdir /logs \
         && mkdir /cron_list \
-        && sed -i 's/COOKIE_QEYD.split("\\n")/COOKIE_QEYD.split("||")/g' /qeyd/Scripts/qeyd_replace.js \
-        && sed -i "s/xmly_speed_cookie.split('\\n')/xmly_speed_cookie.split('||')/g" /xmly_speed/xmly_speed.py
+        #替换喜马拉雅脚本相关内容以兼容环境变量配置
+        && sed -i 's/BARK/BARK_PUSH/g' /xmly_speed/xmly_speed.py \
+        && sed -i 's/SCKEY/PUSH_KEY/g' /xmly_speed/xmly_speed.py \
+        && sed -i 's/if\ XMLY_ACCUMULATE_TIME/if\ os.environ["XMLY_ACCUMULATE_TIME"]/g' /xmly_speed/xmly_speed.py \
+        && sed -i "s/\(xmly_speed_cookie\.split('\)\\\n/\1\|/g" /xmly_speed/xmly_speed.py \
+        && sed -i 's/cookiesList.append(line)/cookiesList.append(line.replace(" ",""))/g' /xmly_speed/xmly_speed.py \
+        #替换企鹅阅读脚本相关内容以兼容环境变量配置
+        && sed -i 's/COOKIE_QEYD.split("\\n")/COOKIE_QEYD.split("|")/g' /qeyd/Scripts/qeyd_replace.js
 
 COPY ./cronlist.sh /cron_list/
 
-# 企鹅默认仓库地址
+# 喜马拉雅极速配置-默认0关闭刷时长
+ENV XMLY_ACCUMULATE_TIME 0
+# 企鹅阅读必须配置-默认仓库地址
 ENV SYNCURL https://raw.githubusercontent.com/ziye12/JavaScript/master/qqread.js
-# 生效的定时任务文件名
-ENV CRONTAB_LIST_FILE cronlist.sh
 
 RUN crontab /cron_list/cronlist.sh
 

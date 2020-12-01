@@ -51,24 +51,24 @@ my_script:
     # 钉钉通知bot token
     - DD_BOT_TOKEN=
     - DD_BOT_SECRET=
-    # 喜马拉雅极速版相关，原作者使用\n换行传入多个cookie，这个环境变量转译麻烦，改为 是用||来连接多个cookies
-    # - XMLY_SPEED_COOKIE=cookie1
-    #                     ||cookie2
-    #                     ||cookie2
-    #                     ||cookie2
-    # # 企鹅阅读相关，原作者使用\n换行传入多个cookie，这个环境变量转译麻烦，改为 是用||来连接多个cookies
-    # - COOKIE_QEYD=cookie1
-    #                 ||cookie2
-    #                 ||cookie2
-    #                 ||cookie2
+    # 喜马拉雅极速版相关，原作者使用\n换行传入多个cookie，脚本里面没有处理环境变量转译，改为用|来连接多个cookies
+    - XMLY_ACCUMULATE_TIME=1 #设置为1开启刷时长，0为关闭刷时长
+    - XMLY_SPEED_COOKIE=cookie1
+                      | cookie2
+                      | cookie2
+    # 企鹅阅读相关，原作者使用\n换行传入多个cookie，这个环境变量转译麻烦，改为 是用||来连接多个cookies
+    #格式为qqreadheaderVal@qqreadtimeurlVal@qqreadtimeheaderVal
+    - COOKIE_QEYD=cookie1
+                    |cookie2
+                    |cookie2
     # 镜像里面已经默认配置为原作者(https://raw.githubusercontent.com/ziye12/JavaScript/master/qqread.js)的脚本，如果需要自定配置
     # - SYNCURL=
-#   command:
-#     - /bin/sh
-#     - -c
-#     - |
-#     - crond
-#     - node
+  command:
+    - /bin/sh
+    - -c
+    - |
+      crond
+      node
 ```
 ### 目录文件配置好之后在 `my_scripts`目录执行  
  `docker-compose up -d` 启动；  
