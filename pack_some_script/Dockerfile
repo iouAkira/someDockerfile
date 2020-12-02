@@ -33,7 +33,7 @@ RUN mkdir /logs \
         #替换喜马拉雅脚本相关内容以兼容环境变量配置
         && sed -i 's/BARK/BARK_PUSH/g' /xmly_speed/xmly_speed.py \
         && sed -i 's/SCKEY/PUSH_KEY/g' /xmly_speed/xmly_speed.py \
-        && sed -i 's/if\ XMLY_ACCUMULATE_TIME/if\ os.environ["XMLY_ACCUMULATE_TIME"]/g' /xmly_speed/xmly_speed.py \
+        && sed -i 's/if\ XMLY_ACCUMULATE_TIME.*$/if\ os.environ["XMLY_ACCUMULATE_TIME"]=="1":/g' /xmly_speed/xmly_speed.py \
         && sed -i "s/\(xmly_speed_cookie\.split('\)\\\n/\1\|/g" /xmly_speed/xmly_speed.py \
         && sed -i 's/cookiesList.append(line)/cookiesList.append(line.replace(" ",""))/g' /xmly_speed/xmly_speed.py
 
