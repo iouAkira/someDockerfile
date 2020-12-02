@@ -35,7 +35,7 @@ RUN mkdir /logs \
         && sed -i 's/SCKEY/PUSH_KEY/g' /xmly_speed/xmly_speed.py \
         && sed -i 's/if\ XMLY_ACCUMULATE_TIME/if\ os.environ["XMLY_ACCUMULATE_TIME"]/g' /xmly_speed/xmly_speed.py \
         && sed -i "s/\(xmly_speed_cookie\.split('\)\\\n/\1\|/g" /xmly_speed/xmly_speed.py \
-        && sed -i 's/cookiesList.append(line)/cookiesList.append(line.replace(" ",""))/g' /xmly_speed/xmly_speed.py \
+        && sed -i 's/cookiesList.append(line)/cookiesList.append(line.replace(" ",""))/g' /xmly_speed/xmly_speed.py
 
 
 COPY ./pack_some_script/cronlist.sh /cron_list/

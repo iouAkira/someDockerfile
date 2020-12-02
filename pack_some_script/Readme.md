@@ -1,4 +1,5 @@
 # 打包一些比较好薅的羊毛脚本
+> ### Cookie获取相关教程请查看原作者仓库教程
 - ### 喜马拉雅极速版 作者：[__@Zero-S1__](https://github.com/Zero-S1)｜[__仓库地址__](https://github.com/Zero-S1/xmly_speed)
 - ### 企鹅阅读(QQ小程序) 作者：[__@ziye12__](https://github.com/ziye12)｜[__仓库地址__](https://github.com/ziye12/JavaScript)
 ___
