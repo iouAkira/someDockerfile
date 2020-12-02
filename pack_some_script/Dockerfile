@@ -22,8 +22,8 @@ RUN git clone https://github.com/Zero-S1/xmly_speed.git /xmly_speed \
         && pip3 install -r requirements.txt
 
 # 支持多账号企鹅阅读的仓库
-RUN git clone https://github.com/QCEnjoyLL/qeyd.git /qeyd \
-        && cd /qeyd \
+RUN git clone https://github.com/ziye12/JavaScript.git /qqread \
+        && cd /qqread \
         && git checkout master \
         && npm install
 
@@ -36,15 +36,14 @@ RUN mkdir /logs \
         && sed -i 's/if\ XMLY_ACCUMULATE_TIME/if\ os.environ["XMLY_ACCUMULATE_TIME"]/g' /xmly_speed/xmly_speed.py \
         && sed -i "s/\(xmly_speed_cookie\.split('\)\\\n/\1\|/g" /xmly_speed/xmly_speed.py \
         && sed -i 's/cookiesList.append(line)/cookiesList.append(line.replace(" ",""))/g' /xmly_speed/xmly_speed.py \
-        #替换企鹅阅读脚本相关内容以兼容环境变量配置
-        && sed -i 's/COOKIE_QEYD.split("\\n")/COOKIE_QEYD.split("|")/g' /qeyd/Scripts/qeyd_replace.js
+
 
 COPY ./pack_some_script/cronlist.sh /cron_list/
 
 # 喜马拉雅极速配置-默认0关闭刷时长
 ENV XMLY_ACCUMULATE_TIME 0
 # 企鹅阅读必须配置-默认仓库地址
-ENV SYNCURL https://raw.githubusercontent.com/ziye12/JavaScript/master/qqread.js
+ENV COOKIES_SPLIT |
 
 RUN crontab /cron_list/cronlist.sh
 

@@ -1,7 +1,6 @@
 # 打包一些比较好薅的羊毛脚本
 - ### 喜马拉雅极速版 作者：[__@Zero-S1__](https://github.com/Zero-S1)｜[__仓库地址__](https://github.com/Zero-S1/xmly_speed)
-- ### 企鹅阅读(QQ小程序)多账户 作者：[__@QCEnjoyLL__](https://github.com/QCEnjoyLL)｜[__仓库地址__](https://github.com/QCEnjoyLL/qeyd)
-- ### 企鹅阅读(QQ小程序) 脚本原作者：[__@ziye12__](https://github.com/ziye12)｜[__仓库地址__](https://github.com/ziye12/JavaScript)
+- ### 企鹅阅读(QQ小程序) 作者：[__@ziye12__](https://github.com/ziye12)｜[__仓库地址__](https://github.com/ziye12/JavaScript)
 ___
 # 使用说明
 > 前提：   
@@ -22,7 +21,7 @@ my_scripts
 └── docker-compose.yml
 ```
 ### 1. 在`my_scripts`目录创建`logs`目录存放日志;
-### 2. 在`my_scripts`目录创建`docker-compose.yml` 参考内容如下：
+### 2. 在`my_scripts`目录创建`docker-compose.yml` 参考内容如下([或者直接复制这个文件内容修改](https://raw.githubusercontent.com/iouakira/someDockerfile/master/pack_some_script/docker-compose.yml))：
 ```yaml
 my_script:
   image: akyakya/pack_some_script:latest
@@ -54,15 +53,18 @@ my_script:
     # 喜马拉雅极速版相关，原作者使用\n换行传入多个cookie，脚本里面没有处理环境变量转译，改为用|来连接多个cookies
     - XMLY_ACCUMULATE_TIME=1 #设置为1开启刷时长，0为关闭刷时长
     - XMLY_SPEED_COOKIE=cookie1
-                      | cookie2
-                      | cookie2
-    # 企鹅阅读相关，原作者使用\n换行传入多个cookie，这个环境变量转译麻烦，改为 是用||来连接多个cookies
-    #格式为qqreadheaderVal@qqreadtimeurlVal@qqreadtimeheaderVal
-    - COOKIE_QEYD=cookie1
-                    |cookie2
-                    |cookie2
-    # 镜像里面已经默认配置为原作者(https://raw.githubusercontent.com/ziye12/JavaScript/master/qqread.js)的脚本，如果需要自定配置
-    # - SYNCURL=
+                        | cookie2
+                        | cookie2
+    # 企鹅阅读相关
+    #多账号 cookies连接符号，不配置默认为|，自己有能力调整排错的可以尝试自定义
+    - COOKIES_SPLIT=|
+    #上面COOKIES_SPLIT配置的什么下面用什么连接多个qqreadheaderVal
+    - QQREAD_HEADER=qqreadheaderVal1|qqreadheaderVal2|qqreadheaderVal3
+    #上面COOKIES_SPLIT配置的什么下面用什么连接多个qqreadheaderVal
+    - QQREAD_TIMEURL=qqreadtimeurlVal1|qqreadtimeurlVal2|qqreadtimeurlVal3
+    #上面COOKIES_SPLIT配置的什么下面用什么连接多个qqreadheaderVal
+    - QQREAD_TIMEHD=qqreadtimeheaderVal1|qqreadtimeheaderVal2|qqreadtimeheaderVal3
+
   command:
     - /bin/sh
     - -c
