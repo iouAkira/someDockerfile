@@ -34,10 +34,6 @@ my_script:
   environment:
     # 注意环境变量填写值的时候一律不需要引号（""或者''）下面这些只是事例，根据自己的需求增加删除
     # 公用通知相关环境变量
-    # 喜马拉雅用的bark
-    - BARK=
-    # 喜马拉雅用的server酱
-    - SCKEY=
     # server酱服务
     - PUSH_KEY=
     # bark服务
