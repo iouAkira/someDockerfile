@@ -38,7 +38,7 @@ RUN mkdir /logs \
         && sed -i 's/cookiesList.append(line)/cookiesList.append(line.replace(" ",""))/g' /xmly_speed/xmly_speed.py \
         && sed -i 's/_notify_time.split.*$/_notify_time.split()[0]==os.environ["XMLY_NOTIFY_TIME"]\ and\ int(_notify_time.split()[1])<30:/g' /xmly_speed/xmly_speed.py
 
-COPY ./pack_some_script/crontablist.sh /checkUpdate/
+COPY ./pack_some_script/cronlist.sh /checkUpdate/
 COPY ./pack_some_script/update_notify.py /checkUpdate/
 
 
