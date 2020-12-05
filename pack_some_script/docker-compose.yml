@@ -23,6 +23,7 @@ my_script:
     - DD_BOT_SECRET=
     # 喜马拉雅极速版相关，原作者使用\n换行传入多个cookie，脚本里面没有处理环境变量转译，改为用|来连接多个cookies
     - XMLY_ACCUMULATE_TIME=1 #设置为1开启刷时长，0为关闭刷时长
+    - XMLY_NOTIFY_TIME=18 #喜马拉雅通知时间，要填写2位，例如8点就写08，默认为19
     - XMLY_SPEED_COOKIE=cookie1
                         | cookie2
                         | cookie2
