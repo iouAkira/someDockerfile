@@ -46,10 +46,10 @@ COPY ./pack_some_script/update_notify.py /checkUpdate/
 ENV BUILD_VERSION 0.0.4
 # 喜马拉雅极速配置-默认0关闭刷时长
 ENV XMLY_ACCUMULATE_TIME 0
-ENV XMLY_NOTIFY_TIME 18
+ENV XMLY_NOTIFY_TIME 19
 # 企鹅阅读必须配置-默认仓库地址
 ENV COOKIES_SPLIT |
 
-RUN crontab /checkUpdate/crontablist.sh
+RUN crontab /checkUpdate/cronlist.sh
 
 CMD ["node"]
