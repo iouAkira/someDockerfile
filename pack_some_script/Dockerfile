@@ -38,7 +38,7 @@ RUN mkdir /logs \
         && sed -i 's/cookiesList.append(line)/cookiesList.append(line.replace(" ",""))/g' /xmly_speed/xmly_speed.py \
         && sed -i 's/_notify_time.split.*$/_notify_time.split()[0]==os.environ["XMLY_NOTIFY_TIME"]\ and\ int(_notify_time.split()[1])<30:/g' /xmly_speed/xmly_speed.py
 
-COPY ./pack_some_script/crontablist.sh /checkUpdate/
+COPY ./pack_some_script/cronlist.sh /checkUpdate/
 COPY ./pack_some_script/update_notify.py /checkUpdate/
 
 
@@ -46,10 +46,10 @@ COPY ./pack_some_script/update_notify.py /checkUpdate/
 ENV BUILD_VERSION 0.0.4
 # 喜马拉雅极速配置-默认0关闭刷时长
 ENV XMLY_ACCUMULATE_TIME 0
-ENV XMLY_NOTIFY_TIME 18
+ENV XMLY_NOTIFY_TIME 19
 # 企鹅阅读必须配置-默认仓库地址
 ENV COOKIES_SPLIT |
 
-RUN crontab /checkUpdate/crontablist.sh
+RUN crontab /checkUpdate/cronlist.sh
 
 CMD ["node"]
