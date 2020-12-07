@@ -4,7 +4,7 @@ v0.0.5
 - 企鹅越小小程序更新说明，docker-compose.yml的 QQREAD_HEADER 环境变量需要换成 QQREAD_BODY，Readme已经更新说明
 BODY的获取rewrite参考作者原仓库
 https://github.com/ziye12/JavaScript/blob/master/Task/qqreads.js#L41
-- 建议docker push akyakya/pack_some_script更新镜像和docker-compose.yml，执行docker-compose up -d
+- 建议docker push akyakya/pack_some_script更新镜像和docker-compose.yml里面的三个企鹅阅读的变量重新抓包获取最新的，执行docker-compose up -d
 
 v0.0.4
 更新时间:2020-12-05
