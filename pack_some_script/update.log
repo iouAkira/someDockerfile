@@ -1,3 +1,11 @@
+v0.0.5
+更新时间:2020-12-07
+- 增加了自动更新通知脚本
+- 企鹅越小小程序更新说明，docker-compose.yml的 QQREAD_HEADER 环境变量需要换成 QQREAD_BODY，Readme已经更新说明
+BODY的获取rewrite参考作者原仓库
+https://github.com/ziye12/JavaScript/blob/master/Task/qqreads.js#L41
+- 建议docker push akyakya/pack_some_script更新镜像和docker-compose.yml，执行docker-compose up -d
+
 v0.0.4
 更新时间:2020-12-05
 - 修正喜马拉雅发送通知功能，增减发送通知环境变量参数
