@@ -9,6 +9,7 @@ import base64
 import urllib.parse
 import json
 import logging
+from requests.exceptions import RequestException, Timeout
 
 # 参考@lxk0301仓库的https://github.com/lxk0301/jd_scripts/blob/master/sendNotify.js
 # @iouAkira 参照改写的Python版本
@@ -145,7 +146,8 @@ def tg_bot_notify(title, content):
         except Exception as err:
             logger.exception("Telegram发送通知消息异常\n%s" % err)
     else:
-        logger.info("您未提供telegram机器人推送所需的TG_BOT_TOKEN和TG_USER_ID，取消telegram推送消息通知")
+        logger.info(
+            "您未提供telegram机器人推送所需的TG_BOT_TOKEN和TG_USER_ID，取消telegram推送消息通知")
         return
 
 
@@ -231,6 +233,7 @@ def compare(a: str, b: str):
             if i == max(lena, lenb)-1:
                 return a
 
+
 def send_notify(title, content):
     """
     统一发送
@@ -241,19 +244,75 @@ def send_notify(title, content):
     dd_bot_notify(title, content)
     igot_notify(title, content)
 
+
 # 启用日志
 logging.basicConfig(
     format='%(asctime)s-%(name)s-%(levelname)s==> %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def check_update():
+
+def get_remote_context(check_name, file_name):
+    """
+    获取远程仓库里指定文件的内容
+
+    参数
+    check_name: 需要获取的数据名称，自定义，方便日志区分
+    file_name: 要获取的文件名
+    """
+    get_success = True
+    resp = ''
+    try:
+        resp = requests.get(
+            url="https://github.com/iouAkira/someDockerfile/raw/master/pack_some_script/"+file_name, timeout=10)
+    except RequestException as error:
+        logger.warning(f"获取{check_name}内容时发生网络请求异常，尝试使用镜像仓库")
+        try:
+            resp = requests.get(
+                url="https://raw.fastgit.org/iouAkira/someDockerfile/master/pack_some_script/"+file_name, timeout=10)
+        except Exception as errot:
+            logger.warning(f"使用镜像仓库网络请求异常，获取{check_name}内容失败。")
+            get_success = False
+    except Exception as error:
+        logger.warning(f"网络请求错错误，获取{check_name}容失败。")
+        get_success = False
+
+    return resp, get_success
+
+
+def send_notify():
+    """
+    其他类普通的通知
+    """
+    resp, status = get_remote_context("通知", "notify.log")
+    if status and resp.status_code == 200:
+        logger.info(resp.text)
+
+
+def check_config_change():
+    """
+    检查配置更新版本判断是否需要提醒用户更新更新配置
+    """n
+    resp, status = get_remote_context("配置更新", "update.log")
+    if status and resp.status_code == 200:
+        logger.info(resp.text)
+        #获取文件里面的里面存放的最新更新通知事假n
+        change_content=resp.text.split("\n")
+        for line in change_content:
+            if (line.startswith("v")):
+                if (compare(line.replace("v", ""), curr_verions.replace("v", "")) == curr_verions.replace("v", "")):
+                    break
+                if (first_line):
+                    first_line = False
+                    is_notify = True
+                    latest_version = line
+            context = context + line + '\n'
+
+def check_image_update():
     """
     检查对比构建版本判断是否需要提醒用户更新镜像
     """
-    try:
-        resp = requests.get(
-            url="https://raw.githubusercontent.com/iouakira/someDockerfile/master/pack_some_script/update.log").text
-
+    resp, status = get_remote_context("镜像更新", "update.log")
+    if status and resp.status_code == 200:
         update_log = resp.split("\n")
         first_line = True
         is_notify = False
@@ -289,11 +348,11 @@ def check_update():
                         (curr_verions, latest_version, context))
         else:
             logger.info("无更新，或者不再更新时间段内，取消发送更新通知。")
-    except Exception as err:
-        logger.exception("检查发送更新通知异常\n%s" % err)
+
 
 def main():
-    check_update()
+    check_config_change()
+
 
 if __name__ == '__main__':
     main()
