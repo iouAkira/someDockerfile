@@ -1,7 +1,5 @@
 import os
 from os import replace
-import requests
-from requests.api import get
 import time
 import hmac
 import hashlib
@@ -9,7 +7,9 @@ import base64
 import urllib.parse
 import json
 import logging
-from requests.exceptions import RequestException, Timeout
+
+import requests
+from requests.exceptions import RequestException
 
 # 参考@lxk0301仓库的https://github.com/lxk0301/jd_scripts/blob/master/sendNotify.js
 # @iouAkira 参照改写的Python版本
@@ -293,19 +293,19 @@ def check_config_change():
     检查配置更新版本判断是否需要提醒用户更新更新配置
     """
     resp, status = get_remote_context("配置更新", "update.log")
-    if status and resp.status_code == 200:
-        logger.info(resp.text)
-        #获取文件里面的里面存放的最新更新通知事假n
-        change_content=resp.text.split("\n")
-        for line in change_content:
-            if (line.startswith("v")):
-                if (compare(line.replace("v", ""), curr_verions.replace("v", "")) == curr_verions.replace("v", "")):
-                    break
-                if (first_line):
-                    first_line = False
-                    is_notify = True
-                    latest_version = line
-            context = context + line + '\n'
+    # if status and resp.status_code == 200:
+    #     logger.info(resp.text)
+    #     #获取文件里面的里面存放的最新更新通知事假n
+    #     change_content=resp.text.split("\n")
+    #     for line in change_content:
+    #         if (line.startswith("v")):
+    #             if (compare(line.replace("v", ""), curr_verions.replace("v", "")) == curr_verions.replace("v", "")):
+    #                 break
+    #             if (first_line):
+    #                 first_line = False
+    #                 is_notify = True
+    #                 latest_version = line
+    #         context = context + line + '\n'
 
 def check_image_update():
     """
