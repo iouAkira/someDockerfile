@@ -16,9 +16,11 @@ RUN git clone https://github.com/lxk0301/jd_scripts /scripts \
         && npm install request
 
 ENV CRONTAB_LIST_FILE crontab_list_ts.sh
+RUN crontab /scripts/docker/$CRONTAB_LIST_FILE
 
-RUN crontab /scripts/docker/crontab_list_ts.sh
+COPY ./docker-entrypoint.sh /usr/local/bin
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 WORKDIR /scripts
 
-CMD ["node"]
+ENTRYPOINT ["docker-entrypoint.sh"]
