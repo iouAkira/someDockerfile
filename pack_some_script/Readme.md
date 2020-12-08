@@ -56,10 +56,10 @@ my_script:
     # 企鹅阅读相关
     #多账号 cookies连接符号，不配置默认为|，自己有能力调整排错的可以尝试自定义
     - COOKIES_SPLIT=|
-    #上面COOKIES_SPLIT配置的什么下面用什么连接多个qqreadheaderVal
-    - QQREAD_HEADER=qqreadheaderVal1
-                   |qqreadheaderVal2
-                   |qqreadheaderVal3
+    #上面COOKIES_SPLIT配置的什么下面用什么连接多个qqreadbodyVal
+    - QQREAD_BODY=qqreadbodyVal1
+                   |qqreadbodyVal2
+                   |qqreadbodyVal3
     #上面COOKIES_SPLIT配置的什么下面用什么连接多个qqreadtimeurlVal
     - QQREAD_TIMEURL=qqreadtimeurlVal1
                     |qqreadtimeurlVal2

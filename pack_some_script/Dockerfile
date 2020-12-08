@@ -43,7 +43,7 @@ COPY ./pack_some_script/update_notify.py /checkUpdate/
 
 
 #镜像构建版本,每次调整构建文件更新
-ENV BUILD_VERSION 0.0.4
+ENV BUILD_VERSION 0.0.5
 # 喜马拉雅极速配置-默认0关闭刷时长
 ENV XMLY_ACCUMULATE_TIME 0
 ENV XMLY_NOTIFY_TIME 19
