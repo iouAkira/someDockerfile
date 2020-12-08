@@ -291,7 +291,7 @@ def send_notify():
 def check_config_change():
     """
     检查配置更新版本判断是否需要提醒用户更新更新配置
-    """n
+    """
     resp, status = get_remote_context("配置更新", "update.log")
     if status and resp.status_code == 200:
         logger.info(resp.text)
