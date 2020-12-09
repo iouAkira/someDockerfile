@@ -15,12 +15,14 @@ RUN git clone https://github.com/lxk0301/jd_scripts /scripts \
         && cd /tmp \
         && npm install request
 
-ENV CRONTAB_LIST_FILE crontab_list_ts.sh
-RUN crontab /scripts/docker/$CRONTAB_LIST_FILE
+ENV BUILD_VERSION=0.1.0 \
+    DEFAULT_LIST_FILE=crontab_list_ts.sh \
+    CUSTOM_LIST_MERGE_TYPE=append
 
-COPY ./docker-entrypoint.sh /usr/local/bin
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+COPY ./docker_entrypoint.sh /usr/local/bin
+COPY ./load_crontab_file.sh /scripts/docker
+RUN chmod +x /usr/local/bin/docker_entrypoint.sh
 
 WORKDIR /scripts
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["docker_entrypoint.sh"]
