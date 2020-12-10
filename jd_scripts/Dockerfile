@@ -1,5 +1,5 @@
 FROM alpine
-MAINTAINER Akira <e.akimoto.akira@gmail.com>
+LABEL AUTHOR="Akira <e.akimoto.akira@gmail.com>"
 
 RUN set -ex \
         && apk update && apk upgrade\
@@ -16,7 +16,7 @@ RUN git clone https://github.com/lxk0301/jd_scripts /scripts \
         && npm install request
 
 ENV BUILD_VERSION=0.1.0 \
-    DEFAULT_LIST_FILE=crontab_list_ts.sh \
+#     DEFAULT_LIST_FILE=crontab_list.sh \
     CUSTOM_LIST_MERGE_TYPE=append
 
 COPY ./docker_entrypoint.sh /usr/local/bin

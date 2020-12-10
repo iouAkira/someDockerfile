@@ -16,13 +16,24 @@ git -C /scripts pull
 echo "##############################################################################"
 
 ##兼容旧镜像的环境变量
-if [ $CRONTAB_LIST_FILE && !$DEFAULT_LIST_FILE ]; then
-    $DEFAULT_LIST_FILE=$CRONTAB_LIST_FILE
+if [ !$DEFAULT_LIST_FILE ]; then
+    defaultListFile="/scripts/docker/crontab_list.sh"
+else
+    defaultListFile="/scripts/docker/$DEFAULT_LIST_FILE"
 fi
 
-defaultListFile="/scripts/docker/$DEFAULT_LIST_FILE"
 customListFile="/scripts/docker/$CUSTOM_LIST_FILE"
 mergedListFile="/scripts/docker/merged_list_file.sh"
+
+if type ts >/dev/null 2>&1; then
+    echo 'moreutils tools installed, default task append |ts output'
+    echo '系统已安装moreutils工具包，默认定时任务增加｜ts 输出'
+    ##复制一个新文件来追加|ts，防止git pull的时候冲突
+    cp $defaultListFile /scripts/docker/default_list.sh
+    defaultListFile="/scripts/docker/default_list.sh"
+
+    sed -i 's/>>/|ts >>/g' $defaultListFile
+fi
 
 #判断 自定义文件是否存在 是否存在
 if [ $CUSTOM_LIST_FILE ]; then
