@@ -16,11 +16,10 @@ RUN git clone https://github.com/lxk0301/jd_scripts /scripts \
         && npm install request
 
 ENV BUILD_VERSION=0.1.0 \
-#     DEFAULT_LIST_FILE=crontab_list.sh \
+    DEFAULT_LIST_FILE=crontab_list.sh \
     CUSTOM_LIST_MERGE_TYPE=append
 
 COPY ./docker_entrypoint.sh /usr/local/bin
-COPY ./load_crontab_file.sh /scripts/docker
 RUN chmod +x /usr/local/bin/docker_entrypoint.sh
 
 WORKDIR /scripts
