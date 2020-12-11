@@ -5,7 +5,7 @@ LABEL AUTHOR="Akira <e.akimoto.akira@gmail.com>" \
 
 RUN set -ex \
         && apk update && apk upgrade\
-        && apk add --no-cache tzdata moreutils git nodejs npm curl jq\
+        && apk add --no-cache tzdata  git  nodejs  moreutils  npm  python3-dev  py3-pip  py3-cryptography curl jq \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone
 
@@ -29,8 +29,8 @@ RUN cd /scripts/docker/bot \
         && python3 setup.py install
 
 ENV BUILD_VERSION=0.1.2 \
-    DEFAULT_LIST_FILE=crontab_list.sh \
-    CUSTOM_LIST_MERGE_TYPE=append
+        DEFAULT_LIST_FILE=crontab_list.sh \
+        CUSTOM_LIST_MERGE_TYPE=append
 
 # github action 构建    
 COPY ./jd_scripts/bot/docker_entrypoint.sh /usr/local/bin
