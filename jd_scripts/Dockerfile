@@ -9,7 +9,7 @@ RUN set -ex \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone
 
-RUN git clone https://github.com/iouAkira/jd_scripts /scripts \
+RUN git clone https://github.com/lxk0103/jd_scripts /scripts \
         && cd /scripts \
         && git checkout master \
         && mkdir logs \
