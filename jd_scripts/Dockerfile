@@ -9,7 +9,7 @@ RUN set -ex \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone
 
-RUN git clone https://github.com/lxk0103/jd_scripts /scripts \
+RUN git clone https://github.com/lxk0301/jd_scripts /scripts \
         && cd /scripts \
         && git checkout master \
         && mkdir logs \
@@ -18,8 +18,8 @@ RUN git clone https://github.com/lxk0103/jd_scripts /scripts \
         && npm install request
 
 ENV BUILD_VERSION=0.1.2 \
-    DEFAULT_LIST_FILE=crontab_list.sh \
-    CUSTOM_LIST_MERGE_TYPE=append
+        DEFAULT_LIST_FILE=crontab_list.sh \
+        CUSTOM_LIST_MERGE_TYPE=append
 
 # github action 构建    
 COPY ./jd_scripts/docker_entrypoint.sh /usr/local/bin
