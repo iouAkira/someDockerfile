@@ -134,4 +134,8 @@ crontab $mergedListFile
 
 echo "Start crontab task main process..."
 echo "启动crondtab定时任务主进程..."
-crond -f
+crond
+
+echo "Start jd_bot process..."
+echo "启动crondtab定时任务主进程..."
+jd_bot
