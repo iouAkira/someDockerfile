@@ -22,7 +22,7 @@ my_scripts
 └── docker-compose.yml
 ```
 ### 1. 在`my_scripts`目录创建`logs`目录存放日志;
-### 2. 在`my_scripts`目录创建`docker-compose.yml` 参考内容如下([或者直接复制这个文件内容修改](https://raw.githubusercontent.com/iouakira/someDockerfile/master/pack_some_script/docker-compose.yml))：
+### 2. 在`my_scripts`目录创建`docker-compose.yml` ~command:参数不再需要~参考内容如下([或者直接复制这个文件内容修改](https://raw.githubusercontent.com/iouakira/someDockerfile/master/pack_some_script/docker-compose.yml))：
 ```yaml
 my_script:
   image: akyakya/pack_some_script:latest
@@ -31,7 +31,12 @@ my_script:
   tty: true
   volumes:
     - ./logs:/logs
+    # - ./my_crontab_list.sh:/pss/my_crontab_list.sh #挂载自定义任务文件
   environment:
+    #20201219增加自定义任务配置
+    #使用自定义定任务之后，上面volumes挂载之后这里配置对应的文件名
+    # - CUSTOM_LIST_FILE=my_crontab_list.sh #自定任务文件名
+    # - CUSTOM_LIST_MERGE_TYPE=append #默认值append自定文件的使用方式append追加默认之后，overwrite覆盖默认任务
     # 注意环境变量填写值的时候一律不需要引号（""或者''）下面这些只是事例，根据自己的需求增加删除
     # 公用通知相关环境变量
     # server酱服务
@@ -56,6 +61,7 @@ my_script:
     # 企鹅阅读相关
     #多账号 cookies连接符号，不配置默认为|，自己有能力调整排错的可以尝试自定义
     - COOKIES_SPLIT=|
+    - QQREAD_NOTIFY_TIME=19  #企鹅阅读通知时间，默认为19
     #上面COOKIES_SPLIT配置的什么下面用什么连接多个qqreadbodyVal
     - QQREAD_BODY=qqreadbodyVal1
                    |qqreadbodyVal2
@@ -67,19 +73,11 @@ my_script:
     #上面COOKIES_SPLIT配置的什么下面用什么连接多个qqreadtimeheaderVal
     - QQREAD_TIMEHD=qqreadtimeheaderVal1
                    |qqreadtimeheaderVal2
-                   |qqreadtimeheaderVal3
-
-  command:
-    - /bin/sh
-    - -c
-    - |
-      crond
-      node
-
+                   |qqreadtimeheaderVal3docke
 ```
 ### 目录文件配置好之后在 `my_scripts`目录执行  
  `docker-compose up -d` 启动；  
- `docker-compose logs` 打印日志；  
+ `docker-compose logs` 打印日志；(中文乱码可看英文输出就行，或者使用 `docker logs my_script` 查看)  
  `docker-compose pull` 更新镜像；  
  `docker-compose stop` 停止容器；  
  `docker-compose restart` 重启容器；  
