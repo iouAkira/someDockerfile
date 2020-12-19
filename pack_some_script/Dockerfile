@@ -1,16 +1,20 @@
 FROM alpine
-MAINTAINER Akira <e.akimoto.akira@gmail.com>
+LABEL AUTHOR="Akira <e.akimoto.akira@gmail.com>" \
+        VERSION=0.0.6 \
+        UPDATE_CONTENT="调整镜像启动入口文件，增加一些自定义，非必要更新，如果更新使用请重新阅读一遍dockerhub地址的readme(https://hub.docker.com/repository/docker/akyakya/pack_some_script)"
 
 RUN set -ex \
         && apk update && apk upgrade\
         && apk add --no-cache tzdata \
-                                git \
-                                nodejs \
-                                moreutils \
-                                npm \
-                                python3-dev \
-                                py3-pip \
-                                py3-cryptography \
+        git \
+        nodejs \
+        moreutils \
+        npm \
+        python3-dev \
+        py3-pip \
+        py3-cryptography \
+        jq \
+        curl \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone
 
@@ -27,29 +31,27 @@ RUN git clone https://github.com/ziye12/JavaScript.git /qqread \
         && git checkout master \
         && npm install
 
-# 创建工作目录，替换多Cookies链接符号
+# 创建工作目录
 RUN mkdir /logs \
-        && mkdir /checkUpdate \
-        #替换喜马拉雅脚本相关内容以兼容环境变量配置
-        && sed -i 's/BARK/BARK_PUSH/g' /xmly_speed/xmly_speed.py \
-        && sed -i 's/SCKEY/PUSH_KEY/g' /xmly_speed/xmly_speed.py \
-        && sed -i 's/if\ XMLY_ACCUMULATE_TIME.*$/if\ os.environ["XMLY_ACCUMULATE_TIME"]=="1":/g' /xmly_speed/xmly_speed.py \
-        && sed -i "s/\(xmly_speed_cookie\.split('\)\\\n/\1\|/g" /xmly_speed/xmly_speed.py \
-        && sed -i 's/cookiesList.append(line)/cookiesList.append(line.replace(" ",""))/g' /xmly_speed/xmly_speed.py \
-        && sed -i 's/_notify_time.split.*$/_notify_time.split()[0]==os.environ["XMLY_NOTIFY_TIME"]\ and\ int(_notify_time.split()[1])<30:/g' /xmly_speed/xmly_speed.py
+        && mkdir /pss
 
-COPY ./pack_some_script/cronlist.sh /checkUpdate/
-COPY ./pack_some_script/update_notify.py /checkUpdate/
+# github action 构建
+COPY ./pack_some_script/crontab_list.sh ./pack_some_script/send_notify.py ./pack_some_script/default_task.sh /pss/
+COPY ./pack_some_script/docker_entrypoint.sh /usr/local/bin/
+# 本地构建
+# COPY ./crontab_list.sh ./send_notify.py ./default_task.sh /pss/
+# COPY ./docker_entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker_entrypoint.sh \
+        &&  crontab /pss/crontab_list.sh
 
 
 #镜像构建版本,每次调整构建文件更新
-ENV BUILD_VERSION 0.0.5
-# 喜马拉雅极速配置-默认0关闭刷时长
-ENV XMLY_ACCUMULATE_TIME 0
-ENV XMLY_NOTIFY_TIME 19
-# 企鹅阅读必须配置-默认仓库地址
-ENV COOKIES_SPLIT |
+ENV BUILD_VERSION=0.0.6 \
+        # 喜马拉雅极速配置-默认0关闭刷时长
+        XMLY_ACCUMULATE_TIME=0 \
+        XMLY_NOTIFY_TIME=19 \
+        # 企鹅阅读必须配置-默认仓库地址
+        COOKIES_SPLIT=| \
+        QQREAD_NOTIFY_TIME=19
 
-RUN crontab /checkUpdate/cronlist.sh
-
-CMD ["node"]
+ENTRYPOINT ["docker_entrypoint.sh"]

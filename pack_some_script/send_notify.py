@@ -234,15 +234,33 @@ def compare(a: str, b: str):
                 return a
 
 
-def send_notify(title, content):
+def send_notify(title, content, fn_name):
     """
     统一发送
     """
-    server_notify(title, content)
-    bark_notify(title, content)
-    tg_bot_notify(title, content)
-    dd_bot_notify(title, content)
-    igot_notify(title, content)
+    notified = ""
+    # 文件可能不存在，默认初始化
+    init_file = open("/pss/%s.txt" % fn_name, 'a')
+    init_file.close()
+
+    with open("/pss/%s.txt" % fn_name, 'r') as lines:
+        array = lines.readlines()
+        for i in array:
+            items = i.split("=")
+            if(items[0] == "NOTIFIED"):
+                logger.info(items)
+                notified = items[1]
+    if(notified != time.strftime("%Y%m%d", time.localtime()) and time.localtime().tm_hour < 22 and time.localtime().tm_hour >= 8):
+        with open("/pss/%s.txt" % fn_name, 'w+') as wf:
+            wf.write("NOTIFIED=%s" %
+                     time.strftime("%Y%m%d", time.localtime()))
+        server_notify(title, content)
+        bark_notify(title, content)
+        tg_bot_notify(title, content)
+        dd_bot_notify(title, content)
+        igot_notify(title, content)
+    else:
+        logger.info("当日已发送，或者不在发送通知时间段内，取消发送通知。")
 
 
 # 启用日志
@@ -279,79 +297,39 @@ def get_remote_context(check_name, file_name):
     return resp, get_success
 
 
-def send_notify():
+def normal_notify():
     """
     其他类普通的通知
+    想好通知内容维护方式再写
     """
-    resp, status = get_remote_context("通知", "notify.log")
-    if status and resp.status_code == 200:
-        logger.info(resp.text)
+    if "NORMAL_CONTENT" in os.environ:
+        send_notify("Docker镜像普通通知", "\n\n```%s```" %
+                    os.environ["NORMAL_CONTENT"], "normal_notify")
 
 
-def check_config_change():
+def config_change_notify():
     """
     检查配置更新版本判断是否需要提醒用户更新更新配置
+    想好通知内容维护方式再写
     """
-    resp, status = get_remote_context("配置更新", "update.log")
-    # if status and resp.status_code == 200:
-    #     logger.info(resp.text)
-    #     #获取文件里面的里面存放的最新更新通知事假n
-    #     change_content=resp.text.split("\n")
-    #     for line in change_content:
-    #         if (line.startswith("v")):
-    #             if (compare(line.replace("v", ""), curr_verions.replace("v", "")) == curr_verions.replace("v", "")):
-    #                 break
-    #             if (first_line):
-    #                 first_line = False
-    #                 is_notify = True
-    #                 latest_version = line
-    #         context = context + line + '\n'
+    if "CONFIG_CHANGE_CONTENT" in os.environ:
+        send_notify("⚠️Docker镜像配置参数更新通知", "\n\n```%s```" %
+                    os.environ["CONFIG_CHANGE_CONTENT"], "config_change_notify")
 
-def check_image_update():
+
+def image_update_notify():
     """
     检查对比构建版本判断是否需要提醒用户更新镜像
     """
-    resp, status = get_remote_context("镜像更新", "update.log")
-    if status and resp.status_code == 200:
-        update_log = resp.split("\n")
-        first_line = True
-        is_notify = False
-        context = ""
-        latest_version = ""
-        curr_verions = os.environ["BUILD_VERSION"]
-        notified = ""
-        for line in update_log:
-            if (line.startswith("v")):
-                if (compare(line.replace("v", ""), curr_verions.replace("v", "")) == curr_verions.replace("v", "")):
-                    break
-                if (first_line):
-                    first_line = False
-                    is_notify = True
-                    latest_version = line
-            context = context + line + '\n'
-        # 文件可能不纯在，默认初始化
-        init_file = open("notified.txt", 'a')
-        init_file.close()
-
-        with open("notified.txt", 'r') as lines:
-            array = lines.readlines()
-            for i in array:
-                items = i.split("=")
-                if(items[0] == "NOTIFIED"):
-                    logger.info(items)
-                    notified = items[1]
-        if(is_notify and notified != time.strftime("%Y%m%d", time.localtime()) and time.localtime().tm_hour < 22 and time.localtime().tm_hour >= 8):
-            with open("notified.txt", 'w+') as wf:
-                wf.write("NOTIFIED=%s" %
-                         time.strftime("%Y%m%d", time.localtime()))
-            send_notify("⚠️Docker镜像版本更新通知⚠️", "当前构建版本为`%s`  最新构建版本为`%s`。 \n\n```\n%s```" %
-                        (curr_verions, latest_version, context))
-        else:
-            logger.info("无更新，或者不再更新时间段内，取消发送更新通知。")
+    if "IMAGE_UPDATE_CONTENT" in os.environ:
+        send_notify("⚠️Docker镜像版本更新通知⚠️", "\n\n```%s```" %
+                    os.environ["IMAGE_UPDATE_CONTENT"], "image_update_notify")
 
 
 def main():
-    check_config_change()
+    normal_notify()
+    image_update_notify()
+    config_change_notify()
 
 
 if __name__ == '__main__':
