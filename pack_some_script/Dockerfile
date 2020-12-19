@@ -47,6 +47,8 @@ RUN chmod +x /usr/local/bin/docker_entrypoint.sh \
 
 #镜像构建版本,每次调整构建文件更新
 ENV BUILD_VERSION=0.0.6 \
+        DEFAULT_LIST_FILE=crontab_list.sh \
+        CUSTOM_LIST_MERGE_TYPE=append \
         # 喜马拉雅极速配置-默认0关闭刷时长
         XMLY_ACCUMULATE_TIME=0 \
         XMLY_NOTIFY_TIME=19 \
