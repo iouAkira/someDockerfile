@@ -1,7 +1,7 @@
 FROM alpine
 LABEL AUTHOR="Akira <e.akimoto.akira@gmail.com>" \
         VERSION=0.0.6 \
-        UPDATE_CONTENT="调整镜像启动入口文件，增加一些自定义，非必要更新，如果更新使用请重新阅读一遍dockerhub地址的readme(https://hub.docker.com/repository/docker/akyakya/pack_some_script)"
+        UPDATE_CONTENT="增加汽车之家极速版及相关配置更新，请参考dockerhub仓库readme配置"
 
 RUN set -ex \
         && apk update && apk upgrade\
@@ -30,6 +30,9 @@ RUN git clone https://github.com/ziye12/JavaScript.git /qqread \
         && cd /qqread \
         && git checkout master \
         && npm install
+
+# 支持多账号汽车之家的仓库
+RUN git clone https://github.com/ziye12/QCZJSPEED.git /QCZJSPEED
 
 # 创建工作目录
 RUN mkdir /logs \

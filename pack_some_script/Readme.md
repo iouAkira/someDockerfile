@@ -2,6 +2,7 @@
 > ### Cookie获取相关教程请查看原作者仓库教程
 - ### 喜马拉雅极速版 作者：[__@Zero-S1__](https://github.com/Zero-S1)｜[__仓库地址__](https://github.com/Zero-S1/xmly_speed)
 - ### 企鹅阅读(QQ小程序) 作者：[__@ziye12__](https://github.com/ziye12)｜[__仓库地址__](https://github.com/ziye12/JavaScript)
+- ### 汽车之家极速版 作者：[__@ziye12__](https://github.com/ziye12)｜[__仓库地址__](https://github.com/ziye12/QCZJSPEED)
 ___
 # 使用说明
 > 前提：   
@@ -59,8 +60,8 @@ my_script:
                         | cookie2
                         | cookie2
     # 企鹅阅读相关
-    #多账号 cookies连接符号，不配置默认为|，自己有能力调整排错的可以尝试自定义
-    - COOKIES_SPLIT=|
+    #多账号 cookies连接符号，不配置默认为|，自己有能力调整排错的可以尝试自定义,因为汽车之家body里面呢包含| ,使用汽车之家建议改为|&|，否则会汽车之家任务无法执行
+    - COOKIES_SPLIT=|&|
     - QQREAD_NOTIFY_TIME=19  #企鹅阅读通知时间，默认为19
     #上面COOKIES_SPLIT配置的什么下面用什么连接多个qqreadbodyVal
     - QQREAD_BODY=qqreadbodyVal1
@@ -74,6 +75,40 @@ my_script:
     - QQREAD_TIMEHD=qqreadtimeheaderVal1
                    |qqreadtimeheaderVal2
                    |qqreadtimeheaderVal3docke
+    # 汽车之家需要抓包配置的环境变量
+    # GetUserInfourl  对应环境变量配置为：QCZJ_GetUserInfoURL
+    # GetUserInfoheader  对应环境变量配置为：QCZJ_GetUserInfoHEADER
+    # coinbody  对应环境变量配置为：QCZJ_coinBODY
+    # accountManageheader  对应环境变量配置为：QCZJ_accountManageHEADER
+    # taskbody  对应环境变量配置为：QCZJ_taskBODY
+    # activitybody  对应环境变量配置为：QCZJ_activityBODY
+    # addCoinbody  对应环境变量配置为：QCZJ_addCoinBODY
+    # addCoin2body  对应环境变量配置为：QCZJ_addCoin2BODY
+    # reportAssbody  对应环境变量配置为：QCZJ_reportAssBODY
+    # reportAssheader  对应环境变量配置为：QCZJ_reportAssHEADER
+    # cointowalletbody  对应环境变量配置为：QCZJ_cointowalletBODY
+    - QCZJ_GetUserInfoURL=QCZJ_GetUserInfoURL1
+                      |&|QCZJ_GetUserInfoURL2
+    - QCZJ_GetUserInfoHEADER=QCZJ_GetUserInfoHEADER1
+                      |&|QCZJ_GetUserInfoHEADER2
+    - QCZJ_coinBODY=QCZJ_coinBODY1
+                  |&|QCZJ_coinBODY2
+    - QCZJ_accountManageHEADER=QCZJ_accountManageHEADER1
+                  |&|QCZJ_accountManageHEADER2
+    - QCZJ_taskBODY=QCZJ_taskBODY1
+                  |&|QCZJ_taskBODY2
+    - QCZJ_activityBODY=QCZJ_activityBODY1
+                  |&|QCZJ_activityBODY2
+    - QCZJ_addCoinBODY=QCZJ_addCoinBODY1
+                  |&|QCZJ_addCoinBODY2
+    - QCZJ_addCoin2BODY=QCZJ_addCoin2BODY1
+                  |&|QCZJ_addCoin2BODY2
+    - QCZJ_reportAssHEADER=QCZJ_reportAssHEADER1
+                  |&|QCZJ_reportAssHEADER2
+    - QCZJ_reportAssBODY=QCZJ_reportAssBODY1
+                  |&|QCZJ_reportAssBODY2
+    - QCZJ_cointowalletBODY=QCZJ_cointowalletBODY1
+                  |&|QCZJ_cointowalletBODY2
 ```
 ### 目录文件配置好之后在 `my_scripts`目录执行  
  `docker-compose up -d` 启动；  

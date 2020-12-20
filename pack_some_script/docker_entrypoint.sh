@@ -30,6 +30,16 @@ sed -i "s/const d =.*$/const d = new Date(new Date().getTime());/g" /qqread/Task
 sed -i "s/(d.getHours() == 12.*$//g" /qqread/Task/qqreads.js
 sed -i "s/(d.getHours() == 23/(d.getHours() == process.env.QQREAD_NOTIFY_TIME/g" /qqread/Task/qqreads.js
 
+echo "Pull the qczj latest code..."
+echo "git 拉取汽车之家极速版最新代码..."
+git -C /QCZJSPEED reset --hard
+git -C /QCZJSPEED pull
+
+echo "Replace some qczj scripts content to be compatible with env configuration ..."
+echo "替换汽车之间内容修正错误..."
+sed -i "s/middleaccountManageEADER/middleaccountManageHEADER/g" /QCZJSPEED/Task/qczjspeed.js
+cp /QCZJSPEED/Task/qczjspeed.js /qqread/Task/
+
 echo "Pull the xmly_speed latest code..."
 echo "git 拉取喜马拉雅最新代码..."
 git -C /xmly_speed reset --hard
