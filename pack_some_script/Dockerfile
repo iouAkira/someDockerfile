@@ -27,7 +27,8 @@ RUN mkdir /logs \
         && git remote add -f origin https://github.com/iouAkira/someDockerfile.git \
         && git config core.sparsecheckout true \
         && echo pack_some_script/* >> /pss/.git/info/sparse-checkout \
-        && git pull origin master
+        && git pull origin master \
+        && cp /pss/pack_some_script/crontab_list.sh /pss/crontab_list.sh
 
 # 支持喜马拉雅极速版仓库
 RUN git clone https://github.com/Zero-S1/xmly_speed.git /xmly_speed \
@@ -50,7 +51,8 @@ RUN git clone https://github.com/ziye12/QCZJSPEED.git /QCZJSPEED
 COPY ./pack_some_script/docker_entrypoint.sh /usr/local/bin/
 # 本地构建
 # COPY ./docker_entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker_entrypoint.sh
+RUN chmod +x /usr/local/bin/docker_entrypoint.sh \
+        &&  crontab /pss/crontab_list.sh
 
 
 #镜像构建版本,每次调整构建文件更新
