@@ -27,6 +27,8 @@ git -C /QCZJSPEED pull
 echo "Replace some qczj scripts content to be compatible with env configuration ..."
 echo "替换汽车之间内容修正错误..."
 sed -i "s/middleaccountManageEADER/middleaccountManageHEADER/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/taskBODY.split(COOKIES_SPLIT)/taskBODY.replace(' '+COOKIES_SPLIT,COOKIES_SPLIT).split(COOKIES_SPLIT)/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/activityBODY.split(COOKIES_SPLIT)/activityBODY.replace(' '+COOKIES_SPLIT,COOKIES_SPLIT).split(COOKIES_SPLIT)/g" /QCZJSPEED/Task/qczjspeed.js
 cp /QCZJSPEED/Task/qczjspeed.js /qqread/Task/
 
 echo "git 拉取喜马拉雅最新代码..."
