@@ -1,3 +1,11 @@
+v0.0.7
+更新时间:2020-12-21
+- 增加汽车之家极速脚本相关任务配置说明详情查看dockerhub(https://hub.docker.com/r/akyakya/pack_some_script)仓库readme
+- 如果需要使用汽车之家任务多账户分隔符需要调整具体看说明
+汽车之家极速版相关cookie body获取参考原作者仓库说明
+第一步 添加  hostname=mobile.app.autohome.com.cn,pay.autohome.com.cn,openapi.autohome.com.cn,
+- 建议docker push akyakya/pack_some_script更新镜像和参考最新readme配置docker-compose.yml后，执行docker-compose up -d
+
 v0.0.5
 更新时间:2020-12-07
 - 增加了自动更新通知脚本
