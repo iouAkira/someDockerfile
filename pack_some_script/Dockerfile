@@ -1,7 +1,7 @@
 FROM alpine
 LABEL AUTHOR="Akira <e.akimoto.akira@gmail.com>" \
-        VERSION=0.0.6 \
-        UPDATE_CONTENT="增加汽车之家极速版及相关配置更新，请参考dockerhub仓库readme配置"
+        VERSION=0.0.7 \
+        UPDATE_CONTENT="增加汽车之家极速版及相关配置更新,修正汽车之家极速版多账号执行异常bug，请参考dockerhub仓库(https://hub.docker.com/r/akyakya/pack_some_script)readme配置"
 
 RUN set -ex \
         && apk update && apk upgrade\
@@ -17,6 +17,17 @@ RUN set -ex \
         curl \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone
+
+# 配置镜像仓库配置相关文件夹
+# 创建工作目录
+RUN mkdir /logs \
+        && mkdir /pss \
+        && cd  /pss \
+        && git init \
+        && git remote add -f origin https://github.com/iouAkira/someDockerfile.git \
+        && git config core.sparsecheckout true \
+        && echo pack_some_script/* >> /pss/.git/info/sparse-checkout \
+        && git pull origin master
 
 # 支持喜马拉雅极速版仓库
 RUN git clone https://github.com/Zero-S1/xmly_speed.git /xmly_speed \
@@ -34,22 +45,17 @@ RUN git clone https://github.com/ziye12/JavaScript.git /qqread \
 # 支持多账号汽车之家的仓库
 RUN git clone https://github.com/ziye12/QCZJSPEED.git /QCZJSPEED
 
-# 创建工作目录
-RUN mkdir /logs \
-        && mkdir /pss
 
 # github action 构建
-COPY ./pack_some_script/crontab_list.sh ./pack_some_script/send_notify.py ./pack_some_script/default_task.sh /pss/
 COPY ./pack_some_script/docker_entrypoint.sh /usr/local/bin/
 # 本地构建
-# COPY ./crontab_list.sh ./send_notify.py ./default_task.sh /pss/
 # COPY ./docker_entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker_entrypoint.sh \
         &&  crontab /pss/crontab_list.sh
 
 
 #镜像构建版本,每次调整构建文件更新
-ENV BUILD_VERSION=0.0.6 \
+ENV BUILD_VERSION=0.0.7 \
         DEFAULT_LIST_FILE=crontab_list.sh \
         CUSTOM_LIST_MERGE_TYPE=append \
         # 喜马拉雅极速配置-默认0关闭刷时长
