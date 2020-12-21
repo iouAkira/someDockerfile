@@ -50,8 +50,7 @@ RUN git clone https://github.com/ziye12/QCZJSPEED.git /QCZJSPEED
 COPY ./pack_some_script/docker_entrypoint.sh /usr/local/bin/
 # 本地构建
 # COPY ./docker_entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker_entrypoint.sh \
-        &&  crontab /pss/crontab_list.sh
+RUN chmod +x /usr/local/bin/docker_entrypoint.sh
 
 
 #镜像构建版本,每次调整构建文件更新
