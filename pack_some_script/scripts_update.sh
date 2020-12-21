@@ -1,8 +1,7 @@
 #!/bin/sh
 set -e
 
-echo "##############################################################################"
-echo "Container start"
+
 echo "Pull the qqreader latest code..."
 echo "git 拉取企鹅阅读最新代码..."
 git -C /qqread reset --hard
@@ -43,7 +42,6 @@ sed -i "s/\(xmly_speed_cookie\.split('\)\\\n/\1\|/g" /xmly_speed/xmly_speed.py
 sed -i 's/cookiesList.append(line)/cookiesList.append(line.replace(" ",""))/g' /xmly_speed/xmly_speed.py
 sed -i 's/_notify_time.split.*$/_notify_time.split()[0]==os.environ["XMLY_NOTIFY_TIME"]\ and\ int(_notify_time.split()[1])<30:/g' /xmly_speed/xmly_speed.py
 
-echo "##############################################################################"
 
 ######################################获取docker构建文件里面的自定义信息方法-start#####################################################
 function getDockerImageLabel() {
