@@ -21,9 +21,9 @@ git -C /QCZJSPEED pull
 
 echo "Replace some qczj scripts content to be compatible with env configuration ..."
 echo "替换汽车之间内容修正错误..."
-sed -i "s/taskBODY.split(COOKIES_SPLIT)/taskBODY.replace(' '+COOKIES_SPLIT,COOKIES_SPLIT).split(COOKIES_SPLIT)/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/activityBODY.split(COOKIES_SPLIT)/activityBODY.replace(' '+COOKIES_SPLIT,COOKIES_SPLIT).split(COOKIES_SPLIT)/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/coinBODY.split(COOKIES_SPLIT)/coinBODY.replace(' '+COOKIES_SPLIT,COOKIES_SPLIT).split(COOKIES_SPLIT)/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/body: coinbodyVal/body: coinbodyVal.trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/body: taskbodyVal/body: taskbodyVal.trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/body: activitybodyVal/body: activitybodyVal.trim()/g" /QCZJSPEED/Task/qczjspeed.js
 cp /QCZJSPEED/Task/qczjspeed.js /qqread/Task/
 
 echo "Pull the xmly_speed latest code..."
