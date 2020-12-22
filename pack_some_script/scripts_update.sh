@@ -24,6 +24,9 @@ echo "替换汽车之间内容修正错误..."
 sed -i "s/body: coinbodyVal/body: coinbodyVal.trim()/g" /QCZJSPEED/Task/qczjspeed.js
 sed -i "s/body: taskbodyVal/body: taskbodyVal.trim()/g" /QCZJSPEED/Task/qczjspeed.js
 sed -i "s/body: activitybodyVal/body: activitybodyVal.trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/body: addCoinbodyVal/body: addCoinbodyVal.trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/body: addCoin2bodyVal/body: addCoin2bodyVal.trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/headers: JSON.parse(reportAssheaderVal/headers: JSON.parse(reportAssheaderVal.trim()/g" /QCZJSPEED/Task/qczjspeed.js
 cp /QCZJSPEED/Task/qczjspeed.js /qqread/Task/
 
 echo "Pull the xmly_speed latest code..."
