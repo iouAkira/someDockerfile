@@ -90,13 +90,14 @@ if [ ! $BUILD_VERSION ]; then
         cd /pss
         python3 send_notify.py
     fi
-else
-    if version_gt $version $BUILD_VERSION; then
+elif version_gt $version $BUILD_VERSION; then
         echo "Current container version $BUILD_VERSION, dockerhub lastet version $version, send update notification"
         echo "当前容器版本为$BUILD_VERSION，dockerhub仓库版本为$version，发送通知"
         cd /pss
         python3 send_notify.py
-    fi
+else
+        echo "The docker image update content is not checked"
+        echo "未检查到docker镜像更新内容"
 fi
 #######################################通知用户更新镜像-end#####################################################################
 
