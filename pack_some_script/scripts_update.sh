@@ -70,7 +70,7 @@ if type jq >/dev/null 2>&1; then
     echo "get dockerhub repo images labels..."
     echo "获取dockerhub仓库镜像labels信息..."
     labels=$(getDockerImageLabel)
-    export IMAGE_UPDATE_CONTENT=$(echo $labels | jq -r .IMAGE_UPDATE_CONTENT)
+    export IMAGE_UPDATE_CONTENT=$(echo $labels | jq -r .UPDATE_CONTENT)
     # export CONFIG_CHANGE_CONTENT=$(echo $labels | jq -r .CONFIG_CHANGE_CONTENT)
     version=$(echo $labels | jq -r .VERSION)
 else
