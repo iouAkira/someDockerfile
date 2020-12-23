@@ -1,3 +1,4 @@
+[![dockeri.co](https://dockeri.co/image/akyakya/pack_some_script)](https://hub.docker.com/r/akyakya/pack_some_script)
 # 打包一些比较好薅的羊毛脚本
 > ### Cookie获取相关教程请查看原作者仓库教程
 - ### 喜马拉雅极速版 作者：[__@Zero-S1__](https://github.com/Zero-S1)｜[__仓库地址__](https://github.com/Zero-S1/xmly_speed)
