@@ -21,12 +21,21 @@ git -C /QCZJSPEED pull
 
 echo "Replace some qczj scripts content to be compatible with env configuration ..."
 echo "替换汽车之间内容修正错误..."
-sed -i "s/body: coinbodyVal/body: coinbodyVal.trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/body: taskbodyVal/body: taskbodyVal.trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/body: activitybodyVal/body: activitybodyVal.trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/body: addCoinbodyVal/body: addCoinbodyVal.trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/body: addCoin2bodyVal/body: addCoin2bodyVal.trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/headers: JSON.parse(reportAssheaderVal/headers: JSON.parse(reportAssheaderVal.trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/=\ GetUserInfourlArr\[i\]/=\ GetUserInfourlArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/=\ GetUserInfoheaderArr\[i\]/=\ GetUserInfoheaderArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/=\ coinbodyArr\[i\]/=\ coinbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/=\ taskbodyArr\[i\]/=\ taskbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/=\ activitybodyArr\[i\]/=\ activitybodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/=\ GoldcoinbodyArr\[i\]/=\ GoldcoinbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/=\ videobodyArr\[i\]/=\ videobodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/=\ WelfarevideobodyArr\[i\]/=\ WelfarevideobodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/=\ WelfarebodyArr\[i\]/=\ WelfarebodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/=\ addCoinbodyArr\[i\]/=\ addCoinbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/=\ addCoin2bodyArr\[i\]/=\ addCoin2bodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/=\ reportAssheaderArr\[i\]/=\ reportAssheaderArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/=\ reportAssbodyArr\[i\]/=\ reportAssbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/=\ cointowalletbodyArr\[i\]/=\ cointowalletbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+
 cp /QCZJSPEED/Task/qczjspeed.js /qqread/Task/
 
 echo "Pull the xmly_speed latest code..."
