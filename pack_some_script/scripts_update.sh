@@ -34,7 +34,7 @@ sed -i "s/=\ addCoinbodyArr\[i\]/=\ addCoinbodyArr\[i\].trim()/g" /QCZJSPEED/Tas
 sed -i "s/=\ addCoin2bodyArr\[i\]/=\ addCoin2bodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
 sed -i "s/=\ reportAssheaderArr\[i\]/=\ reportAssheaderArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
 sed -i "s/=\ reportAssbodyArr\[i\]/=\ reportAssbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/=\ cointowalletbodyArr\[i\]/=\ cointowalletbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+sed -i "s/cointowalletbodyVal.replace/cointowalletbodyVal.trim().replace/g" /QCZJSPEED/Task/qczjspeed.js
 
 cp /QCZJSPEED/Task/qczjspeed.js /qqread/Task/
 
