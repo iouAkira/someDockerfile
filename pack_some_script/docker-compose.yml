@@ -49,36 +49,46 @@ my_script:
                    |qqreadtimeheaderVal2
                    |qqreadtimeheaderVal3docke
     # 汽车之家需要抓包配置的环境变量
-    # GetUserInfourl  对应环境变量配置为：QCZJ_GetUserInfoURL
-    # GetUserInfoheader  对应环境变量配置为：QCZJ_GetUserInfoHEADER
-    # coinbody  对应环境变量配置为：QCZJ_coinBODY
-    # accountManageheader  对应环境变量配置为：QCZJ_accountManageHEADER
-    # taskbody  对应环境变量配置为：QCZJ_taskBODY
-    # activitybody  对应环境变量配置为：QCZJ_activityBODY
-    # addCoinbody  对应环境变量配置为：QCZJ_addCoinBODY
-    # addCoin2body  对应环境变量配置为：QCZJ_addCoin2BODY
-    # reportAssbody  对应环境变量配置为：QCZJ_reportAssBODY
-    # reportAssheader  对应环境变量配置为：QCZJ_reportAssHEADER
-    # cointowalletbody  对应环境变量配置为：QCZJ_cointowalletBODY
-    - QCZJ_GetUserInfoURL=QCZJ_GetUserInfoURL1
-                      |&|QCZJ_GetUserInfoURL2
-    - QCZJ_GetUserInfoHEADER=QCZJ_GetUserInfoHEADER1
-                      |&|QCZJ_GetUserInfoHEADER2
-    - QCZJ_coinBODY=QCZJ_coinBODY1
-                  |&|QCZJ_coinBODY2
-    - QCZJ_accountManageHEADER=QCZJ_accountManageHEADER1
-                  |&|QCZJ_accountManageHEADER2
-    - QCZJ_taskBODY=QCZJ_taskBODY1
-                  |&|QCZJ_taskBODY2
-    - QCZJ_activityBODY=QCZJ_activityBODY1
-                  |&|QCZJ_activityBODY2
-    - QCZJ_addCoinBODY=QCZJ_addCoinBODY1
-                  |&|QCZJ_addCoinBODY2
-    - QCZJ_addCoin2BODY=QCZJ_addCoin2BODY1
-                  |&|QCZJ_addCoin2BODY2
-    - QCZJ_reportAssHEADER=QCZJ_reportAssHEADER1
-                  |&|QCZJ_reportAssHEADER2
-    - QCZJ_reportAssBODY=QCZJ_reportAssBODY1
-                  |&|QCZJ_reportAssBODY2
-    - QCZJ_cointowalletBODY=QCZJ_cointowalletBODY1
-                  |&|QCZJ_cointowalletBODY2
+    # 汽车之家极速版配置比较多，注意不好少配漏配错配
+    - QCZJ_GetUserInfoURL=GetUserInfoURL1
+                    |&|GetUserInfoURL2
+                    |&|GetUserInfoURL3
+    - QCZJ_GetUserInfoHEADER=GetUserInfoHEADER1
+                    |&|GetUserInfoHEADER2
+                    |&|GetUserInfoHEADER3
+    - QCZJ_coinBODY=coinBODY1
+                    |&|coinBODY2
+                    |&|coinBODY3
+    - QCZJ_taskBODY=taskBODY1
+                    |&|taskBODY2
+                    |&|taskBODY3
+    - QCZJ_activityBODY=activityBODY1
+                    |&|activityBODY2
+                    |&|activityBODY3
+    - QCZJ_GoldcoinBODY=GoldcoinBODY1
+                    |&|GoldcoinBODY2
+                    |&|GoldcoinBODY3
+    - QCZJ_videoBODY=videoBODY1
+                    |&|videoBODY2
+                    |&|videoBODY3
+    - QCZJ_WelfarevideoBODY=WelfarevideoBODY1
+                    |&|WelfarevideoBODY2
+                    |&|WelfarevideoBODY3
+    - QCZJ_WelfareBODY=WelfareBODY1
+                    |&|WelfareBODY2
+                    |&|WelfareBODY3
+    - QCZJ_addCoinBODY=addCoinBODY1
+                    |&|addCoinBODY2
+                    |&|addCoinBODY3
+    - QCZJ_addCoin2BODY=addCoin2BODY1
+                    |&|addCoin2BODY2
+                    |&|addCoin2BODY3
+    - QCZJ_reportAssBODY=reportAssBODY1
+                    |&|reportAssBODY2
+                    |&|reportAssBODY3
+    - QCZJ_reportAssHEADER=reportAssHEADER1
+                    |&|reportAssHEADER2
+                    |&|reportAssHEADER3
+    - QCZJ_cointowalletBODY=cointowalletBODY1
+                    |&|cointowalletBODY2
+                    |&|cointowalletBODY3
