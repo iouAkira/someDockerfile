@@ -13,6 +13,41 @@ echo "替换企鹅阅读脚本相关内容以兼容环境变量配置..."
 sed -i "s/const d =.*$/const d = new Date(new Date().getTime());/g" /qqread/Task/qqreads.js
 sed -i "s/(d.getHours() == 12.*$//g" /qqread/Task/qqreads.js
 sed -i "s/(d.getHours() == 23/(d.getHours() == process.env.QQREAD_NOTIFY_TIME/g" /qqread/Task/qqreads.js
+sed -i "s/qqreadbox();/console.log('宝箱任务已作为独立任务执行,此处跳过');/g" /qqread/Task/qqreads.js
+sed -i "s/qqreadbox2();/console.log('翻倍宝箱任务已作为独立任务执行,此处跳过');/g" /qqread/Task/qqreads.js
+
+echo "复制一份企鹅阅读文件单独执行开宝箱任务....."
+openBoxFn="async function openbox() {
+  for (let i = 0; i < qqreadbdArr.length; i++) {
+    let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000 + 8 * 60 * 60 * 1000);
+    tz = '';
+    qqreadbodyVal = qqreadbdArr[i];
+    qqreadtimeurlVal = qqreadtimeurlArr[i];
+    qqreadtimeheaderVal = qqreadtimehdArr[i];
+    O = (\`\${jsname + (i + 1)}\`);
+    if (nowTimes.getHours() === 0 && (nowTimes.getMinutes() >= 0 && nowTimes.getMinutes() <= 40)) { await qqreadtrack() };//更新
+    await qqreadtask();//任务列表
+    if (task.data && task.data.treasureBox.doneFlag == 0) {
+      await qqreadbox();//宝箱
+    }
+    if (task.data && task.data.treasureBox.videoDoneFlag == 0) {
+      await qqreadbox2();//宝箱翻倍
+    }
+    await openboxmsg();//通知
+  }
+}
+function openboxmsg() {
+  return new Promise(async resolve => {
+    let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000 + 8 * 60 * 60 * 1000);
+    \$.msg(O, \"\", tz);
+    resolve()
+  })
+}"
+
+cp /qqread/Task/qqreads.js /qqread/Task/qqreads_openbox.js
+echo "$openBoxFn" >> /qqread/Task/qqreads_openbox.js
+
+sed -i "s/all();/openbox();/g" /qqread/Task/qqreads_openbox.js
 
 echo "Pull the qczj latest code..."
 echo "git 拉取汽车之家极速版最新代码..."
