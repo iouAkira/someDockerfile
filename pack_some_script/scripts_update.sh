@@ -12,7 +12,7 @@ echo "Replace some qqread scripts content to be compatible with env configuratio
 echo "替换企鹅阅读脚本相关内容以兼容环境变量配置..."
 sed -i "s/const d =.*$/const d = new Date(new Date().getTime());/g" /qqread/Task/qqreads.js
 sed -i "s/(d.getHours() == 12.*$//g" /qqread/Task/qqreads.js
-sed -i "s/(d.getHours() == 23/(d.getHours() == process.env.QQREAD_NOTIFY_TIME/g" /qqread/Task/qqreads.js
+sed -i "s/(d.getHours() == 23/(d.getHours() == process.env.QQREAD_NOTIFY_TIME \&\& d.getMinutes() <= 25)/g" /qqread/Task/qqreads.js
 sed -i "s/qqreadbox();/console.log('宝箱任务已作为独立任务执行,此处跳过');/g" /qqread/Task/qqreads.js
 sed -i "s/qqreadbox2();/console.log('翻倍宝箱任务已作为独立任务执行,此处跳过');/g" /qqread/Task/qqreads.js
 
