@@ -24,7 +24,7 @@ openBoxFn="async function openbox() {
     qqreadbodyVal = qqreadbdArr[i];
     qqreadtimeurlVal = qqreadtimeurlArr[i];
     qqreadtimeheaderVal = qqreadtimehdArr[i];
-    O = (\`\${taskname + (i + 1)}\`);
+    O = (\`\${jsname + (i + 1)}\`);
     if (nowTimes.getHours() === 0 && (nowTimes.getMinutes() >= 0 && nowTimes.getMinutes() <= 40)) { await qqreadtrack() };//更新
     await qqreadtask();//任务列表
     if (task.data && task.data.treasureBox.doneFlag == 0) {
@@ -48,7 +48,6 @@ cp /qqread/Task/qqreads.js /qqread/Task/qqreads_openbox.js
 echo "$openBoxFn" >> /qqread/Task/qqreads_openbox.js
 
 sed -i "s/\"企鹅读书\"/'企鹅读书开宝箱任务'/g" /qqread/Task/qqreads_openbox.js
-
 sed -i "s/all();/openbox();/g" /qqread/Task/qqreads_openbox.js
 
 echo "Pull the qczj latest code..."
