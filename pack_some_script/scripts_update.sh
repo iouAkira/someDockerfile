@@ -17,14 +17,15 @@ sed -i "s/qqreadbox();/console.log('宝箱任务已作为独立任务执行,此�
 sed -i "s/qqreadbox2();/console.log('翻倍宝箱任务已作为独立任务执行,此处跳过');/g" /qqread/Task/qqreads.js
 
 echo "复制一份企鹅阅读文件单独执行开宝箱任务....."
-openBoxFn="async function openbox() {
+openBoxFn="const taskname = '企鹅读书开宝箱任务;
+async function openbox() {
   for (let i = 0; i < qqreadbdArr.length; i++) {
     let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000 + 8 * 60 * 60 * 1000);
     tz = '';
     qqreadbodyVal = qqreadbdArr[i];
     qqreadtimeurlVal = qqreadtimeurlArr[i];
     qqreadtimeheaderVal = qqreadtimehdArr[i];
-    O = (\`\${jsname + (i + 1)}\`);
+    O = (\`\${taskname + (i + 1)}\`);
     if (nowTimes.getHours() === 0 && (nowTimes.getMinutes() >= 0 && nowTimes.getMinutes() <= 40)) { await qqreadtrack() };//更新
     await qqreadtask();//任务列表
     if (task.data && task.data.treasureBox.doneFlag == 0) {
