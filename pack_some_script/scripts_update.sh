@@ -17,8 +17,7 @@ sed -i "s/qqreadbox();/console.log('宝箱任务已作为独立任务执行,此�
 sed -i "s/qqreadbox2();/console.log('翻倍宝箱任务已作为独立任务执行,此处跳过');/g" /qqread/Task/qqreads.js
 
 echo "复制一份企鹅阅读文件单独执行开宝箱任务....."
-openBoxFn="const taskname = '企鹅读书开宝箱任务';
-async function openbox() {
+openBoxFn="async function openbox() {
   for (let i = 0; i < qqreadbdArr.length; i++) {
     let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000 + 8 * 60 * 60 * 1000);
     tz = '';
@@ -47,6 +46,8 @@ function openboxmsg() {
 
 cp /qqread/Task/qqreads.js /qqread/Task/qqreads_openbox.js
 echo "$openBoxFn" >> /qqread/Task/qqreads_openbox.js
+
+sed -i "s/\"企鹅读书\"/'企鹅读书开宝箱任务'/g" /qqread/Task/qqreads_openbox.js
 
 sed -i "s/all();/openbox();/g" /qqread/Task/qqreads_openbox.js
 
