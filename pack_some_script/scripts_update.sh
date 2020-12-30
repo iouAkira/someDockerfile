@@ -208,7 +208,7 @@ fi
 if [ $BAIDU_COOKIE ] ;then
     wget -O /qqread/Task/baidu_speed.js https://raw.githubusercontent.com/Sunert/Scripts/master/Task/baidu_speed.js
     echo -e >>$mergedListFile
-    echo "10 7-22/2 * * * node /qqread/Task/baidu_speed.js |ts >> /logs/baidu_speed.log 2>&1" >>$mergedListFile
+    echo "10 7-22/1 * * * node /qqread/Task/baidu_speed.js |ts >> /logs/baidu_speed.log 2>&1" >>$mergedListFile
 fi
 
 echo "Load the latest crontab task file..."
