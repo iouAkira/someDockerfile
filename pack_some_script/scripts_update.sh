@@ -205,7 +205,7 @@ if [ $(grep -c "default_task.sh" $mergedListFile) -eq '0' ]; then
     echo "52 */1 * * * sh /pss/default_task.sh |ts >> /logs/default_task.log 2>&1" >>$mergedListFile
 fi
 
-if [$BAIDU_COOKIE] ;then
+if [ $BAIDU_COOKIE ] ;then
     wget -O /qqread/Task/baidu_speed.js https://raw.githubusercontent.com/Sunert/Scripts/master/Task/baidu_speed.js
     echo -e >>$mergedListFile
     echo "10 7-22/2 * * * node /qqread/Task/baidu_speed.js |ts >> /logs/baidu_speed.log 2>&1" >>$mergedListFile
