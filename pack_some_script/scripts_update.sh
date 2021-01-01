@@ -214,6 +214,8 @@ function initBaidu() {
     echo Task/baidu_speed.js >>/baidu_speed/.git/info/sparse-checkout
     echo Task/sendNotify.js >>/baidu_speed/.git/info/sparse-checkout
     git pull origin master
+    cd Task
+    npm install
 }
 
 #sunert 仓库的聚看点
@@ -227,6 +229,8 @@ function initJUKAN() {
     echo Task/jukan.js >>/jukan/.git/info/sparse-checkout
     echo Task/sendNotify.js >>/jukan/.git/info/sparse-checkout
     git pull origin master
+    cd Task
+    npm install
 }
 
 #@shylocks仓库的聚看点
@@ -240,6 +244,7 @@ function initJKD() {
     echo jkd.js >>/jkd/.git/info/sparse-checkout
     echo jkd_clearCk.js >>/jkd/.git/info/sparse-checkout
     git pull origin main
+    npm install
 }
 
 if [ 0"$BAIDU_COOKIE" = "0" ]; then
@@ -250,7 +255,7 @@ else
         initBaidu
     else
         echo "更新baidu_speed脚本相关文件"
-        git -C /baidu_speed pull
+        git -C /baidu_speed pull origin master
     fi
     echo -e >>$mergedListFile
     echo "10 7-22/1 * * * sleep \$((RANDOM % 120)); node /baidu_speed/Task/baidu_speed.js |ts >> /logs/baidu_speed.log 2>&1" >>$mergedListFile
@@ -266,7 +271,7 @@ else
         initJUKAN
     else
         echo "更新jukan脚本相关文件"
-        git -C /jukan pull
+        git -C /jukan pull origin master
     fi
 
     echo -e >>$mergedListFile
@@ -283,7 +288,7 @@ else
         initJKD
     else
         echo "更新jkd脚本相关文件"
-        git -C /jukan pull
+        git -C /jukan pull origin main
     fi
     echo -e >>$mergedListFile
     echo "*/20 7-23 * * * sleep \$((RANDOM % 120)); node /jkd/jkd.js |ts >> /logs/jkd.log 2>&1" >>$mergedListFile
