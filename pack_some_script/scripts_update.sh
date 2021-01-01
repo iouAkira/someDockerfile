@@ -204,14 +204,14 @@ if [ $(grep -c "default_task.sh" $mergedListFile) -eq '0' ]; then
 fi
 
 if [ 0"$BAIDU_COOKIE" = "0" ]; then
-    echo "没有配置百度Cookie，相关环境变量参数，跳过"
+    echo "没有配置百度Cookie，相关环境变量参数，跳过下载配置定时任务"
 else
     wget -O /qqread/Task/baidu_speed.js https://raw.githubusercontent.com/Sunert/Scripts/master/Task/baidu_speed.js
     echo -e >>$mergedListFile
     echo "10 7-22/1 * * * sleep \$((RANDOM % 120)); node /qqread/Task/baidu_speed.js |ts >> /logs/baidu_speed.log 2>&1" >>$mergedListFile
 fi
 
-if [ 0"$BAIDU_COOKIE" = "0" ]; then
+if [ 0"$JUKAN_COOKIE" = "0" ]; then
     echo "没有配置聚看点，相关环境变量参数，跳过下载配置定时任务"
 else
     wget -O /qqread/Task/jukan.js https://raw.githubusercontent.com/Sunert/Scripts/master/Task/jukan.js
