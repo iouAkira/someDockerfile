@@ -211,16 +211,15 @@ else
     echo "10 7-22/1 * * * sleep \$((RANDOM % 120)); node /qqread/Task/baidu_speed.js |ts >> /logs/baidu_speed.log 2>&1" >>$mergedListFile
 fi
 
-if [ 0"$JUKAN_COOKIE" = "0" ]; then
+if [ 0"$JKD_COOKIE" = "0" ]; then
     echo "没有配置聚看点，相关环境变量参数，跳过下载配置定时任务"
 else
-    wget -O /qqread/Task/jukan.js https://raw.githubusercontent.com/Sunert/Scripts/master/Task/jukan.js
+    wget -O /qqread/Task/jkd.js  https://raw.githubusercontent.com/shylocks/Loon/main/jkd.js
 
-    sed -i "s/getdata('jukan_cash')/getdata('jukan_cash') || process.env.JUKAN_CASH /g" /qqread/Task/jukan.js
-    sed -i "s/getdata('jukan_name')/getdata('jukan_name') || process.env.JUKAN_NAME /g" /qqread/Task/jukan.js
-
+#     sed -i "s/getdata('jukan_cash')/getdata('jukan_cash') || process.env.JUKAN_CASH /g" /qqread/Task/jkd.js
+#     sed -i "s/getdata('jukan_name')/getdata('jukan_name') || process.env.JUKAN_NAME /g" /qqread/Task/jkd.js
     echo -e >>$mergedListFile
-    echo "*/10 */2 * * * sleep \$((RANDOM % 120)); node /qqread/Task/jukan.js |ts >> /logs/jukan.log 2>&1" >>$mergedListFile
+    echo "*/10 */2 * * * sleep \$((RANDOM % 120)); node /qqread/Task/jkd.js |ts >> /logs/jkd.log 2>&1" >>$mergedListFile
 fi
 
 echo "Load the latest crontab task file..."
