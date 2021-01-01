@@ -221,7 +221,7 @@ else
     sed -i "s/getdata('jukan_name')/getdata('jukan_name') || process.env.JUKAN_NAME /g" /qqread/Task/jukan.js
 
     echo -e >>$mergedListFile
-    echo "*/10 */2 * * * sleep \$((RANDOM % 120)); node /qqread/Task/jukan.js |ts >> /logs/jukan.log 2>&1" >>$mergedListFile
+    echo "*/20 7-23 * * * sleep \$((RANDOM % 120)); node /qqread/Task/jukan.js |ts >> /logs/jukan.log 2>&1" >>$mergedListFile
 fi
 
 if [ 0"$JKD_COOKIE" = "0" ]; then
@@ -231,7 +231,7 @@ else
     wget -O /qqread/Task/jkd.js https://raw.githubusercontent.com/shylocks/Loon/main/jkd.js
 
     echo -e >>$mergedListFile
-    echo "*/10 */2 * * * sleep \$((RANDOM % 120)); node /qqread/Task/jkd.js |ts >> /logs/jkd.log 2>&1" >>$mergedListFile
+    echo "*/20 7-23 * * * sleep \$((RANDOM % 120)); node /qqread/Task/jkd.js |ts >> /logs/jkd.log 2>&1" >>$mergedListFile
 fi
 
 echo "Load the latest crontab task file..."
