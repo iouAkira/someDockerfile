@@ -247,7 +247,8 @@ if [ 0"$BAIDU_COOKIE" = "0" ]; then
 else
     if [ ! -d "/baidu_speed/" ]; then
         echo "未检查到baidu_speed脚本相关文件，初始化下载相关脚本"
-        initBaidu() else
+        initBaidu
+    else
         echo "更新baidu_speed脚本相关文件"
         git -C /baidu_speed pull
     fi
@@ -262,7 +263,8 @@ else
 
     if [ ! -d "/jukan/" ]; then
         echo "未检查到jukan脚本相关文件，初始化下载相关脚本"
-        initJUKAN() else
+        initJUKAN
+    else
         echo "更新jukan脚本相关文件"
         git -C /jukan pull
     fi
@@ -278,7 +280,8 @@ else
 
     if [ ! -d "/jkd/" ]; then
         echo "未检查到jukan脚本相关文件，初始化下载相关脚本"
-        initJUKAN() else
+        initJKD
+    else
         echo "更新jkd脚本相关文件"
         git -C /jukan pull
     fi
