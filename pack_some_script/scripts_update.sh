@@ -239,7 +239,7 @@ function initJKD() {
     echo package.json >>/jkd/.git/info/sparse-checkout
     echo jkd.js >>/jkd/.git/info/sparse-checkout
     echo jkd_clearCk.js >>/jkd/.git/info/sparse-checkout
-    git pull origin master
+    git pull origin main
 }
 
 if [ 0"$BAIDU_COOKIE" = "0" ]; then
