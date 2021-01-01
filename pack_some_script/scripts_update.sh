@@ -203,40 +203,88 @@ if [ $(grep -c "default_task.sh" $mergedListFile) -eq '0' ]; then
     echo "52 */1 * * * sh /pss/default_task.sh |ts >> /logs/default_task.log 2>&1" >>$mergedListFile
 fi
 
+#sunert 仓库的百度极速版
+function initBaidu() {
+    mkdir /baidu_speed
+    cd /baidu_speed
+    git init
+    git remote add -f origin https://github.com/Sunert/Scripts.git
+    git config core.sparsecheckout true
+    echo Task/package.json >>/baidu_speed/.git/info/sparse-checkout
+    echo Task/baidu_speed.js >>/baidu_speed/.git/info/sparse-checkout
+    echo Task/sendNotify.js >>/baidu_speed/.git/info/sparse-checkout
+    git pull origin master
+}
+
+#sunert 仓库的聚看点
+function initJUKAN() {
+    mkdir /jukan
+    cd /jukan
+    git init
+    git remote add -f origin https://github.com/Sunert/Scripts.git
+    git config core.sparsecheckout true
+    echo Task/package.json >>/jukan/.git/info/sparse-checkout
+    echo Task/jukan.js >>/jukan/.git/info/sparse-checkout
+    echo Task/sendNotify.js >>/jukan/.git/info/sparse-checkout
+    git pull origin master
+}
+
+#@shylocks仓库的聚看点
+function initJKD() {
+    mkdir /jkd
+    cd /jkd
+    git init
+    git remote add -f origin https://github.com/shylocks/Loon.git
+    git config core.sparsecheckout true
+    echo package.json >>/jkd/.git/info/sparse-checkout
+    echo jkd.js >>/jkd/.git/info/sparse-checkout
+    echo jkd_clearCk.js >>/jkd/.git/info/sparse-checkout
+    git pull origin master
+}
+
 if [ 0"$BAIDU_COOKIE" = "0" ]; then
     echo "没有配置百度Cookie，相关环境变量参数，跳过下载配置定时任务"
 else
-    wget -O /qqread/Task/baidu_speed.js https://raw.githubusercontent.com/Sunert/Scripts/master/Task/baidu_speed.js
+    if [ ! -d "/baidu_speed/" ]; then
+        echo "未检查到baidu_speed脚本相关文件，初始化下载相关脚本"
+        initBaidu() else
+        echo "更新baidu_speed脚本相关文件"
+        git -C /baidu_speed pull
+    fi
     echo -e >>$mergedListFile
-    echo "10 7-22/1 * * * sleep \$((RANDOM % 120)); node /qqread/Task/baidu_speed.js |ts >> /logs/baidu_speed.log 2>&1" >>$mergedListFile
+    echo "10 7-22/1 * * * sleep \$((RANDOM % 120)); node /baidu_speed/Task/baidu_speed.js |ts >> /logs/baidu_speed.log 2>&1" >>$mergedListFile
 fi
 
 if [ 0"$JUKAN_COOKIE" = "0" ]; then
     echo "没有配置JUKAN_COOKIE聚看点，相关环境变量参数，跳过下载下载脚本、配置定时任务"
 else
     echo "配置了JUKAN_COOKIE 所以使用 @sunert 仓库的脚本执行任务"
-    wget -O /qqread/Task/jukan.js https://raw.githubusercontent.com/Sunert/Scripts/master/Task/jukan.js
 
-    sed -i "s/getdata('jukan_cash')/getdata('jukan_cash') || process.env.JUKAN_CASH /g" /qqread/Task/jukan.js
-    sed -i "s/getdata('jukan_name')/getdata('jukan_name') || process.env.JUKAN_NAME /g" /qqread/Task/jukan.js
+    if [ ! -d "/jukan/" ]; then
+        echo "未检查到jukan脚本相关文件，初始化下载相关脚本"
+        initJUKAN() else
+        echo "更新jukan脚本相关文件"
+        git -C /jukan pull
+    fi
 
     echo -e >>$mergedListFile
-    echo "*/20 7-23 * * * sleep \$((RANDOM % 120)); node /qqread/Task/jukan.js |ts >> /logs/jukan.log 2>&1" >>$mergedListFile
+    echo "*/20 7-23 * * * sleep \$((RANDOM % 120)); node /jukan/Task/jukan.js |ts >> /logs/jukan.log 2>&1" >>$mergedListFile
 fi
 
 if [ 0"$JKD_COOKIE" = "0" ]; then
     echo "没有配置JKD_COOKIE聚看点，相关环境变量参数，跳过下载下载脚本、配置定时任务"
 else
     echo "配置了JKD_COOKIE所以使用 @shylocks 仓库的脚本执行任务"
-    wget -O /qqread/Task/jkd.js https://raw.githubusercontent.com/shylocks/Loon/main/jkd.js
 
+    if [ ! -d "/jkd/" ]; then
+        echo "未检查到jukan脚本相关文件，初始化下载相关脚本"
+        initJUKAN() else
+        echo "更新jkd脚本相关文件"
+        git -C /jukan pull
+    fi
     echo -e >>$mergedListFile
-    echo "*/20 7-23 * * * sleep \$((RANDOM % 120)); node /qqread/Task/jkd.js |ts >> /logs/jkd.log 2>&1" >>$mergedListFile
+    echo "*/20 7-23 * * * sleep \$((RANDOM % 120)); node /jkd/jkd.js |ts >> /logs/jkd.log 2>&1" >>$mergedListFile
 fi
-
-echo "Load the latest crontab task file..."
-echo "加载最新的定时任务文件..."
-crontab $mergedListFile
 
 echo "Load the latest crontab task file..."
 echo "加载最新的定时任务文件..."
