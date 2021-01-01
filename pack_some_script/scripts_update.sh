@@ -1,7 +1,6 @@
 #!/bin/sh
 set -e
 
-
 echo "Pull the qqreader latest code..."
 echo "git 拉取企鹅阅读最新代码..."
 git -C /qqread reset --hard
@@ -45,7 +44,7 @@ function openboxmsg() {
 }"
 
 cp /qqread/Task/qqreads.js /qqread/Task/qqreads_openbox.js
-echo "$openBoxFn" >> /qqread/Task/qqreads_openbox.js
+echo "$openBoxFn" >>/qqread/Task/qqreads_openbox.js
 
 sed -i "s/\"企鹅读书\"/'企鹅读书开宝箱任务'/g" /qqread/Task/qqreads_openbox.js
 sed -i "s/all();/openbox();/g" /qqread/Task/qqreads_openbox.js
@@ -89,7 +88,6 @@ sed -i 's/if\ XMLY_ACCUMULATE_TIME.*$/if\ os.environ["XMLY_ACCUMULATE_TIME"]=="1
 sed -i "s/\(xmly_speed_cookie\.split('\)\\\n/\1\|/g" /xmly_speed/xmly_speed.py
 sed -i 's/cookiesList.append(line)/cookiesList.append(line.replace(" ",""))/g' /xmly_speed/xmly_speed.py
 sed -i 's/_notify_time.split.*$/_notify_time.split()[0]==os.environ["XMLY_NOTIFY_TIME"]\ and\ int(_notify_time.split()[1])<30:/g' /xmly_speed/xmly_speed.py
-
 
 ######################################获取docker构建文件里面的自定义信息方法-start#####################################################
 function getDockerImageLabel() {
@@ -136,13 +134,13 @@ if [ ! $BUILD_VERSION ]; then
         python3 send_notify.py
     fi
 elif version_gt $version $BUILD_VERSION; then
-        echo "Current container version $BUILD_VERSION, dockerhub lastet version $version, send update notification"
-        echo "当前容器版本为$BUILD_VERSION，dockerhub仓库版本为$version，发送通知"
-        cd /pss
-        python3 send_notify.py
+    echo "Current container version $BUILD_VERSION, dockerhub lastet version $version, send update notification"
+    echo "当前容器版本为$BUILD_VERSION，dockerhub仓库版本为$version，发送通知"
+    cd /pss
+    python3 send_notify.py
 else
-        echo "The docker image update content is not checked"
-        echo "未检查到docker镜像更新内容"
+    echo "The docker image update content is not checked"
+    echo "未检查到docker镜像更新内容"
 fi
 #######################################通知用户更新镜像-end#####################################################################
 
@@ -205,10 +203,24 @@ if [ $(grep -c "default_task.sh" $mergedListFile) -eq '0' ]; then
     echo "52 */1 * * * sh /pss/default_task.sh |ts >> /logs/default_task.log 2>&1" >>$mergedListFile
 fi
 
-if [ $BAIDU_COOKIE ] ;then
+if [ 0"$BAIDU_COOKIE" = "0" ]; then
+    echo "没有配置百度Cookie，相关环境变量参数，跳过"
+else
     wget -O /qqread/Task/baidu_speed.js https://raw.githubusercontent.com/Sunert/Scripts/master/Task/baidu_speed.js
     echo -e >>$mergedListFile
     echo "10 7-22/1 * * * sleep \$((RANDOM % 120)); node /qqread/Task/baidu_speed.js |ts >> /logs/baidu_speed.log 2>&1" >>$mergedListFile
+fi
+
+if [ 0"$BAIDU_COOKIE" = "0" ]; then
+    echo "没有配置聚看点，相关环境变量参数，跳过下载配置定时任务"
+else
+    wget -O /qqread/Task/jukan.js https://raw.githubusercontent.com/Sunert/Scripts/master/Task/jukan.js
+
+    sed -i "s/getdata('jukan_cash')/getdata('jukan_cash') || process.env.JUKAN_CASH /g" /qqread/Task/jukan.js
+    sed -i "s/getdata('jukan_name')/getdata('jukan_name') || process.env.JUKAN_NAME /g" /qqread/Task/jukan.js
+
+    echo -e >>$mergedListFile
+    echo "*/10 */2 * * * sleep \$((RANDOM % 120)); node /qqread/Task/jukan.js |ts >> /logs/jukan.log 2>&1" >>$mergedListFile
 fi
 
 echo "Load the latest crontab task file..."
