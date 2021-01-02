@@ -5,7 +5,7 @@
   > 3个环境变量 `XMLY_SPEED_COOKIE`为cookie必须配置，后面2个为可选配置 `XMLY_ACCUMULATE_TIME`#设置为1开启刷时长，0为关闭刷时长、`XMLY_NOTIFY_TIME` 通知时间，例 (9点) XMLY_NOTIFY_TIME=09
 
 - ### 企鹅阅读(QQ小程序) 作者：[__@ziye12__](https://github.com/ziye12)｜[__仓库地址__](https://github.com/ziye12/JavaScript)
-  > 5个环境变量 `QQREAD_BODY`、`QQREAD_TIMEURL`、`QQREAD_TIMEHD`为cookie必须配置，后面2个为可选配置`COOKIES_SPLIT`# 多账号cookies连接符号，不配置默认为|，自己有能力调整排错的可以尝试自定义 如果需要配置使用汽车之家请配置为 `COOKIES_SPLIT=|&|`通知时间`QQREAD_NOTIFY_TIME`
+  > 6个环境变量 `QQREAD_BODY`、`QQREAD_TIMEURL`、`QQREAD_TIMEHD`为cookie必须配置，后面3个为可选配置`COOKIES_SPLIT`# 多账号cookies连接符号，不配置默认为|，自己有能力调整排错的可以尝试自定义 如果需要配置使用汽车之家请配置为 `COOKIES_SPLIT=|&|`、通知时间`QQREAD_NOTIFY_TIME`、提现金额`QQREAD_CASH`不配置默认为0不自动提现，可配置为1、2、10、30、50、100
 - ### 汽车之家极速版 作者：[__@ziye12__](https://github.com/ziye12)｜[__仓库地址__](https://github.com/ziye12/QCZJSPEED)
   > 11个环境变量均为必需配置`QCZJ_GetUserInfoURL`、`QCZJ_GetUserInfoHEADER`、`QCZJ_coinBODY`、`QCZJ_taskBODY`、`QCZJ_activityBODY`、`QCZJ_GoldcoinBODY`、`QCZJ_videoBODY`、`QCZJ_WelfarevideoBODY`、`QCZJ_WelfareBODY`、`QCZJ_addCoinBODY`、`QCZJ_addCoin2BODY`、`QCZJ_reportAssBODY`、`QCZJ_reportAssHEADER`
     ```diff 
