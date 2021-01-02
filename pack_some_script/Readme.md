@@ -23,14 +23,14 @@
     ```
 ___
 ```diff
-! 2021-01-02更新
-! 所有脚本脚本定时任务都由脚本判断环境变量是否存在来决定增加定时任务
++ 2021-01-02更新
++ 所有脚本脚本定时任务都由脚本判断环境变量是否存在来决定增加定时任务
 _______
-+ 2020-12-19更新
-+ 增加自定义任务配置
-+ 使用自定义定任务之后，上面volumes挂载之后这里配置对应的文件名
-+ CUSTOM_LIST_FILE=my_crontab_list.sh #自定任务文件名
-+ CUSTOM_LIST_MERGE_TYPE=append #默认值append自定文件的使用方式append追加默认之后，overwrite覆盖默认任务
+! 2020-12-19更新
+! 增加自定义任务配置
+! 使用自定义定任务之后，上面volumes挂载之后这里配置对应的文件名
+! CUSTOM_LIST_FILE=my_crontab_list.sh #自定任务文件名
+! CUSTOM_LIST_MERGE_TYPE=append #默认值append自定文件的使用方式append追加默认之后，overwrite覆盖默认任务
 ```
 # 使用说明
 > 前提：   
