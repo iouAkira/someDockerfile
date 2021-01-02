@@ -288,7 +288,7 @@ else
         initJKD
     else
         echo "更新jkd脚本相关文件"
-        git -C /jukan pull origin main
+        git -C /jkd pull origin main
     fi
     echo -e >>$mergedListFile
     echo "*/20 7-23 * * * sleep \$((RANDOM % 120)); node /jkd/jkd.js |ts >> /logs/jkd.log 2>&1" >>$mergedListFile
