@@ -1,94 +1,6 @@
 #!/bin/sh
 set -e
 
-echo "Pull the qqreader latest code..."
-echo "git 拉取企鹅阅读最新代码..."
-git -C /qqread reset --hard
-git -C /qqread pull
-npm install --prefix /qqread
-
-echo "Replace some qqread scripts content to be compatible with env configuration ..."
-echo "替换企鹅阅读脚本相关内容以兼容环境变量配置..."
-sed -i "s/const d =.*$/const d = new Date(new Date().getTime());/g" /qqread/Task/qqreads.js
-sed -i "s/(d.getHours() == 12.*$//g" /qqread/Task/qqreads.js
-sed -i "s/(d.getHours() == 23.*$/(d.getHours() == process.env.QQREAD_NOTIFY_TIME \&\& d.getMinutes() <= 25)/g" /qqread/Task/qqreads.js
-sed -i "s/qqreadbox();/console.log('宝箱任务已作为独立任务执行,此处跳过');/g" /qqread/Task/qqreads.js
-sed -i "s/qqreadbox2();/console.log('翻倍宝箱任务已作为独立任务执行,此处跳过');/g" /qqread/Task/qqreads.js
-
-echo "复制一份企鹅阅读文件单独执行开宝箱任务....."
-openBoxFn="async function openbox() {
-  for (let i = 0; i < qqreadbdArr.length; i++) {
-    let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000 + 8 * 60 * 60 * 1000);
-    tz = '';
-    qqreadbodyVal = qqreadbdArr[i];
-    qqreadtimeurlVal = qqreadtimeurlArr[i];
-    qqreadtimeheaderVal = qqreadtimehdArr[i];
-    O = (\`\${jsname + (i + 1)}\`);
-    if (nowTimes.getHours() === 0 && (nowTimes.getMinutes() >= 0 && nowTimes.getMinutes() <= 40)) { await qqreadtrack() };//更新
-    await qqreadtask();//任务列表
-    if (task.data && task.data.treasureBox.doneFlag == 0) {
-      await qqreadbox();//宝箱
-    }
-    if (task.data && task.data.treasureBox.videoDoneFlag == 0) {
-      await qqreadbox2();//宝箱翻倍
-    }
-    await openboxmsg();//通知
-  }
-}
-function openboxmsg() {
-  return new Promise(async resolve => {
-    let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000 + 8 * 60 * 60 * 1000);
-    \$.msg(O, \"\", tz);
-    resolve()
-  })
-}"
-
-cp /qqread/Task/qqreads.js /qqread/Task/qqreads_openbox.js
-echo "$openBoxFn" >>/qqread/Task/qqreads_openbox.js
-
-sed -i "s/\"企鹅读书\"/'企鹅读书开宝箱任务'/g" /qqread/Task/qqreads_openbox.js
-sed -i "s/all();/openbox();/g" /qqread/Task/qqreads_openbox.js
-
-echo "Pull the qczj latest code..."
-echo "git 拉取汽车之家极速版最新代码..."
-git -C /QCZJSPEED reset --hard
-git -C /QCZJSPEED pull
-
-echo "Replace some qczj scripts content to be compatible with env configuration ..."
-echo "替换汽车之间内容修正错误..."
-sed -i "s/=\ GetUserInfourlArr\[i\]/=\ GetUserInfourlArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/=\ GetUserInfoheaderArr\[i\]/=\ GetUserInfoheaderArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/=\ coinbodyArr\[i\]/=\ coinbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/=\ taskbodyArr\[i\]/=\ taskbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/=\ activitybodyArr\[i\]/=\ activitybodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/=\ GoldcoinbodyArr\[i\]/=\ GoldcoinbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/=\ videobodyArr\[i\]/=\ videobodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/=\ WelfarevideobodyArr\[i\]/=\ WelfarevideobodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/=\ WelfarebodyArr\[i\]/=\ WelfarebodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/=\ addCoinbodyArr\[i\]/=\ addCoinbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/=\ addCoin2bodyArr\[i\]/=\ addCoin2bodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/=\ reportAssheaderArr\[i\]/=\ reportAssheaderArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/=\ reportAssbodyArr\[i\]/=\ reportAssbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
-sed -i "s/cointowalletbodyVal.replace/cointowalletbodyVal.trim().replace/g" /QCZJSPEED/Task/qczjspeed.js
-
-cp /QCZJSPEED/Task/qczjspeed.js /qqread/Task/
-
-echo "Pull the xmly_speed latest code..."
-echo "git 拉取喜马拉雅最新代码..."
-git -C /xmly_speed reset --hard
-git -C /xmly_speed pull
-cd /xmly_speed
-pip3 install -r requirements.txt
-
-echo "Replace some xmly scripts content to be compatible with env configuration ..."
-echo "替换喜马拉雅脚本相关内容以兼容环境变量配置..."
-sed -i 's/BARK/BARK_PUSH/g' /xmly_speed/xmly_speed.py
-sed -i 's/SCKEY/PUSH_KEY/g' /xmly_speed/xmly_speed.py
-sed -i 's/if\ XMLY_ACCUMULATE_TIME.*$/if\ os.environ["XMLY_ACCUMULATE_TIME"]=="1":/g' /xmly_speed/xmly_speed.py
-sed -i "s/\(xmly_speed_cookie\.split('\)\\\n/\1\|/g" /xmly_speed/xmly_speed.py
-sed -i 's/cookiesList.append(line)/cookiesList.append(line.replace(" ",""))/g' /xmly_speed/xmly_speed.py
-sed -i 's/_notify_time.split.*$/_notify_time.split()[0]==os.environ["XMLY_NOTIFY_TIME"]\ and\ int(_notify_time.split()[1])<30:/g' /xmly_speed/xmly_speed.py
-
 ######################################获取docker构建文件里面的自定义信息方法-start#####################################################
 function getDockerImageLabel() {
     repo=akyakya/pack_some_script
@@ -144,16 +56,224 @@ else
 fi
 #######################################通知用户更新镜像-end#####################################################################
 
-##兼容旧镜像的环境变量
-if [ !$DEFAULT_LIST_FILE ]; then
-    defaultListFile="/pss/crontab_list.sh"
-else
-    defaultListFile="/pss/$DEFAULT_LIST_FILE"
-fi
+#sunert 仓库的百度极速版
+function initBaidu() {
+    mkdir /baidu_speed
+    cd /baidu_speed
+    git init
+    git remote add -f origin https://github.com/Sunert/Scripts.git
+    git config core.sparsecheckout true
+    echo Task/package.json >>/baidu_speed/.git/info/sparse-checkout
+    echo Task/baidu_speed.js >>/baidu_speed/.git/info/sparse-checkout
+    echo Task/sendNotify.js >>/baidu_speed/.git/info/sparse-checkout
+    git pull origin master
+    cd Task
+    npm install
+}
 
+#sunert 仓库的聚看点
+function initJUKAN() {
+    mkdir /jukan
+    cd /jukan
+    git init
+    git remote add -f origin https://github.com/Sunert/Scripts.git
+    git config core.sparsecheckout true
+    echo Task/package.json >>/jukan/.git/info/sparse-checkout
+    echo Task/jukan.js >>/jukan/.git/info/sparse-checkout
+    echo Task/sendNotify.js >>/jukan/.git/info/sparse-checkout
+    git pull origin master
+    cd Task
+    npm install
+}
+
+#@shylocks仓库的聚看点
+function initJKD() {
+    mkdir /jkd
+    cd /jkd
+    git init
+    git remote add -f origin https://github.com/shylocks/Loon.git
+    git config core.sparsecheckout true
+    echo package.json >>/jkd/.git/info/sparse-checkout
+    echo jkd.js >>/jkd/.git/info/sparse-checkout
+    echo jkd_clearCk.js >>/jkd/.git/info/sparse-checkout
+    git pull origin main
+    npm install
+}
+
+##定义定合并定时任务相关文件路径变量
+defaultListFile="/pss/$DEFAULT_LIST_FILE"
 customListFile="/pss/$CUSTOM_LIST_FILE"
 mergedListFile="/pss/merged_list_file.sh"
 
+##判断喜马拉雅COOKIE配置之后才会更新相关任务脚本
+if [ 0"$XMLY_SPEED_COOKIE" = "0" ]; then
+    echo "没有喜马拉雅极速版Cookie，相关环境变量参数，跳过配置定时任务"
+else
+    echo "Pull the xmly_speed latest code..."
+    echo "git 拉取喜马拉雅最新代码..."
+    git -C /xmly_speed reset --hard
+    git -C /xmly_speed pull
+    cd /xmly_speed
+    pip3 install -r requirements.txt
+
+    echo "Replace some xmly scripts content to be compatible with env configuration ..."
+    echo "替换喜马拉雅脚本相关内容以兼容环境变量配置..."
+    sed -i 's/BARK/BARK_PUSH/g' /xmly_speed/xmly_speed.py
+    sed -i 's/SCKEY/PUSH_KEY/g' /xmly_speed/xmly_speed.py
+    sed -i 's/if\ XMLY_ACCUMULATE_TIME.*$/if\ os.environ["XMLY_ACCUMULATE_TIME"]=="1":/g' /xmly_speed/xmly_speed.py
+    sed -i "s/\(xmly_speed_cookie\.split('\)\\\n/\1\|/g" /xmly_speed/xmly_speed.py
+    sed -i 's/cookiesList.append(line)/cookiesList.append(line.replace(" ",""))/g' /xmly_speed/xmly_speed.py
+    sed -i 's/_notify_time.split.*$/_notify_time.split()[0]==os.environ["XMLY_NOTIFY_TIME"]\ and\ int(_notify_time.split()[1])<30:/g' /xmly_speed/xmly_speed.py
+
+    echo -e >>$defaultListFile
+    ##喜马拉雅极速版任务
+    echo "*/30 * * * * sleep \$((RANDOM % 120)); cd /xmly_speed && python3 xmly_speed.py >> /logs/xmly_speed.log 2>&1" >>$defaultListFile
+fi
+
+##企鹅阅读COOKIE配置之后才会更新相关任务脚本
+if [ 0"$QQREAD_BODY" = "0" ]; then
+    echo "没有企鹅阅读Cookie，相关环境变量参数，跳过配置定时任务"
+else
+    echo "Pull the qqreader latest code..."
+    echo "git 拉取企鹅阅读最新代码..."
+    git -C /qqread reset --hard
+    git -C /qqread pull
+    npm install --prefix /qqread
+
+    echo "Replace some qqread scripts content to be compatible with env configuration ..."
+    echo "替换企鹅阅读脚本相关内容以兼容环境变量配置..."
+    sed -i "s/const d =.*$/const d = new Date(new Date().getTime());/g" /qqread/Task/qqreads.js
+    sed -i "s/(d.getHours() == 12.*$//g" /qqread/Task/qqreads.js
+    sed -i "s/(d.getHours() == 23.*$/(d.getHours() == process.env.QQREAD_NOTIFY_TIME \&\& d.getMinutes() <= 25)/g" /qqread/Task/qqreads.js
+    sed -i "s/qqreadbox();/console.log('宝箱任务已作为独立任务执行,此处跳过');/g" /qqread/Task/qqreads.js
+    sed -i "s/qqreadbox2();/console.log('翻倍宝箱任务已作为独立任务执行,此处跳过');/g" /qqread/Task/qqreads.js
+
+    echo "复制一份企鹅阅读文件单独执行开宝箱任务....."
+    openBoxFn="async function openbox() {
+    for (let i = 0; i < qqreadbdArr.length; i++) {
+        let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000 + 8 * 60 * 60 * 1000);
+        tz = '';
+        qqreadbodyVal = qqreadbdArr[i];
+        qqreadtimeurlVal = qqreadtimeurlArr[i];
+        qqreadtimeheaderVal = qqreadtimehdArr[i];
+        O = (\`\${jsname + (i + 1)}\`);
+        if (nowTimes.getHours() === 0 && (nowTimes.getMinutes() >= 0 && nowTimes.getMinutes() <= 40)) { await qqreadtrack() };//更新
+        await qqreadtask();//任务列表
+        if (task.data && task.data.treasureBox.doneFlag == 0) {
+        await qqreadbox();//宝箱
+        }
+        if (task.data && task.data.treasureBox.videoDoneFlag == 0) {
+        await qqreadbox2();//宝箱翻倍
+        }
+        await openboxmsg();//通知
+    }
+    }
+    function openboxmsg() {
+    return new Promise(async resolve => {
+        let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000 + 8 * 60 * 60 * 1000);
+        \$.msg(O, \"\", tz);
+        resolve()
+    })
+    }"
+
+    cp /qqread/Task/qqreads.js /qqread/Task/qqreads_openbox.js
+    echo "$openBoxFn" >>/qqread/Task/qqreads_openbox.js
+
+    sed -i "s/\"企鹅读书\"/'企鹅读书开宝箱任务'/g" /qqread/Task/qqreads_openbox.js
+    sed -i "s/all();/openbox();/g" /qqread/Task/qqreads_openbox.js
+
+    echo -e >>$defaultListFile
+    ##企鹅阅读小程序阅读任务
+    echo "*/30 * * * * node /qqread/Task/qqreads.js >> /logs/qqread.log 2>&1" >>$defaultListFile
+    echo -e >>$defaultListFile
+    ##企鹅阅读小程序宝箱任务
+    echo "*/1 * * * * node /qqread/Task/qqreads_openbox.js >> /logs/qqreads_openbox.log 2>&1" >>$defaultListFile
+fi
+
+##判断汽车之家COOKIE配置之后才会更新相关任务脚本
+if [ 0"$QCZJ_GetUserInfoURL" = "0" ]; then
+    echo "没有汽车之家Cookie，相关环境变量参数，跳过配置定时任务"
+else
+    echo "Pull the qczj latest code..."
+    echo "git 拉取汽车之家极速版最新代码..."
+    git -C /QCZJSPEED reset --hard
+    git -C /QCZJSPEED pull
+
+    echo "Replace some qczj scripts content to be compatible with env configuration ..."
+    echo "替换汽车之间内容修正错误..."
+    sed -i "s/=\ GetUserInfourlArr\[i\]/=\ GetUserInfourlArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+    sed -i "s/=\ GetUserInfoheaderArr\[i\]/=\ GetUserInfoheaderArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+    sed -i "s/=\ coinbodyArr\[i\]/=\ coinbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+    sed -i "s/=\ taskbodyArr\[i\]/=\ taskbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+    sed -i "s/=\ activitybodyArr\[i\]/=\ activitybodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+    sed -i "s/=\ GoldcoinbodyArr\[i\]/=\ GoldcoinbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+    sed -i "s/=\ videobodyArr\[i\]/=\ videobodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+    sed -i "s/=\ WelfarevideobodyArr\[i\]/=\ WelfarevideobodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+    sed -i "s/=\ WelfarebodyArr\[i\]/=\ WelfarebodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+    sed -i "s/=\ addCoinbodyArr\[i\]/=\ addCoinbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+    sed -i "s/=\ addCoin2bodyArr\[i\]/=\ addCoin2bodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+    sed -i "s/=\ reportAssheaderArr\[i\]/=\ reportAssheaderArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+    sed -i "s/=\ reportAssbodyArr\[i\]/=\ reportAssbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
+    sed -i "s/cointowalletbodyVal.replace/cointowalletbodyVal.trim().replace/g" /QCZJSPEED/Task/qczjspeed.js
+
+    cp /QCZJSPEED/Task/qczjspeed.js /qqread/Task/
+
+    echo -e >>$defaultListFile
+    ##汽车之家相关任务
+    echo "*/30 * * * * sleep \$((RANDOM % 120)); node /qqread/Task/qczjspeed.js >> /logs/qczjspeed.log 2>&1" >>$defaultListFile
+fi
+
+##判断百度极速版COOKIE配置之后才会更新相关任务脚本
+if [ 0"$BAIDU_COOKIE" = "0" ]; then
+    echo "没有配置百度Cookie，相关环境变量参数，跳过下载配置定时任务"
+else
+    if [ ! -d "/baidu_speed/" ]; then
+        echo "未检查到baidu_speed脚本相关文件，初始化下载相关脚本"
+        initBaidu
+    else
+        echo "更新baidu_speed脚本相关文件"
+        git -C /baidu_speed pull origin master
+    fi
+    echo -e >>$defaultListFile
+    echo "10 7-22/1 * * * sleep \$((RANDOM % 120)); node /baidu_speed/Task/baidu_speed.js >> /logs/baidu_speed.log 2>&1" >>$defaultListFile
+fi
+
+##判断聚看点@sunert版本COOKIE配置之后才会更新相关任务脚本
+if [ 0"$JUKAN_COOKIE" = "0" ]; then
+    echo "没有配置JUKAN_COOKIE聚看点，相关环境变量参数，跳过下载下载脚本、配置定时任务"
+else
+    echo "配置了JUKAN_COOKIE 所以使用 @sunert 仓库的脚本执行任务"
+
+    if [ ! -d "/jukan/" ]; then
+        echo "未检查到jukan脚本相关文件，初始化下载相关脚本"
+        initJUKAN
+    else
+        echo "更新jukan脚本相关文件"
+        git -C /jukan pull origin master
+    fi
+
+    echo -e >>$defaultListFile
+    echo "*/20 7-23 * * * sleep \$((RANDOM % 120)); node /jukan/Task/jukan.js >> /logs/jukan.log 2>&1" >>$defaultListFile
+fi
+
+##判断聚看点@shylocks版本COOKIE配置之后才会更新相关任务脚本
+if [ 0"$JKD_COOKIE" = "0" ]; then
+    echo "没有配置JKD_COOKIE聚看点，相关环境变量参数，跳过下载下载脚本、配置定时任务"
+else
+    echo "配置了JKD_COOKIE所以使用 @shylocks 仓库的脚本执行任务"
+
+    if [ ! -d "/jkd/" ]; then
+        echo "未检查到jukan脚本相关文件，初始化下载相关脚本"
+        initJKD
+    else
+        echo "更新jkd脚本相关文件"
+        git -C /jkd pull origin main
+    fi
+    echo -e >>$defaultListFile
+    echo "*/20 7-23 * * * sleep \$((RANDOM % 120)); node /jkd/jkd.js >> /logs/jkd.log 2>&1" >>$defaultListFile
+fi
+
+###追加|ts 任务日志时间戳
 if type ts >/dev/null 2>&1; then
     echo 'moreutils tools installed, default task append |ts output'
     echo '系统已安装moreutils工具包，默认定时任务增加｜ts 输出'
@@ -202,98 +322,6 @@ if [ $(grep -c "default_task.sh" $mergedListFile) -eq '0' ]; then
     echo -e >>$mergedListFile
     echo "52 */1 * * * sh /pss/default_task.sh |ts >> /logs/default_task.log 2>&1" >>$mergedListFile
 fi
-
-#sunert 仓库的百度极速版
-function initBaidu() {
-    mkdir /baidu_speed
-    cd /baidu_speed
-    git init
-    git remote add -f origin https://github.com/Sunert/Scripts.git
-    git config core.sparsecheckout true
-    echo Task/package.json >>/baidu_speed/.git/info/sparse-checkout
-    echo Task/baidu_speed.js >>/baidu_speed/.git/info/sparse-checkout
-    echo Task/sendNotify.js >>/baidu_speed/.git/info/sparse-checkout
-    git pull origin master
-    cd Task
-    npm install
-}
-
-#sunert 仓库的聚看点
-function initJUKAN() {
-    mkdir /jukan
-    cd /jukan
-    git init
-    git remote add -f origin https://github.com/Sunert/Scripts.git
-    git config core.sparsecheckout true
-    echo Task/package.json >>/jukan/.git/info/sparse-checkout
-    echo Task/jukan.js >>/jukan/.git/info/sparse-checkout
-    echo Task/sendNotify.js >>/jukan/.git/info/sparse-checkout
-    git pull origin master
-    cd Task
-    npm install
-}
-
-#@shylocks仓库的聚看点
-function initJKD() {
-    mkdir /jkd
-    cd /jkd
-    git init
-    git remote add -f origin https://github.com/shylocks/Loon.git
-    git config core.sparsecheckout true
-    echo package.json >>/jkd/.git/info/sparse-checkout
-    echo jkd.js >>/jkd/.git/info/sparse-checkout
-    echo jkd_clearCk.js >>/jkd/.git/info/sparse-checkout
-    git pull origin main
-    npm install
-}
-
-if [ 0"$BAIDU_COOKIE" = "0" ]; then
-    echo "没有配置百度Cookie，相关环境变量参数，跳过下载配置定时任务"
-else
-    if [ ! -d "/baidu_speed/" ]; then
-        echo "未检查到baidu_speed脚本相关文件，初始化下载相关脚本"
-        initBaidu
-    else
-        echo "更新baidu_speed脚本相关文件"
-        git -C /baidu_speed pull origin master
-    fi
-    echo -e >>$mergedListFile
-    echo "10 7-22/1 * * * sleep \$((RANDOM % 120)); node /baidu_speed/Task/baidu_speed.js |ts >> /logs/baidu_speed.log 2>&1" >>$mergedListFile
-fi
-
-if [ 0"$JUKAN_COOKIE" = "0" ]; then
-    echo "没有配置JUKAN_COOKIE聚看点，相关环境变量参数，跳过下载下载脚本、配置定时任务"
-else
-    echo "配置了JUKAN_COOKIE 所以使用 @sunert 仓库的脚本执行任务"
-
-    if [ ! -d "/jukan/" ]; then
-        echo "未检查到jukan脚本相关文件，初始化下载相关脚本"
-        initJUKAN
-    else
-        echo "更新jukan脚本相关文件"
-        git -C /jukan pull origin master
-    fi
-
-    echo -e >>$mergedListFile
-    echo "*/20 7-23 * * * sleep \$((RANDOM % 120)); node /jukan/Task/jukan.js |ts >> /logs/jukan.log 2>&1" >>$mergedListFile
-fi
-
-if [ 0"$JKD_COOKIE" = "0" ]; then
-    echo "没有配置JKD_COOKIE聚看点，相关环境变量参数，跳过下载下载脚本、配置定时任务"
-else
-    echo "配置了JKD_COOKIE所以使用 @shylocks 仓库的脚本执行任务"
-
-    if [ ! -d "/jkd/" ]; then
-        echo "未检查到jukan脚本相关文件，初始化下载相关脚本"
-        initJKD
-    else
-        echo "更新jkd脚本相关文件"
-        git -C /jkd pull origin main
-    fi
-    echo -e >>$mergedListFile
-    echo "*/20 7-23 * * * sleep \$((RANDOM % 120)); node /jkd/jkd.js |ts >> /logs/jkd.log 2>&1" >>$mergedListFile
-fi
-
 echo "Load the latest crontab task file..."
 echo "加载最新的定时任务文件..."
 crontab $mergedListFile
