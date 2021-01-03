@@ -153,7 +153,7 @@ else
     echo "*/30 * * * * node /qqread/Task/qqreadnode.js >> /logs/qqreadnode.log 2>&1" >>$defaultListFile
     echo -e >>$defaultListFile
     ##企鹅阅读小程序宝箱任务
-    echo "*/1 * * * * node /qqread/Task/qqreads_openbox.js >> /logs/qqreads_openbox.log 2>&1" >>$defaultListFile
+    echo "*/10 * * * * node /qqread/Task/qqreads_openbox.js >> /logs/qqreads_openbox.log 2>&1" >>$defaultListFile
 fi
 
 ##判断汽车之家COOKIE配置之后才会更新相关任务脚本
