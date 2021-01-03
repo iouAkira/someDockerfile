@@ -12,12 +12,11 @@
     ! tip：COOKIES_SPLIT 只针对企鹅阅读和汽车之家生效
     ```
 - ### 百度极速版 作者：[__@Sunert__](https://github.com/Sunert)｜[__仓库地址__](https://github.com/Sunert/Scripts/blob/master/Task/baidu_speed.js)
-  > 1个环境变量 `BAIDU_COOKIE`如果需要使用百度极速版刷任务，必须配置
-
+  > 1个环境变量 `BAIDU_COOKIE`如果需要使用百度极速版刷任务，必须配置（多cookies使用 `&`链接 ）
 - ### Sunert的聚看点 作者：[__@Sunert__](https://github.com/Sunert)｜[__仓库地址__](https://github.com/Sunert/Scripts/blob/master/Task/jukan.js)
-  > 2个环境变量变量 `JUKAN_COOKIE`，`JUKAN_BODY`，如果要使用Sunert的聚看点刷任务2个必须配置
+  > 2个环境变量变量 `JUKAN_COOKIE`，`JUKAN_BODY`，如果要使用Sunert的聚看点刷任务2个必须配置（多cookies使用 `&`链接 ）
 - ### shylocks的聚看点 作者：[__@shylocks__](https://github.com/shylocks)｜[__仓库地址__](https://github.com/shylocks/Loon/blob/main/jkd.js)
-  > 3个环境变量 `JKD_COOKIE`如果要使用shylocks的聚看点刷任务必须配置,后面`JKD_USER_AGENT`用户ua默认为ios、`JKD_WITHDRAW`提现金额 为可选配置
+  > 3个环境变量 `JKD_COOKIE`如果要使用shylocks的聚看点刷任务必须配置（多cookies使用`&`或者`@`链接）,后面`JKD_USER_AGENT`用户ua默认为ios、`JKD_WITHDRAW`提现金额 为可选配置
     ```diff
     ! tip：聚看点二选一配置即可
     ```
