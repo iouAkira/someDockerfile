@@ -233,9 +233,10 @@ else
     else
         echo "更新baidu_speed脚本相关文件"
         git -C /baidu_speed pull origin master
-        sed -i "s/if (process.env.BAIDU_COOKIE && process.env.BAIDU_COOKIE.indexOf('\n')/else if (process.env.BAIDU_COOKIE && process.env.BAIDU_COOKIE.indexOf('\n')/g" /baidu_speed/Task/baidu_speed.js
-        sed -i "s/inviteCode=WKQLC6/inviteCode=VRW2RC/g" /baidu_speed/Task/baidu_speed.js
     fi
+    sed -i "s/StartBody/BDCookie/g" /baidu_speed/Task/baidu_speed.js
+    sed -i "s/if (process.env.BAIDU_COOKIE && process.env.BAIDU_COOKIE.indexOf('\n')/else if (process.env.BAIDU_COOKIE && process.env.BAIDU_COOKIE.indexOf('\n')/g" /baidu_speed/Task/baidu_speed.js
+    sed -i "s/WKQLC6/VRW2RC/g" /baidu_speed/Task/baidu_speed.js
     echo -e >>$defaultListFile
     echo "10 7-22/1 * * * sleep \$((RANDOM % 120)); node /baidu_speed/Task/baidu_speed.js >> /logs/baidu_speed.log 2>&1" >>$defaultListFile
 fi
