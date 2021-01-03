@@ -146,7 +146,7 @@ else
 
     echo "复制一份企鹅阅读文件单独执行开宝箱任务....."
     cp /qqread/Task/qqreadnode.js /qqread/Task/qqreads_openbox.js
-    sed -i "s/BOX = 2/BOX = 1/g" /qqread/Task/qqreads_openbox.js
+    sed -i "s/BOX = 0/BOX = 1/g" /qqread/Task/qqreads_openbox.js
 
     echo -e >>$defaultListFile
     ##企鹅阅读小程序阅读任务
