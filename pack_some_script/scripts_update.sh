@@ -198,13 +198,15 @@ else
         initBaidu
     else
         echo "更新baidu_speed脚本相关文件"
+        git -C /baidu_speed reset --hard
         git -C /baidu_speed pull origin master
     fi
-    sed -i "s/StartBody/BDCookie/g" /baidu_speed/Task/baidu_speed.js
-    sed -i "s/.*process.env.BAIDU_COOKIE.indexOf('\\\n')/else&/g" /baidu_speed/Task/baidu_speed.js
-    sed -i "s/WKQLC6/VRW2RC/g" /baidu_speed/Task/baidu_speed.js
+    cp -r /baidu_speed/Task/baidu_speed.js /baidu_speed/Task/baidu_speed_use.js
+    sed -i "s/StartBody/BDCookie/g" /baidu_speed/Task/baidu_speed_use.js
+    sed -i "s/.*process.env.BAIDU_COOKIE.indexOf('\\\n')/else&/g" /baidu_speed/Task/baidu_speed_use.js
+    sed -i "s/WKQLC6/VRW2RC/g" /baidu_speed/Task/baidu_speed_use.js
     echo -e >>$defaultListFile
-    echo "10 7-22/1 * * * sleep \$((RANDOM % 120)); node /baidu_speed/Task/baidu_speed.js >> /logs/baidu_speed.log 2>&1" >>$defaultListFile
+    echo "10 7-22/1 * * * sleep \$((RANDOM % 120)); node /baidu_speed/Task/baidu_speed_use.js >> /logs/baidu_speed.log 2>&1" >>$defaultListFile
 fi
 
 ##判断聚看点@sunert版本COOKIE配置之后才会更新相关任务脚本
@@ -218,6 +220,7 @@ else
         initJUKAN
     else
         echo "更新jukan脚本相关文件"
+        git -C /jukan reset --hard
         git -C /jukan pull origin master
     fi
 
@@ -236,6 +239,7 @@ else
         initJKD
     else
         echo "更新jkd脚本相关文件"
+        git -C /jkd reset --hard
         git -C /jkd pull origin main
     fi
     echo -e >>$defaultListFile
