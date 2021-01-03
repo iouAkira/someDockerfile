@@ -235,7 +235,7 @@ else
         git -C /baidu_speed pull origin master
     fi
     sed -i "s/StartBody/BDCookie/g" /baidu_speed/Task/baidu_speed.js
-    sed -i "s/.*process.env.BAIDU_COOKIE.indexOf('\\\n')/else&" /baidu_speed/Task/baidu_speed.js
+    sed -i "s/.*process.env.BAIDU_COOKIE.indexOf('\\\n')/else&/g" /baidu_speed/Task/baidu_speed.js
     sed -i "s/WKQLC6/VRW2RC/g" /baidu_speed/Task/baidu_speed.js
     echo -e >>$defaultListFile
     echo "10 7-22/1 * * * sleep \$((RANDOM % 120)); node /baidu_speed/Task/baidu_speed.js >> /logs/baidu_speed.log 2>&1" >>$defaultListFile
