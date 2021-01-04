@@ -125,9 +125,13 @@ else
     sed -i 's/cookiesList.append(line)/cookiesList.append(line.replace(" ",""))/g' /xmly_speed/xmly_speed.py
     sed -i 's/_notify_time.split.*$/_notify_time.split()[0]==os.environ["XMLY_NOTIFY_TIME"]\ and\ int(_notify_time.split()[1])<30:/g' /xmly_speed/xmly_speed.py
 
+    if [ 0"$XMLY_CRON" = "0" ]; then
+        XMLY_CRON="*/30 * * * *"
+    fi
+
     echo -e >>$defaultListFile
     ##喜马拉雅极速版任务
-    echo "*/30 * * * * sleep \$((RANDOM % 120)); cd /xmly_speed && python3 xmly_speed.py >> /logs/xmly_speed.log 2>&1" >>$defaultListFile
+    echo "$XMLY_CRON sleep \$((RANDOM % 120)); cd /xmly_speed && python3 xmly_speed.py >> /logs/xmly_speed.log 2>&1" >>$defaultListFile
 fi
 
 ##企鹅阅读COOKIE配置之后才会更新相关任务脚本
@@ -148,12 +152,19 @@ else
     cp /qqread/Task/qqreadnode.js /qqread/Task/qqreads_openbox.js
     sed -i "s/BOX = 0/BOX = 1/g" /qqread/Task/qqreads_openbox.js
 
+    if [ 0"$QQREAD_CRON" = "0" ]; then
+        QQREAD_CRON="*/30 * * * *"
+    fi
     echo -e >>$defaultListFile
     ##企鹅阅读小程序阅读任务
-    echo "*/30 * * * * node /qqread/Task/qqreadnode.js >> /logs/qqreadnode.log 2>&1" >>$defaultListFile
+    echo "$QQREAD_CRON node /qqread/Task/qqreadnode.js >> /logs/qqreadnode.log 2>&1" >>$defaultListFile
+
+    if [ 0"$QQREAD_OPENBOX_CRON" = "0" ]; then
+        QQREAD_OPENBOX_CRON="*/10 * * * *"
+    fi
     echo -e >>$defaultListFile
     ##企鹅阅读小程序宝箱任务
-    echo "*/10 * * * * node /qqread/Task/qqreads_openbox.js >> /logs/qqreads_openbox.log 2>&1" >>$defaultListFile
+    echo "$QQREAD_OPENBOX_CRON node /qqread/Task/qqreads_openbox.js >> /logs/qqreads_openbox.log 2>&1" >>$defaultListFile
 fi
 
 ##判断汽车之家COOKIE配置之后才会更新相关任务脚本
@@ -184,9 +195,12 @@ else
 
     cp /QCZJSPEED/Task/qczjspeed.js /qqread/Task/
 
+    if [ 0"$QCZJ_CRON" = "0" ]; then
+        QCZJ_CRON="*/30 * * * *"
+    fi
     echo -e >>$defaultListFile
     ##汽车之家相关任务
-    echo "*/30 * * * * sleep \$((RANDOM % 120)); node /qqread/Task/qczjspeed.js >> /logs/qczjspeed.log 2>&1" >>$defaultListFile
+    echo "$QCZJ_CRON sleep \$((RANDOM % 120)); node /qqread/Task/qczjspeed.js >> /logs/qczjspeed.log 2>&1" >>$defaultListFile
 fi
 
 ##判断百度极速版COOKIE配置之后才会更新相关任务脚本
@@ -204,8 +218,12 @@ else
     cp -r /baidu_speed/Task/baidu_speed.js /baidu_speed/Task/baidu_speed_use.js
     sed -i "s/StartBody/BDCookie/g" /baidu_speed/Task/baidu_speed_use.js
     sed -i "s/.*process.env.BAIDU_COOKIE.indexOf('\\\n')/else&/g" /baidu_speed/Task/baidu_speed_use.js
+
+    if [ 0"$BAIDU_CRON" = "0" ]; then
+        BAIDU_CRON="10 7-22 * * *"
+    fi
     echo -e >>$defaultListFile
-    echo "10 7-22/1 * * * sleep \$((RANDOM % 120)); node /baidu_speed/Task/baidu_speed_use.js >> /logs/baidu_speed.log 2>&1" >>$defaultListFile
+    echo "$BAIDU_CRON sleep \$((RANDOM % 120)); node /baidu_speed/Task/baidu_speed_use.js >> /logs/baidu_speed.log 2>&1" >>$defaultListFile
 fi
 
 ##判断聚看点@sunert版本COOKIE配置之后才会更新相关任务脚本
@@ -223,8 +241,11 @@ else
         git -C /jukan pull origin master
     fi
 
+    if [ 0"$JUKAN_CRON" = "0" ]; then
+        JUKAN_CRON="*/20 7-22 * * *"
+    fi
     echo -e >>$defaultListFile
-    echo "*/20 7-23 * * * sleep \$((RANDOM % 120)); node /jukan/Task/jukan.js >> /logs/jukan.log 2>&1" >>$defaultListFile
+    echo "$JUKAN_CRON sleep \$((RANDOM % 120)); node /jukan/Task/jukan.js >> /logs/jukan.log 2>&1" >>$defaultListFile
 fi
 
 ##判断聚看点@shylocks版本COOKIE配置之后才会更新相关任务脚本
@@ -241,8 +262,12 @@ else
         git -C /jkd reset --hard
         git -C /jkd pull origin main
     fi
+
+    if [ 0"$JKD_CRON" = "0" ]; then
+        JKD_CRON="*/20 7-22 * * *"
+    fi
     echo -e >>$defaultListFile
-    echo "*/20 7-23 * * * sleep \$((RANDOM % 120)); node /jkd/jkd.js >> /logs/jkd.log 2>&1" >>$defaultListFile
+    echo "$JKD_CRON sleep \$((RANDOM % 120)); node /jkd/jkd.js >> /logs/jkd.log 2>&1" >>$defaultListFile
 fi
 
 ###追加|ts 任务日志时间戳
