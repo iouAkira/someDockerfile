@@ -1,6 +1,8 @@
 [![dockeri.co](https://dockeri.co/image/akyakya/pack_some_script)](https://hub.docker.com/r/akyakya/pack_some_script)
-# 打包一些比较好薅的羊毛脚本
-> ### Cookie获取相关教程请查看原作者仓库教程
+# 只是打包一些🐑🐑脚本
+```diff
+! tip：Cookie获取相关请移步原作者仓库查看教程
+```
 - ### 喜马拉雅极速版 作者：[__@Zero-S1__](https://github.com/Zero-S1)｜[__仓库地址__](https://github.com/Zero-S1/xmly_speed)
   > 4个环境变量 `XMLY_SPEED_COOKIE`为cookie必须配置；后面3个为可选配置 `XMLY_ACCUMULATE_TIME`#设置为1开启刷时长，0为关闭刷时长、`XMLY_NOTIFY_TIME`通知时间，例 (9点) XMLY_NOTIFY_TIME=09、`XMLY_CRON`喜马拉雅自定义定时任务，不配置默认为`*/30 * * * *`
 
