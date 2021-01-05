@@ -95,7 +95,7 @@ function initJKD() {
     git config core.sparsecheckout true
     echo package.json >>/jkd/.git/info/sparse-checkout
     echo jkd.js >>/jkd/.git/info/sparse-checkout
-    echo jkd_clearCk.js >>/jkd/.git/info/sparse-checkout
+    echo sendNotify.js >>/jkd/.git/info/sparse-checkout
     git pull origin main
     npm install
 }
@@ -147,24 +147,26 @@ else
     echo "Replace some qqread scripts content to be compatible with env configuration ..."
     echo "替换企鹅阅读脚本相关内容以兼容环境变量配置..."
     sed -i "s/BOX = 2/BOX = 0/g" /qqread/Task/qqreadnode.js
+    sed -i "s/notifyttt = 1/notifyttt = process.env.QQREAD_NOTIFYTTT || 1/g" /qqread/Task/qqreadnode.js
+    sed -i "s/notifyInterval = 2/notifyInterval = process.env.QQREAD_NOTIFY_INTERVAL || 2/g" /qqread/Task/qqreadnode.js
 
-    echo "复制一份企鹅阅读文件单独执行开宝箱任务....."
-    cp /qqread/Task/qqreadnode.js /qqread/Task/qqreads_openbox.js
-    sed -i "s/BOX = 0/BOX = 1/g" /qqread/Task/qqreads_openbox.js
+    # echo "复制一份企鹅阅读文件单独执行开宝箱任务....."
+    # cp /qqread/Task/qqreadnode.js /qqread/Task/qqreads_openbox.js
+    # sed -i "s/BOX = 0/BOX = 1/g" /qqread/Task/qqreads_openbox.js
 
     if [ 0"$QQREAD_CRON" = "0" ]; then
-        QQREAD_CRON="*/30 * * * *"
+        QQREAD_CRON="*/20 * * * *"
     fi
     echo -e >>$defaultListFile
     ##企鹅阅读小程序阅读任务
     echo "$QQREAD_CRON node /qqread/Task/qqreadnode.js >> /logs/qqreadnode.log 2>&1" >>$defaultListFile
 
-    if [ 0"$QQREAD_OPENBOX_CRON" = "0" ]; then
-        QQREAD_OPENBOX_CRON="*/10 * * * *"
-    fi
-    echo -e >>$defaultListFile
-    ##企鹅阅读小程序宝箱任务
-    echo "$QQREAD_OPENBOX_CRON node /qqread/Task/qqreads_openbox.js >> /logs/qqreads_openbox.log 2>&1" >>$defaultListFile
+    # if [ 0"$QQREAD_OPENBOX_CRON" = "0" ]; then
+    #     QQREAD_OPENBOX_CRON="*/10 * * * *"
+    # fi
+    # echo -e >>$defaultListFile
+    # ##企鹅阅读小程序宝箱任务
+    # echo "$QQREAD_OPENBOX_CRON node /qqread/Task/qqreads_openbox.js >> /logs/qqreads_openbox.log 2>&1" >>$defaultListFile
 fi
 
 ##判断汽车之家COOKIE配置之后才会更新相关任务脚本
@@ -259,8 +261,8 @@ else
         initJKD
     else
         echo "更新jkd脚本相关文件"
-        #git -C /jkd reset --hard
-        #git -C /jkd pull origin main
+        git -C /jkd reset --hard
+        git -C /jkd pull origin main
     fi
 
     if [ 0"$JKD_CRON" = "0" ]; then

@@ -5,7 +5,7 @@
   > 4个环境变量 `XMLY_SPEED_COOKIE`为cookie必须配置；后面3个为可选配置 `XMLY_ACCUMULATE_TIME`#设置为1开启刷时长，0为关闭刷时长、`XMLY_NOTIFY_TIME`通知时间，例 (9点) XMLY_NOTIFY_TIME=09、`XMLY_CRON`喜马拉雅自定义定时任务，不配置默认为`*/30 * * * *`
 
 - ### 企鹅阅读(QQ小程序) 作者：[__@ziye12__](https://github.com/ziye12)｜[__仓库地址__](https://github.com/ziye12/JavaScript)
-  > 8个环境变量 `QQREAD_BODY`、`QQREAD_TIMEURL`、`QQREAD_TIMEHD`为cookie必须配置；后面5个为可选配置`COOKIES_SPLIT`多账号cookies连接符号，不配置默认为|，如果需要配置使用汽车之家请配置为 `COOKIES_SPLIT=|&|`、~通知时间`QQREAD_NOTIFY_TIME`不再支持，使用原作定义的通知时间~、提现金额`QQREAD_CASH`不配置默认为0不自动提现，可配置为(1、2、10、30、50、100)、`QQREAD_CRON`企鹅阅读自定义定时任务，不配置默认为 `*/30 * * * *`、`QQREAD_OPENBOX_CRON`企鹅阅读开箱自定义定时任务，不配置默认为`*/10 * * * *`
+  > 9个环境变量 `QQREAD_BODY`、`QQREAD_TIMEURL`、`QQREAD_TIMEHD`为cookie必须配置；后面6个为可选配置`COOKIES_SPLIT`多账号cookies连接符号，不配置默认为|，如果需要配置使用汽车之家请配置为 `COOKIES_SPLIT=|&|`、~通知时间`QQREAD_NOTIFY_TIME`不再支持，使用原作定义的通知时间~、提现金额`QQREAD_CASH`不配置默认为0不自动提现，可配置为(1、2、10、30、50、100)、`QQREAD_CRON`企鹅阅读自定义定时任务，不配置默认为 `*/20 * * * *`不建议自定义，20分钟可以开满72个、`QQREAD_NOTIFYTTT`0为关闭外部推送，1为12 23 点外部推送,默认为1、`QQREAD_NOTIFY_INTERVAL`0为关闭通知，1为所有通知，2为12 23 点通知  ， 3为 6 12 18 23 点通知，默认为2
 - ### 汽车之家极速版 作者：[__@ziye12__](https://github.com/ziye12)｜[__仓库地址__](https://github.com/ziye12/QCZJSPEED)
   > 12个环境变量`QCZJ_GetUserInfoURL`、`QCZJ_GetUserInfoHEADER`、`QCZJ_coinBODY`、`QCZJ_taskBODY`、`QCZJ_activityBODY`、`QCZJ_GoldcoinBODY`、`QCZJ_videoBODY`、`QCZJ_WelfarevideoBODY`、`QCZJ_WelfareBODY`、`QCZJ_addCoinBODY`、`QCZJ_addCoin2BODY`、`QCZJ_reportAssBODY`、`QCZJ_reportAssHEADER`为必须配置；`QCZJ_CRON`汽车之家自定义定时任务，不配置默认为`*/30 * * * *`
     ```diff 
@@ -22,9 +22,13 @@
     ```
 ___
 ```diff
-+ 2021-01-04更新 增加每个脚本对应的自定义定时任务的环境变量
-+ 喜马拉雅极速版：XMLY_CRON、企业阅读：QQREAD_CRON、企鹅阅读开箱：QQREAD_OPENBOX_CRON、汽车之家：QCZJ_CRON、百度极速版：BAIDU_CRON、sunert的聚看点：JUKAN_CRON、shylocks的聚看点：JKD_CRON
-+ 具体说明看每个上面每个脚本的环境变量解释
++ 2021-01-04更新 
++ 企鹅阅读作者更新脚本后不再需要单独的开箱任务所以去掉对应相关配置
++ 增企鹅阅读通知开关控制环境变量QQREAD_NOTIFYTTT(0为关闭外部推送，1为12 23 点外部推送,默认为1)、QQREAD_NOTIFY_INTERVAL(0为关闭通知，1为所有通知，2为12 23 点通知  ， 3为 6 12 18 23 点通知，默认为2)
+_______
+! 2021-01-04更新 增加每个脚本对应的自定义定时任务的环境变量
+! 喜马拉雅极速版：XMLY_CRON、企业阅读：QQREAD_CRON、企鹅阅读开箱：QQREAD_OPENBOX_CRON、汽车之家：QCZJ_CRON、百度极速版：BAIDU_CRON、sunert的聚看点：JUKAN_CRON、shylocks的聚看点：JKD_CRON
+! 具体说明看每个上面每个脚本的环境变量解释
 _______
 ! 2021-01-02更新
 ! 所有脚本脚本定时任务都由脚本判断环境变量是否存在来决定增加定时任务
