@@ -227,10 +227,10 @@ else
 fi
 
 ##判断聚看点@sunert版本COOKIE配置之后才会更新相关任务脚本
-if [ 0"$JUKAN_COOKIE" = "0" ]; then
-    echo "没有配置JUKAN_COOKIE聚看点，相关环境变量参数，跳过下载下载脚本、配置定时任务"
+if [ 0"$JUKAN_BODY" = "0" ]; then
+    echo "没有配置JUKAN_BODY聚看点，相关环境变量参数，跳过下载下载脚本、配置定时任务"
 else
-    echo "配置了JUKAN_COOKIE 所以使用 @sunert 仓库的脚本执行任务"
+    echo "配置了JUKAN_BODY所以使用 @sunert 仓库的脚本执行任务"
 
     if [ ! -d "/jukan/" ]; then
         echo "未检查到jukan脚本相关文件，初始化下载相关脚本"
