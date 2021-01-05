@@ -146,7 +146,6 @@ else
 
     echo "Replace some qqread scripts content to be compatible with env configuration ..."
     echo "替换企鹅阅读脚本相关内容以兼容环境变量配置..."
-    sed -i "s/BOX = 2/BOX = 3/g" /qqread/Task/qqreadnode.js
     sed -i "s/notifyttt = 1/notifyttt = process.env.QQREAD_NOTIFYTTT || 1/g" /qqread/Task/qqreadnode.js
     sed -i "s/notifyInterval = 2/notifyInterval = process.env.QQREAD_NOTIFY_INTERVAL || 2/g" /qqread/Task/qqreadnode.js
 
