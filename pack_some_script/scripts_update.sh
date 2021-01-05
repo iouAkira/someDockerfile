@@ -259,8 +259,8 @@ else
         initJKD
     else
         echo "更新jkd脚本相关文件"
-        git -C /jkd reset --hard
-        git -C /jkd pull origin main
+        #git -C /jkd reset --hard
+        #git -C /jkd pull origin main
     fi
 
     if [ 0"$JKD_CRON" = "0" ]; then
