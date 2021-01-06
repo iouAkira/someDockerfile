@@ -260,6 +260,7 @@ else
         initJKD
     else
         echo "更新jkd脚本相关文件"
+        echo sendNotify.js >>/jkd/.git/info/sparse-checkout
         git -C /jkd reset --hard
         git -C /jkd pull origin main
     fi
