@@ -141,8 +141,8 @@ else
     echo "Pull the qqreader latest code..."
     echo "git 拉取企鹅阅读最新代码..."
     git -C /qqread reset --hard
-    git -C /qqread pull
-    npm install --prefix /qqread
+    #git -C /qqread pull
+    #npm install --prefix /qqread
 
     echo "Replace some qqread scripts content to be compatible with env configuration ..."
     echo "替换企鹅阅读脚本相关内容以兼容环境变量配置..."
