@@ -195,8 +195,6 @@ else
     sed -i "s/=\ reportAssbodyArr\[i\]/=\ reportAssbodyArr\[i\].trim()/g" /QCZJSPEED/Task/qczjspeed.js
     sed -i "s/cointowalletbodyVal.replace/cointowalletbodyVal.trim().replace/g" /QCZJSPEED/Task/qczjspeed.js
 
-    cp /QCZJSPEED/Task/qczjspeed.js /qqread/Task/
-
     if [ 0"$QCZJ_CRON" = "0" ]; then
         QCZJ_CRON="*/30 * * * *"
     fi
