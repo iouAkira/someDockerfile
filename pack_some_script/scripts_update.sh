@@ -176,6 +176,7 @@ else
     echo "git 拉取汽车之家极速版最新代码..."
     git -C /QCZJSPEED reset --hard
     git -C /QCZJSPEED pull
+    npm install --prefix /QCZJSPEED
 
     echo "Replace some qczj scripts content to be compatible with env configuration ..."
     echo "替换汽车之间内容修正错误..."
@@ -201,7 +202,7 @@ else
     fi
     echo -e >>$defaultListFile
     ##汽车之家相关任务
-    echo "$QCZJ_CRON sleep \$((RANDOM % 120)); node /qqread/Task/qczjspeed.js >> /logs/qczjspeed.log 2>&1" >>$defaultListFile
+    echo "$QCZJ_CRON sleep \$((RANDOM % 120)); node /QCZJSPEED/Task/qczjspeed.js >> /logs/qczjspeed.log 2>&1" >>$defaultListFile
 fi
 
 ##判断百度极速版COOKIE配置之后才会更新相关任务脚本
