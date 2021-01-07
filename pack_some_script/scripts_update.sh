@@ -158,7 +158,7 @@ else
     fi
     echo -e >>$defaultListFile
     ##企鹅阅读小程序阅读任务
-    echo "$QQREAD_CRON sleep \$((RANDOM % 120)); node /qqread/Task/qqreadnode.js >> /logs/qqreadnode.log 2>&1" >>$defaultListFile
+    echo "$QQREAD_CRON sleep \$((RANDOM % 180)); node /qqread/Task/qqreadnode.js >> /logs/qqreadnode.log 2>&1" >>$defaultListFile
 
     # if [ 0"$QQREAD_OPENBOX_CRON" = "0" ]; then
     #     QQREAD_OPENBOX_CRON="*/10 * * * *"
