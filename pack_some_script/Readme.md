@@ -24,9 +24,22 @@
     ```
 ___
 ```diff
-+ 2021-01-04更新 
-+ 企鹅阅读作者更新脚本后不再需要单独的开箱任务所以去掉对应相关配置
-+ 增企鹅阅读通知开关控制环境变量QQREAD_NOTIFYTTT(0为关闭外部推送，1为12 23 点外部推送,默认为1)、QQREAD_NOTIFY_INTERVAL(0为关闭通知，1为所有通知，2为12 23 点通知  ， 3为 6 12 18 23 点通知，默认为2)
++ 2021-01-10更新 增加 CUSTOM_SHELL_FILE 参数配置执行自定义shell脚本
++ 例1:配置远程shell脚本, 我自己写了一个shell脚本https://raw.githubusercontent.com/iouAkira/someDockerfile/master/pack_some_script/pss_shell_mod.sh
++ CUSTOM_SHELL_FILE=https://raw.githubusercontent.com/iouAkira/someDockerfile/master/pack_some_script/pss_shell_mod.sh
++
++ 例2:配置docker挂载本地自定义shell脚本,/pss/pss_shell_mod.sh 为你在docker-compose.yml里面挂载到容器里面绝对路径
++ CUSTOM_SHELL_FILE=/pss/pss_shell_mod.sh
++
++ tip：如果使用远程自定义，请保证网络畅通或者选择合适的国内仓库，例如有部分人的容器里面就下载不到github的raw文件，那就可以把自己的自定义shell写在gitee上，或者换本地挂载
++      如果是 docker 挂载本地，请保重文件挂载进去了，并且配置的是绝对路径。
++      自定义 shell 脚本里面如果要加 crontab 任务请使用 echo 追加到 /pss/merged_list_file.sh 里面否者不生效
++ 注⚠️ 建议无shell能力的不要轻易使用，当然你可以找别人写好适配了这个docker镜像的脚本直接远程配置
++     上面写了这么多如果还看不懂，不建议使用该变量功能。
+_______
+! 2021-01-04更新
+! 企鹅阅读作者更新脚本后不再需要单独的开箱任务所以去掉对应相关配置
+! 增企鹅阅读通知开关控制环境变量QQREAD_NOTIFYTTT(0为关闭外部推送，1为12 23 点外部推送,默认为1)、QQREAD_NOTIFY_INTERVAL(0为关闭通知，1为所有通知，2为12 23 点通知  ， 3为 6 12 18 23 点通知，默认为2)
 _______
 ! 2021-01-04更新 增加每个脚本对应的自定义定时任务的环境变量
 ! 喜马拉雅极速版：XMLY_CRON、企业阅读：QQREAD_CRON、企鹅阅读开箱：QQREAD_OPENBOX_CRON、汽车之家：QCZJ_CRON、百度极速版：BAIDU_CRON、sunert的聚看点：JUKAN_CRON、shylocks的聚看点：JKD_CRON
