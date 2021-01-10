@@ -1,5 +1,4 @@
-[![dockeri.co](https://dockeri.co/image/akyakya/pack_some_script)](https://hub.docker.com/r/akyakya/pack_some_script)
-# 只是打包一些🐑🐑脚本
+# 只是打包一些🐑🐑脚本 ![Docker Pulls](https://img.shields.io/docker/pulls/akyakya/pack_some_script?style=for-the-badge)
 ```diff
 ! tip：Cookie获取相关请移步原作者仓库查看教程
 ```
