@@ -169,7 +169,7 @@ else
 fi
 
 ##判断汽车之家COOKIE配置之后才会更新相关任务脚本
-if [ 0"$QCZJ_GetUserInfoURL" = "0" ]; then
+if [ 0"$QCZJ_GetUserInfoHEADER" = "0" ]; then
     echo "没有汽车之家Cookie，相关环境变量参数，跳过配置定时任务"
 else
     echo "Pull the qczj latest code..."
