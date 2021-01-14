@@ -1,7 +1,7 @@
 FROM alpine
 LABEL AUTHOR="Akira <e.akimoto.akira@gmail.com>" \
-        VERSION=0.1.2 \
-        UPDATE_CONTENT="更新内容较多，重新阅读仓库[Readme](https://github.com/lxk0301/jd_scripts/tree/master/docker)，更新镜像并更新配置后使用。"
+        VERSION=0.1.3 \
+        UPDATE_CONTENT="最后构建一个Gitee仓库版本的供大家过渡使用，后续请迁移使用其他仓库镜像，或者其他使用方式。"
 
 RUN set -ex \
         && apk update && apk upgrade\
@@ -9,7 +9,7 @@ RUN set -ex \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone
 
-RUN git clone https://github.com/lxk0301/jd_scripts /scripts \
+RUN git clone https://gitee.com/lxk0301/jd_scripts /scripts \
         && cd /scripts \
         && git checkout master \
         && mkdir logs \
@@ -17,7 +17,7 @@ RUN git clone https://github.com/lxk0301/jd_scripts /scripts \
         && cd /tmp \
         && npm install request
 
-ENV BUILD_VERSION=0.1.2 \
+ENV BUILD_VERSION=0.1.3 \
         DEFAULT_LIST_FILE=crontab_list.sh \
         CUSTOM_LIST_MERGE_TYPE=append
 
