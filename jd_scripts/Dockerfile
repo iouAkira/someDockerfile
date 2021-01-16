@@ -3,8 +3,7 @@ LABEL AUTHOR="iouAkira <e.akimoto.akira@gmail.com>"
 
 ENV DEFAULT_LIST_FILE=crontab_list.sh \
         CUSTOM_LIST_MERGE_TYPE=append \
-        REPO_URL=https://gitee.com/lxk0301/jd_scripts
-
+        REPO_URL=https://gitee.com/lxk0301/jd_scripts.git
 RUN set -ex \
         && apk update && apk upgrade\
         && apk add --no-cache tzdata  git  nodejs  moreutils  npm  python3-dev  py3-pip  py3-cryptography curl jq \
