@@ -96,6 +96,7 @@ if [ $(grep -c "default_task.sh" $mergedListFile) -eq '0' ]; then
     echo "52 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
 else
     sed -i "/default_task.sh/d" $mergedListFile
+    echo "#脚本追加默认定时任务 >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
     echo "52 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
 fi
 
@@ -117,6 +118,7 @@ else
         echo "自定义shell脚本为远程脚本，开始下在自定义远程脚本。"
         wget -O /jds/shell_script_mod.sh $CUSTOM_SHELL_FILE
         echo "下载完成，开始执行..."
+        echo "#自定义shell脚本追加定时任务 >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
         sh -x /jds/shell_script_mod.sh
         echo "自定义远程shell脚本下载并执行结束。"
     else
@@ -124,6 +126,7 @@ else
             echo "自定义shell脚本为docker挂载脚本文件，但是指定挂载文件不存在，跳过执行。"
         else
             echo "docker挂载的自定shell脚本，开始执行..."
+            echo "#自定义shell脚本追加定时任务 >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
             sh -x $CUSTOM_SHELL_FILE
             echo "docker挂载的自定shell脚本，执行结束。"
         fi
