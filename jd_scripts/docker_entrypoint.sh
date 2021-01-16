@@ -33,6 +33,5 @@ if [ $run_cmd == 'jd_bot' ]; then
 else
     echo "Start crontab task main process..."
     echo "启动crondtab定时任务主进程..."
-    crond
-    jd_bot
+    crond -f
 fi
