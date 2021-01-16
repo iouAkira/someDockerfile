@@ -34,7 +34,10 @@ echo "1 7 13 1 * node /scripts/jd_super_coupon.js |ts >> /scripts/logs/jd_super_
 wget -O /scripts/jd_mh_super.js https://raw.githubusercontent.com/shylocks/Loon/main/jd_mh_super.js
 echo -e >> /scripts/docker/merged_list_file.sh
 echo "10 20 15 1 * node /scripts/jd_mh_super.js |ts >> /scripts/logs/jd_mh_super.log 2>&1" >> /scripts/docker/merged_list_file.sh
-
+#工业爱消除
+wget -O /scripts/jd_gyec.js https://raw.githubusercontent.com/shylocks/Loon/main/jd_gyec.js
+echo -e >> /scripts/docker/merged_list_file.sh
+echo "30 * * * * node /scripts/jd_gyec.js |ts >> /scripts/logs/jd_gyec.log 2>&1" >> /scripts/docker/merged_list_file.sh
 
 #由于bookshop作者还没有增加互助码环境变量，就自己手动sed进去了
 sed -i "s/shareCodesArr = \[\]/shareCodesArr = \['a25442c9de1a47ddbe4cd3c4828bd8ea@aba172068b7a46e2b6cf89563b919053','ed23af1e5a5946b381266b2192f8d4a2@aba172068b7a46e2b6cf89563b919053','ed23af1e5a5946b381266b2192f8d4a2@a25442c9de1a47ddbe4cd3c4828bd8ea'\]/g" /scripts/jd_bookshop.js
