@@ -14,25 +14,25 @@ if [ $HOSTS_GITEE ]; then
         echo $HOSTS_GITEE >>$hostsPath
     else
         sed -i "/gitee.com/d" $hostsPath
-        echo $HOSTS_GITEE >>$hostsPath
+        echo "$HOSTS_GITEE gitee.com" >>$hostsPath
     fi
 fi
 
 if [ $HOSTS_GITHUB ]; then
     if [ $(grep -c "github.com" $hostsPath) -eq '0' ]; then
-        echo $HOSTS_GITHUB >>$hostsPath
+        echo "$HOSTS_GITHUB github.com">>$hostsPath
     else
         sed -i "/github.com/d" $hostsPath
-        echo $HOSTS_GITHUB >>$hostsPath
+        echo "$HOSTS_GITHUB github.com">>$hostsPath
     fi
 fi
 
 if [ $HOSTS_GITHUB_RAW ]; then
     if [ $(grep -c "raw.githubusercontent.com" $hostsPath) -eq '0' ]; then
-        echo $HOSTS_GITHUB_RAW >>$hostsPath
+        echo "$HOSTS_GITHUB_RAW raw.githubusercontent.com" >>$hostsPath
     else
         sed -i "/raw.githubusercontent.com/d" $hostsPath
-        echo $HOSTS_GITHUB_RAW >>$hostsPath
+        echo "$HOSTS_GITHUB_RAW raw.githubusercontent.com" >>$hostsPath
     fi
 fi
 
