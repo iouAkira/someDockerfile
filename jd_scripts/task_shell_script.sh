@@ -55,7 +55,6 @@ set -e
 # fi
 # #######################################通知用户更新镜像-end#####################################################################
 
-
 echo "定义定时任务合并处理用到的文件路径..."
 defaultListFile="/scripts/docker/$DEFAULT_LIST_FILE"
 echo "默认文件定时任务文件路径为 ${defaultListFile}"
@@ -110,7 +109,6 @@ else
     echo "未配置随即延迟对应的环境变量，故不设置延迟任务..."
 fi
 
-
 echo "第6步判断是否配置自定义shell执行脚本..."
 if [ 0"$CUSTOM_SHELL_FILE" = "0" ]; then
     echo "未配置自定shell脚本文件，跳过执行。"
@@ -137,3 +135,6 @@ sed -i "/\(ts\| ts\)/!s/>>/|ts >>/g" $mergedListFile
 
 echo "第8步加载最新的定时任务文件..."
 crontab $mergedListFile
+
+echo "第9步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
+cat /jds/jd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
