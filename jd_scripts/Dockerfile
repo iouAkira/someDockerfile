@@ -1,32 +1,40 @@
 FROM alpine
-LABEL AUTHOR="Akira <e.akimoto.akira@gmail.com>" \
-        VERSION=0.1.3 \
-        UPDATE_CONTENT="最后构建一个Gitee仓库版本的供大家过渡使用，后续请迁移使用其他仓库镜像，或者其他使用方式。"
+LABEL AUTHOR="iouAkira <e.akimoto.akira@gmail.com>"
+
+ENV DEFAULT_LIST_FILE=crontab_list.sh \
+        CUSTOM_LIST_MERGE_TYPE=append \
+        REPO_URL=https://gitee.com/lxk0301/jd_scripts
 
 RUN set -ex \
         && apk update && apk upgrade\
-        && apk add --no-cache tzdata moreutils git nodejs npm curl jq\
+        && apk add --no-cache tzdata  git  nodejs  moreutils  npm  python3-dev  py3-pip  py3-cryptography curl jq \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone
 
-RUN git clone https://gitee.com/lxk0301/jd_scripts /scripts \
+RUN git clone ${REPO_URL} /scripts \
         && cd /scripts \
         && git checkout master \
         && mkdir logs \
-        && npm install \
-        && cd /tmp \
-        && npm install request
+        && npm install
 
-ENV BUILD_VERSION=0.1.3 \
-        DEFAULT_LIST_FILE=crontab_list.sh \
-        CUSTOM_LIST_MERGE_TYPE=append
+RUN mkdir /jds \
+        && cd  /jds \
+        && git init \
+        && git remote add -f origin https://github.com/iouAkira/someDockerfile.git \
+        && git config core.sparsecheckout true \
+        && echo jd_scripts/* >> /jds/.git/info/sparse-checkout \
+        && git pull origin master \
+        && cd /jds/jd_scripts/bot \
+        && ls -a \
+        && pip3 install --upgrade pip \
+        && pip3 install -r requirements.txt \
+        && python3 setup.py install
 
-# github action 构建    
-COPY ./jd_scripts/docker_entrypoint.sh /usr/local/bin
-# 本地构建
-# COPY ./docker_entrypoint.sh /usr/local/bin
-RUN chmod +x /usr/local/bin/docker_entrypoint.sh
+RUN cp /jds/jd_scripts/docker_entrypoint.sh /usr/local/bin \
+        && chmod +x /usr/local/bin/docker_entrypoint.sh
 
 WORKDIR /scripts
 
 ENTRYPOINT ["docker_entrypoint.sh"]
+
+CMD [ "crond" ]
