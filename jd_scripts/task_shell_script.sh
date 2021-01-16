@@ -131,7 +131,7 @@ else
 fi
 
 echo "第7步增加 |ts 任务日志输出时间戳..."
-sed -i "/\(ts\| ts\)/!s/>>/|ts >>/g" $mergedListFile
+sed -i "/\( ts\| |ts\|| ts\)/!s/>>/\|ts >>/g" $mergedListFile
 
 echo "第8步加载最新的定时任务文件..."
 crontab $mergedListFile
