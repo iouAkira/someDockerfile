@@ -14,6 +14,11 @@
 wget -O /scripts/jd_mh.js https://raw.githubusercontent.com/shylocks/Loon/main/jd_mh.js
 echo -e >> /scripts/docker/merged_list_file.sh
 echo "10 8,9,10 * * * node /scripts/jd_mh.js |ts >> /scripts/logs/jd_mh.log 2>&1" >> /scripts/docker/merged_list_file.sh
+##使用自定义shell下载并配置执行宝洁美发屋
+wget -O /scripts/jd_bj.js https://raw.githubusercontent.com/shylocks/Loon/main/jd_bj.js
+echo -e >> /scripts/docker/merged_list_file.sh
+echo "1 8,9 14-31/1 1 * node /scripts/jd_bj.js |ts >> /scripts/logs/jd_bj.log 2>&1" >> /scripts/docker/merged_list_file.sh
+
 
 
 #由于bookshop作者还没有增加互助码环境变量，就自己手动sed进去了
