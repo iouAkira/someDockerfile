@@ -136,8 +136,11 @@ fi
 echo "第7步增加 |ts 任务日志输出时间戳..."
 sed -i "/\( ts\| |ts\|| ts\)/!s/>>/\|ts >>/g" $mergedListFile
 
-echo "第8步加载最新的定时任务文件..."
+echo "第8步执行原仓库的附属脚本proc_file.sh"
+sh -x /scripts/docker/proc_file.sh
+
+echo "第9步加载最新的定时任务文件..."
 crontab $mergedListFile
 
-echo "第9步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
+echo "第10步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
 cat /jds/jd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
