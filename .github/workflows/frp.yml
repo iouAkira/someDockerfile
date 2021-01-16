@@ -2,13 +2,6 @@ name: 构建frp Docker镜像
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
-    paths:
-      - "frp/Dockerfile"
-  repository_dispatch:
-    types: frp
 
 jobs:
   build-and-push:
