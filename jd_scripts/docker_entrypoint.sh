@@ -1,7 +1,5 @@
--!/bin/sh
+# !/bin/sh
 set -e
-
-export LANG="zh_CN.UTF-8"
 
 #获取配置的自定义参数
 if [ $1 ]; then
