@@ -96,7 +96,7 @@ if [ $(grep -c "default_task.sh" $mergedListFile) -eq '0' ]; then
     echo -e >>$mergedListFile
     echo "52 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
 else
-    sed -i "default_task.sh/d" $mergedListFile
+    sed -i "/default_task.sh/d" $mergedListFile
     echo "52 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
 fi
 
