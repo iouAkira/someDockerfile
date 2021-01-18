@@ -25,10 +25,6 @@ echo "1 7 * * * node /shylocks/jd_wechat_sign.js |ts >> /scripts/logs/jd_wechat_
 echo "1 7 * * * node /shylocks/jd_ms.js |ts >> /scripts/logs/jd_ms.log 2>&1" >> /scripts/docker/merged_list_file.sh
 #神券京豆
 echo "1 7 13 1 * node /shylocks/jd_super_coupon.js |ts >> /scripts/logs/jd_super_coupon.log 2>&1" >> /scripts/docker/merged_list_file.sh
-#神券京豆
-echo "10 20 15 1 * node /shylocks/jd_mh_super.js |ts >> /scripts/logs/jd_mh_super.log 2>&1" >> /scripts/docker/merged_list_file.sh
-#工业爱消除
-echo "30 * * * * node /shylocks/jd_gyec.js |ts >> /scripts/logs/jd_gyec.log 2>&1" >> /scripts/docker/merged_list_file.sh
 #工业爱消除
 echo "30 * * * * node /shylocks/jd_gyec.js |ts >> /scripts/logs/jd_gyec.log 2>&1" >> /scripts/docker/merged_list_file.sh
 #小鸽有礼
