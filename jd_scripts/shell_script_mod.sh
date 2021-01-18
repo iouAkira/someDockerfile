@@ -14,6 +14,9 @@ else
     git -C /shylocks pull --rebase
 fi
 
+##复制两个文件
+cp /scripts/jdCookie.js /shylocks/jdCookie.js
+cp /scripts/sendNotify.js /shylocks/sendNotify.js
 
 ##使用自定义shell下载并配置执行美妆
 echo "10 8,9,10 * * * node /shylocks/jd_mh.js |ts >> /scripts/logs/jd_mh.log 2>&1" >> /scripts/docker/merged_list_file.sh
