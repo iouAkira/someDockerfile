@@ -9,7 +9,7 @@ function initShylocks() {
     echo "未检查到shylocks仓库脚本，初始化下载相关脚本"
     initShylocks
 else
-    echo "更新jkd脚本相关文件"
+    echo "更新shylocks脚本相关文件"
     git -C /shylocks reset --hard
     git -C /shylocks pull --rebase
 fi
