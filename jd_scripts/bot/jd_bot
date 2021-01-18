@@ -520,6 +520,101 @@ def is_admin(from_user_id):
         return False
 
 
+def gen_share_code(update, context):
+    """
+    提交互助码
+    """
+    file_list = list(set(get_dir_file_list(_logs_dir, 'log')))
+    file_list.sort()
+    share_code_file = ""
+    for log_file in file_list:
+        print(log_file.find("share_code.log"))
+        if log_file.find("share_code.log") > -1:
+            share_code_file = log_file
+            break
+    print(share_code_file)
+
+    ddfactory_code_list = []
+    jxfactory_code_list = []
+    jx_farm_code_list = []
+    pet_code_list = []
+    bean_code_list = []
+    farm_code_list = []
+    crazy_joy_code_list = []
+    bookshop_code_list = []
+    with open(share_code_file, 'r') as lines:
+        array = lines.readlines()
+
+        for i in array:
+            if i.find("东东工厂") > -1:
+                ddfactory_code_list.append(i.split("】")[1].replace("\n", ""))
+            if i.find("京喜工厂") > -1:
+                jxfactory_code_list.append(i.split("】")[1].replace("\n", ""))
+            if i.find("京喜农场助力") > -1:
+                jx_farm_code_list.append(i.split("】")[1].replace("\n", ""))
+            if i.find("京东萌宠") > -1:
+                pet_code_list.append(i.split("】")[1].replace("\n", ""))
+            if i.find("种豆得豆") > -1:
+                bean_code_list.append(i.split("】")[1].replace("\n", ""))
+            if i.find("京东农场") > -1:
+                farm_code_list.append(i.split("】")[1].replace("\n", ""))
+            if i.find("crazyJoy") > -1:
+                crazy_joy_code_list.append(i.split("】")[1].replace("\n", ""))
+            # items = i.split("=")
+            # if (items[0] == "NOTIFIED"):
+            #     logger.info(items)
+            #     notified = items[1]
+        # @TuringLabbot
+        logger.info("东东工厂助力码%s" % "&".join(list(set(ddfactory_code_list))))
+        logger.info("京喜工厂助力码%s" % "&".join(list(set(jxfactory_code_list))))
+        logger.info("京喜农场助力码%s" % "&".join(list(set(jx_farm_code_list))))
+        logger.info("京东萌宠助力码%s" % "&".join(list(set(pet_code_list))))
+        logger.info("种豆得豆助力码%s" % "&".join(list(set(bean_code_list))))
+        logger.info("京东农场助力码%s" % "&".join(list(set(farm_code_list))))
+        logger.info("submit_bookshop_code%s" % "&".join(list(set(bean_code_list))))
+
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text="""
+                                @TuringLabbot 可以提交的互助码
+/submit_bean_code - 提交种豆得豆互助码
+/submit_farm_code - 提交东东农场互助码
+/submit_pet_code -  提交东东萌宠互助码
+/submit_jxfactory_code - 提交京喜工厂互助码
+/submit_ddfactory_code - 提交东东工厂互助码
+/submit_bookshop_code - 提交口袋书店互助码
+下面消息为生成的提交格式，复制发送或者转发到 @TuringLabbot 即可
+                                 """)
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text="/submit_ddfactory_code %s" % "&".join(list(set(ddfactory_code_list))))
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text="/submit_jxfactory_code %s" % "&".join(list(set(jxfactory_code_list))))
+        # context.bot.send_message(chat_id=update.effective_chat.id,
+        #                          text="/submit_jxnc_code %s" % "&".join(list(set(jx_farm_code_list))))
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text="/submit_pet_code %s" % "&".join(list(set(pet_code_list))))
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text="/submit_bean_code %s" % "&".join(list(set(bean_code_list))))
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text="/submit_farm_code %s" % "&".join(list(set(farm_code_list))))
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text="/submit_bookshop_code %s" % "&".join(list(set(ddfactory_code_list))))
+
+        # @LvanLamCommitCodeBot
+        logger.info("crazyJoy助力码%s" % "\n".join(list(set(crazy_joy_code_list))))
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text="""
+                                @LvanLamCommitCodeBot 可以提交的互助码
+/jd - 提交种豆得豆互助码
+/jdcash - 提交JD签到领现金互助码
+/jdcrazyjoy -  提交crazyJoy互助码
+/jdnh - 提交JD年会互助码
+/jdzz - 提交JD赚赚互助码
+下面消息为生成的提交格式，复制发送到 @LvanLamCommitCodeBot 即可
+                                 """)
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text="/jdcrazyjoy %s" % "\n".join(list(set(crazy_joy_code_list))))
+
+
 def unknown(update, context):
     """回复用户输入不存在的指令
     """
@@ -598,6 +693,9 @@ def main():
 
     # 通过 env 函数 响应 '/env' 命令
     dp.add_handler(CommandHandler('env', env))
+    
+    # 通过 gen_share_code 函数 响应 '/gen_share_code' 命令
+    dp.add_handler(CommandHandler('gen_share_code', gen_share_code))
 
     # 没找到对应指令
     dp.add_handler(MessageHandler(Filters.command, unknown))
