@@ -1,6 +1,6 @@
 FROM alpine
 LABEL AUTHOR="iouAkira <e.akimoto.akira@gmail.com>" \
-        VERSION=0.1.3
+        VERSION=0.1.3 \
         UPDATE_CONTENT="akyakya/jd_script后续不提供使用咨询和帮助，仅为自己用，请尽快切换到 https://hub.docker.com/r/lxk0301/jd_scripts/tags?page=1&ordering=last_updated 镜像使用"
 
 ENV DEFAULT_LIST_FILE=crontab_list.sh \
