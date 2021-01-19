@@ -32,8 +32,8 @@ echo "1 7 13 1 * node /scripts/jd_super_coupon.js |ts >> /scripts/logs/jd_super_
 echo "30 * * * * node /scripts/jd_gyec.js |ts >> /scripts/logs/jd_gyec.log 2>&1" >> /scripts/docker/merged_list_file.sh
 #小鸽有礼
 echo "5 7 * * * node /scripts/jd_xg.js |ts >> /scripts/logs/jd_xg.log 2>&1" >> /scripts/docker/merged_list_file.sh
-#小鸽有礼
-echo "40 * * * * node /scripts/jd_xxl_gh.js.js |ts >> /scripts/logs/jd_xxl_gh.js.log 2>&1" >> /scripts/docker/merged_list_file.sh
+#个护消消乐
+echo "40 * * * * node /scripts/jd_xxl_gh.js |ts >> /scripts/logs/jd_xxl_gh.log 2>&1" >> /scripts/docker/merged_list_file.sh
 
 # #临时增加红包雨
 echo "58,59 18-20/1 * * * git -C /shylocks reset --hard && git -C /shylocks pull --rebase" >> /scripts/docker/merged_list_file.sh
