@@ -119,7 +119,7 @@ else
         wget -O /jds/shell_script_mod.sh $CUSTOM_SHELL_FILE
         echo "下载完成，开始执行..."
         echo "#远程自定义shell脚本追加定时任务" >>$mergedListFile
-        sh -x /jds/shell_script_mod.sh
+        sh /jds/shell_script_mod.sh
         echo "自定义远程shell脚本下载并执行结束。"
     else
         if [ ! -f $CUSTOM_SHELL_FILE ]; then
@@ -127,7 +127,7 @@ else
         else
             echo "docker挂载的自定shell脚本，开始执行..."
             echo "#docker挂载自定义shell脚本追加定时任务" >>$mergedListFile
-            sh -x $CUSTOM_SHELL_FILE
+            sh $CUSTOM_SHELL_FILE
             echo "docker挂载的自定shell脚本，执行结束。"
         fi
     fi
@@ -137,7 +137,7 @@ echo "第7步增加 |ts 任务日志输出时间戳..."
 sed -i "/\( ts\| |ts\|| ts\)/!s/>>/\|ts >>/g" $mergedListFile
 
 echo "第8步执行原仓库的附属脚本proc_file.sh"
-sh -x /scripts/docker/proc_file.sh
+sh /scripts/docker/proc_file.sh
 
 echo "第9步加载最新的定时任务文件..."
 crontab $mergedListFile
