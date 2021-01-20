@@ -17,7 +17,7 @@ npm install --loglevel error --prefix /scripts
 
 #任务脚本shell仓库
 cd /jds
-git pull origin master
+git pull origin master --rebase
 
 echo "------------------------------------------------执行定时任务任务shell脚本------------------------------------------------"
 sh /jds/jd_scripts/task_shell_script.sh
