@@ -20,7 +20,7 @@ cd /jds
 git pull origin master
 
 echo "------------------------------------------------执行定时任务任务shell脚本------------------------------------------------"
-sh -x /jds/jd_scripts/task_shell_script.sh
+sh /jds/jd_scripts/task_shell_script.sh
 echo "--------------------------------------------------默认定时任务执行完成---------------------------------------------------"
 
 if [ $run_cmd ]; then
