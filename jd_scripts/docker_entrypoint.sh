@@ -13,7 +13,7 @@ git reset --hard
 echo "git pull拉取最新代码..."
 git -C /scripts pull --rebase
 echo "npm install 安装最新依赖"
-npm install --prefix /scripts
+npm install --loglevel error --prefix /scripts
 
 #任务脚本shell仓库
 cd /jds
