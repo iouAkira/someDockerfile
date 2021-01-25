@@ -224,6 +224,8 @@ else
     fi
     echo -e >>$defaultListFile
     echo "$BAIDU_CRON sleep \$((RANDOM % 120)); node /baidu_speed/Task/baidu_speed_use.js >> /logs/baidu_speed.log 2>&1" >>$defaultListFile
+    #增加一个不带随机延迟任务是为了6点抢提现使用
+    echo "0 6 * * * node /baidu_speed/Task/baidu_speed_use.js >> /logs/baidu_speed.log 2>&1" >>$defaultListFile
 fi
 
 ##判断聚看点@sunert版本COOKIE配置之后才会更新相关任务脚本
