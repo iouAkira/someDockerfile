@@ -218,7 +218,7 @@ else
     cp -r /baidu_speed/Task/baidu_speed.js /baidu_speed/Task/baidu_speed_use.js
     sed -i "s/StartBody/BDCookie/g" /baidu_speed/Task/baidu_speed_use.js
     #直接插入提现，
-    sed "/await\ userInfo/i\\      if (\$.time(\"HH\") == \"06\") { await withDraw(withcash); } ;" /baidu_speed/Task/baidu_speed_use.js
+    sed -i "/await\ userInfo/i\\      if (\$.time(\"HH\") == \"06\") { await withDraw(withcash); } ;" /baidu_speed/Task/baidu_speed_use.js
     #sed -i "s/.*process.env.BAIDU_COOKIE.indexOf('\\\n')/else&/g" /baidu_speed/Task/baidu_speed_use.js
 
     if [ 0"$BAIDU_CRON" = "0" ]; then
