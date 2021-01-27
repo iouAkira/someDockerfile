@@ -10,9 +10,9 @@ function initShylocks() {
     initShylocks
 else
     echo "更新shylocks脚本相关文件"
-    git -C /shylocks reset --hard
-    git -C /shylocks pull --rebase
-    npm install --loglevel error
+    #git -C /shylocks reset --hard
+    #git -C /shylocks pull --rebase
+    #npm install --loglevel error
 fi
 
 ##复制两个文件
