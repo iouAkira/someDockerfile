@@ -3,6 +3,7 @@
 function initShylocks() {
     #git clone https://github.com/shylocks/Loon.git /shylocks
     #npm install
+    echo "skip"
 }
 
  if [ ! -d "/shylocks/" ]; then
