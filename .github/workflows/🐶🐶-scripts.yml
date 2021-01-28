@@ -41,8 +41,8 @@ jobs:
         with:
           string: ${{ github.repository_owner }}
       - name: rename
-        run: 
-           mv ./jd_scripts/Dockerfile2 ./jd_scripts/Dockerfile.v2
+        run: |
+           mv jd_scripts/Dockerfile2 jd_scripts/Dockerfile.v2
 
       - name: 构建并推送到Dockerhub和ghcr.io镜像仓库
         uses: docker/build-push-action@v2
