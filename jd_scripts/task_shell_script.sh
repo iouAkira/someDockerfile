@@ -144,3 +144,7 @@ crontab $mergedListFile
 
 echo "第10步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
 cat /jds/jd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
+
+echo "第10步打包脚本文件到/scripts/logs/scripts.tar.gz"
+apk add tar
+tar -zcvf /scripts/logs/scripts.tar.gz /scripts --exclude=scripts/node_modules --exclude=scripts/logs/*.log
