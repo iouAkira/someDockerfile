@@ -1,8 +1,8 @@
 #!/bin/sh
 #@shylocks仓库脚本
 function initShylocks() {
-    git clone https://github.com/shylocks/Loon.git /shylocks
-    npm install
+    #git clone https://github.com/shylocks/Loon.git /shylocks
+    #npm install
 }
 
  if [ ! -d "/shylocks/" ]; then
@@ -16,9 +16,9 @@ else
 fi
 
 ##复制两个文件
-cp -f /shylocks/jd*.js /scripts/
+#cp -f /shylocks/jd*.js /scripts/
 ##加入 @shylocks 仓库的定时任务
-cat /shylocks/docker/crontab_list.sh >> /scripts/docker/merged_list_file.sh
+#cat /shylocks/docker/crontab_list.sh >> /scripts/docker/merged_list_file.sh
 
 # #临时增加红包雨
 echo "58,59 18-20/1 * * * git -C /shylocks reset --hard && git -C /shylocks pull --rebase" >> /scripts/docker/merged_list_file.sh
