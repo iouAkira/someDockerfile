@@ -49,5 +49,5 @@ jobs:
           platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
           tags: |
-            akyakya/AutoSignMachine:latest
-            ghcr.io/${{ steps.repo_name.outputs.lowercase }}/AutoSignMachine:latest
+            akyakya/autosign:latest
+            ghcr.io/${{ steps.repo_name.outputs.lowercase }}/autosign:latest
