@@ -11,7 +11,7 @@ else
 fi
 
 if [ $ENABLE_BILIBILI ]; then
-    echo "*/30 7-22 * * * node /AutoSignMachine/index.js bilibili --cookies ${cookies} --username ${username} --password ${password} ${othercfg} >> /AutoSignMachine/logs/bilibili.log 2>&1 &" >>${mergedListFile}
+    echo "*/30 7-22 * * * node /AutoSignMachine/index.js bilibili --username ${BILIBILI_ACCOUNT} --password ${BILIBILI_PWD} >> /AutoSignMachine/logs/bilibili.log 2>&1 &" >>${mergedListFile}
 else
     echo "未配置启用bilibi签到任务环境变量ENABLE_BILIBILI，故不添加Bilibili定时任务..."
 fi
