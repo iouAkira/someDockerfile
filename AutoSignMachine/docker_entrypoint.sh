@@ -11,7 +11,7 @@ if [ $UPDATE_AT_STARTUP == 'True' ]; then
     cd /AutoSignMachine
     git reset --hard
     echo "git pull拉取最新代码..."
-    git -C /scripts pull --rebase
+    git -C /AutoSignMachine pull --rebase
     echo "npm install 安装最新依赖"
     npm install --loglevel error --prefix /scripts
 fi
