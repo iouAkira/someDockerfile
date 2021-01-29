@@ -13,7 +13,7 @@ if [ $UPDATE_AT_STARTUP == 'True' ]; then
     echo "git pull拉取最新代码..."
     git -C /AutoSignMachine pull --rebase
     echo "npm install 安装最新依赖"
-    npm install --loglevel error --prefix /scripts
+    npm install --loglevel error --prefix /AutoSignMachine
 fi
 
 if [ $TASK_SHELL_SCRIPT ]; then
