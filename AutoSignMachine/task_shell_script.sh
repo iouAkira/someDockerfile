@@ -29,7 +29,7 @@ else
 fi
 
 echo "增加默认脚本更新任务..."
-echo "21 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
+echo "21 */1 * * * docker_entrypoint.sh >> /AutoSignMachine/logs/default_task.log 2>&1" >>$mergedListFile
 
 echo "判断是否配置自定义shell执行脚本..."
 if [ 0"$CUSTOM_SHELL_FILE" = "0" ]; then
