@@ -11,7 +11,6 @@ RUN set -ex \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone
 
-# 支持喜马拉雅极速版仓库
 RUN git clone https://github.com/lunnlew/AutoSignMachine.git /AutoSignMachine 
 
 # github action 构建
