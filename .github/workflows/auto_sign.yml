@@ -1,4 +1,4 @@
-name: 构建JD Scripts镜像
+name: 构建Auto Sign镜像
 
 on:
   workflow_dispatch:
