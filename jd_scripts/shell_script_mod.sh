@@ -15,6 +15,8 @@ else
     #npm install --loglevel error
 fi
 
+
+wget -O jd_opencard.js https://storage.googleapis.com/jd_live/jd_opencard.js
 ##复制文件
 cp -f /shylocks/jd*.js /scripts/
 
