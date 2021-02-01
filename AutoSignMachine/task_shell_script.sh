@@ -3,6 +3,7 @@ set -e
 
 mergedListFile="/AutoSignMachine/merged_list_file.sh"
 echo "定时任务文件路径为 ${mergedListFile}"
+echo -e '' >  ${mergedListFile}
 
 if [ $ENABLE_52POJIE ]; then
     echo "10 13 * * * node /AutoSignMachine/index.js 52pojie --htVD_2132_auth=${htVD_2132_auth} --htVD_2132_saltkey=${htVD_2132_saltkey} >> /AutoSignMachine/logs/52pojie.log 2>&1 &" >>${mergedListFile}
