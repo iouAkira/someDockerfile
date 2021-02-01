@@ -3,7 +3,7 @@ set -e
 
 mergedListFile="/AutoSignMachine/merged_list_file.sh"
 echo "定时任务文件路径为 ${mergedListFile}"
-echo -e '' >  ${mergedListFile}
+echo '' >${mergedListFile}
 
 if [ $ENABLE_52POJIE ]; then
     echo "10 13 * * * node /AutoSignMachine/index.js 52pojie --htVD_2132_auth=${htVD_2132_auth} --htVD_2132_saltkey=${htVD_2132_saltkey} >> /AutoSignMachine/logs/52pojie.log 2>&1 &" >>${mergedListFile}
@@ -24,7 +24,12 @@ else
 fi
 
 if [ $ENABLE_UNICOM ]; then
-    echo "*/30 7-22 * * * node /AutoSignMachine/index.js unicom --user ${UNICOM_PHONE} --password ${UNICOM_PWD} --appid ${UNICOM_APPID} >> /AutoSignMachine/logs/unicom.log 2>&1 &" >>${mergedListFile}
+    if [ -f $UNICOM_CONFIG ]; then
+        apk add jq
+        echo "*/30 7-22 * * * node /AutoSignMachine/index.js unicom --accountSn $(cat ${UNICOM_CONFIG} | jq -r .accountSn) --config ${UNICOM_CONFIG} >> /AutoSignMachine/logs/unicom.log 2>&1 &" >>${mergedListFile}
+    else
+        echo "*/30 7-22 * * * node /AutoSignMachine/index.js unicom --user ${UNICOM_PHONE} --password ${UNICOM_PWD} --appid ${UNICOM_APPID} >> /AutoSignMachine/logs/unicom.log 2>&1 &" >>${mergedListFile}
+    fi
 else
     echo "未配置启用unicom签到任务环境变量ENABLE_UNICOM，故不添加unicom定时任务..."
 fi
