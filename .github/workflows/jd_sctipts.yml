@@ -51,3 +51,14 @@ jobs:
           tags: |
             akyakya/jd_scripts:latest
             ghcr.io/${{ steps.repo_name.outputs.lowercase }}/jd_scripts:latest
+            
+      - name: 构建基于alpine3.12的镜像并推送到Dockerhub和ghcr.io镜像仓库
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./jd_scripts/Dockerfile.alpine312
+          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+          push: true
+          tags: |
+            akyakya/jd_scripts:alpine3.12
+            ghcr.io/${{ steps.repo_name.outputs.lowercase }}/jd_scripts:alpine3.12
