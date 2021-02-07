@@ -25,10 +25,36 @@ fi
 
 if [ $ENABLE_UNICOM ]; then
     if [ -f $UNICOM_CONFIG ]; then
-        apk add jq
+        if type jq >/dev/null 2>&1; then
+            echo "jq已存在"
+        else
+            echo "安装jq"
+            apk add jq
+        fi
         echo "*/30 7-22 * * * node /AutoSignMachine/index.js unicom --accountSn $(cat ${UNICOM_CONFIG} | jq -r .accountSn) --config ${UNICOM_CONFIG} >> /AutoSignMachine/logs/unicom.log 2>&1 &" >>${mergedListFile}
     else
         echo "*/30 7-22 * * * node /AutoSignMachine/index.js unicom --user ${UNICOM_PHONE} --password ${UNICOM_PWD} --appid ${UNICOM_APPID} >> /AutoSignMachine/logs/unicom.log 2>&1 &" >>${mergedListFile}
+    fi
+    ##兑换流量包脚本环境配置
+    if [ $ACTIVE_FLOW ]; then
+        if type bash >/dev/null 2>&1; then
+            echo "已安装 bash "
+        else
+            echo "安装bash"
+            apk add bash
+        fi
+        if type openssl >/dev/null 2>&1; then
+            echo "已安装 openssl "
+        else
+            echo "安装openssl"
+            apk add openssl
+        fi
+        if type curl >/dev/null 2>&1; then
+            echo "已安装 curl "
+        else
+            echo "安装curl"
+            apk add curl
+        fi
     fi
 else
     echo "未配置启用unicom签到任务环境变量ENABLE_UNICOM，故不添加unicom定时任务..."
