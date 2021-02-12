@@ -31,4 +31,4 @@ echo "29,30,31,32,33 20-23/1 28 1 * node /scripts/jd_live_redrain.js >> /scripts
 #由于bookshop作者还没有增加互助码环境变量，就自己手动sed进去了
 sed -i "s/shareCodesArr = \[\]/shareCodesArr = \['a25442c9de1a47ddbe4cd3c4828bd8ea@aba172068b7a46e2b6cf89563b919053','ed23af1e5a5946b381266b2192f8d4a2@aba172068b7a46e2b6cf89563b919053','ed23af1e5a5946b381266b2192f8d4a2@a25442c9de1a47ddbe4cd3c4828bd8ea'\]/g" /scripts/jd_bookshop.js
 ##删掉收益太低的惊喜农场脚本任务
-sed -i "/jd_jxnc/d" $mergedListFile
+sed -i "/jd_jxnc/d" /scripts/docker/merged_list_file.sh
