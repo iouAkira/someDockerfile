@@ -31,7 +31,10 @@ if [ $ENABLE_UNICOM ]; then
             echo "安装jq"
             apk add jq
         fi
-        echo "*/30 7-22 * * * node /AutoSignMachine/index.js unicom --accountSn $(cat ${UNICOM_CONFIG} | jq -r .accountSn) --config ${UNICOM_CONFIG} >> /AutoSignMachine/logs/unicom.log 2>&1 &" >>${mergedListFile}
+        for accountSn  in `cat ${UNICOM_CONFIG} | jq -r .accountSn | sed 's/,/ /g'`
+        do 
+            echo "*/30 7-22 * * * node /AutoSignMachine/index.js unicom --accountSn $accountSn  --config ${UNICOM_CONFIG} >> /AutoSignMachine/logs/unicom.log 2>&1 &" >>${mergedListFile}
+        done
     else
         echo "*/30 7-22 * * * node /AutoSignMachine/index.js unicom --user ${UNICOM_PHONE} --password ${UNICOM_PWD} --appid ${UNICOM_APPID} >> /AutoSignMachine/logs/unicom.log 2>&1 &" >>${mergedListFile}
     fi
