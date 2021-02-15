@@ -6,6 +6,7 @@ git remote set-url origin https://github.com/DJ-clamp/BaseSation.git
 git reset --hard
 git pull --rebase
 git checkout dev
+npm install --loglevel error --prefix /AutoSignMachine
 
 mergedListFile="/AutoSignMachine/merged_list_file.sh"
 echo "定时任务文件路径为 ${mergedListFile}"
