@@ -4,7 +4,9 @@ LABEL AUTHOR="iouAkira <e.akimoto.akira@gmail.com>"
 ENV DEFAULT_LIST_FILE=crontab_list.sh \
         CUSTOM_LIST_MERGE_TYPE=append \
         REPO_URL=https://gitee.com/lxk0301/jd_scripts.git \
+        GIT_PULL=false \
         ZIP_URL=https://www.dropbox.com/s/qfq14kz6ijfi7dx/spt.tar.gz?dl=1
+        
         
 RUN set -ex \
         && apk update && apk upgrade\
@@ -12,9 +14,9 @@ RUN set -ex \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone
 
-RUN wget -O /spt.tar.gz ${ZIP_URL} \
+RUN wget -O /scripts.tar.gz ${ZIP_URL} \
         && cd / \
-        && tar -zxvf spt.tar.gz \
+        && tar -zxvf scripts.tar.gz \
         && cd /scripts \
         && npm install
 
