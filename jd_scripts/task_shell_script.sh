@@ -141,6 +141,9 @@ sh /scripts/docker/proc_file.sh
 
 echo "第9步加载最新的定时任务文件..."
 crontab $mergedListFile
+cp /local_scripts/cookies*.sh  /root/
+source /root/cookies*.sh
+crond
 
 echo "第10步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
 cat /jds/jd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
