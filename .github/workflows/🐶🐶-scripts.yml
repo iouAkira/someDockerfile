@@ -6,7 +6,7 @@ on:
     branches:
       - master
     paths:
-      - "jd_scripts/Dockerfile2"
+      - "jd_scripts/Dockerfile.snapshot"
   repository_dispatch:
     types: jd_scripts_snapshot
 
@@ -40,15 +40,12 @@ jobs:
         uses: ASzc/change-string-case-action@v1
         with:
           string: ${{ github.repository_owner }}
-      - name: rename
-        run: |
-           mv jd_scripts/Dockerfile2 jd_scripts/Dockerfile.v2
 
       - name: 构建并推送到Dockerhub和ghcr.io镜像仓库
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./jd_scripts/Dockerfile.v2
+          file: ./jd_scripts/Dockerfile.snapshot
           platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
           tags: |
