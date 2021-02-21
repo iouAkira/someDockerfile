@@ -6,14 +6,14 @@ if [ $1 ]; then
     run_cmd=$1
 fi
 
-echo "设定远程仓库地址..."
-cd /scripts
-git remote set-url origin $REPO_URL
-git reset --hard
-echo "git pull拉取最新代码..."
-git -C /scripts pull --rebase
-echo "npm install 安装最新依赖"
-npm install --loglevel error --prefix /scripts
+# echo "设定远程仓库地址..."
+# cd /scripts
+# git remote set-url origin $REPO_URL
+# git reset --hard
+# echo "git pull拉取最新代码..."
+# git -C /scripts pull --rebase
+# echo "npm install 安装最新依赖"
+# npm install --loglevel error --prefix /scripts
 
 #任务脚本shell仓库
 cd /jds
