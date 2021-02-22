@@ -1,9 +1,10 @@
 #!/bin/sh
 set -e
 
-#获取配置的自定义参数
+#获取配置的自定义参数,如果有为
 if [ $1 ]; then
     run_cmd=$1
+    echo -e $GIT_SSH_KEY > /root/.ssh/id_rsa
 fi
 
 if [ $GIT_PULL];then
