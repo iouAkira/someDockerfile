@@ -1,4 +1,4 @@
-name: 构建🐶🐶 Scripts镜像
+name: 构建JD Scripts snapshot镜像
 
 on:
   workflow_dispatch:
