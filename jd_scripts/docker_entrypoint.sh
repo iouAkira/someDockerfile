@@ -4,11 +4,8 @@ set -e
 #获取配置的自定义参数,如果有为
 if [ $1 ]; then
     run_cmd=$1
-    echo -e $GIT_SSH_KEY > /root/.ssh/id_rsa
-fi
-
-if [ $GIT_PULL ];then
-    if [ $GIT_PULL == 'true' ];then 
+    echo -e $GIT_SSH_KEY >/root/.ssh/id_rsa
+    if [ $GIT_PULL == 'true' ]; then
         echo "设定远程仓库地址..."
         cd /scripts
         git remote set-url origin $REPO_URL
@@ -18,7 +15,17 @@ if [ $GIT_PULL ];then
         echo "npm install 安装最新依赖"
         npm install --loglevel error --prefix /scripts
     fi
+else
+    echo "设定远程仓库地址..."
+    cd /scripts
+    git remote set-url origin $REPO_URL
+    git reset --hard
+    echo "git pull拉取最新代码..."
+    git -C /scripts pull --rebase
+    echo "npm install 安装最新依赖"
+    npm install --loglevel error --prefix /scripts
 fi
+
 #任务脚本shell仓库
 cd /jds
 git pull origin master --rebase
