@@ -16,11 +16,15 @@ RUN set -ex \
         && chmod 600 /root/.ssh/id_rsa \
         && ssh-keyscan gitee.com > /root/.ssh/known_hosts
 
-RUN git clone ${REPO_URL} /scripts \
-        && cd /scripts \
-        && git checkout master \
-        && mkdir logs \
-        && npm install
+RUN set -ex \
+        && apk update && apk upgrade\
+        && apk add --no-cache tzdata git openssh-client nodejs moreutils npm python3-dev py3-pip py3-cryptography curl jq \
+        && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+        && echo "Asia/Shanghai" > /etc/timezone \
+        && mkdir -p /root/.ssh \
+        && echo -e $GIT_SSH_KEY > /root/.ssh/id_rsa \
+        && chmod 600 /root/.ssh/id_rsa \
+        && ssh-keyscan gitee.com > /root/.ssh/known_hosts
 
 RUN mkdir /jds \
         && cd  /jds \
