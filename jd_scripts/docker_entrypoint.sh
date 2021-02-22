@@ -7,7 +7,7 @@ if [ $1 ]; then
     echo -e $GIT_SSH_KEY > /root/.ssh/id_rsa
 fi
 
-if [ $GIT_PULL];then
+if [ $GIT_PULL ];then
     if [ $GIT_PULL == 'true' ];then 
         echo "设定远程仓库地址..."
         cd /scripts
