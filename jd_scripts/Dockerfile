@@ -8,7 +8,7 @@ ENV DEFAULT_LIST_FILE=crontab_list.sh \
         
 RUN set -ex \
         && apk update && apk upgrade\
-        && apk add --no-cache tzdata  git  nodejs  moreutils  npm  python3-dev  py3-pip  py3-cryptography curl jq \
+        && apk add --no-cache tzdata git openssh-client nodejs moreutils npm python3-dev py3-pip py3-cryptography curl jq \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone \
         && mkdir -p /root/.ssh \
