@@ -26,7 +26,7 @@ _bot_dir = '%sbot/' % _docker_dir
 _share_code_conf = '%sgen_code_conf.list' % _logs_dir
 
 if 'GEN_CODE_CONF' in os.environ:
-    share_code_conf = os.getenv("share_code_conf")
+    share_code_conf = os.getenv("GEN_CODE_CONF")
     if share_code_conf.startswith("/"):
         _share_code_conf = share_code_conf
 
