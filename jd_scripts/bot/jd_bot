@@ -536,7 +536,7 @@ class CodeConf(object):
         code_list = []
         ac = self.activity_code if self.activity_code != "@N" else ""
         try:
-            with open("_logs_dir%s" % (self.log_name), 'r') as lines:
+            with open("%s%s" % (_logs_dir, self.log_name), 'r') as lines:
                 array = lines.readlines()
                 for i in array:
                     # print(self.find_split_char)
