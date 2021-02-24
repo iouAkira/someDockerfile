@@ -536,7 +536,7 @@ class CodeConf(object):
         code_list = []
         ac = self.activity_code if self.activity_code != "@N" else ""
         try:
-            with open("logs/%s" % (self.log_name), 'r') as lines:
+            with open("_logs_dir%s" % (self.log_name), 'r') as lines:
                 array = lines.readlines()
                 for i in array:
                     # print(self.find_split_char)
@@ -575,7 +575,7 @@ def gen_long_code(update, context):
                 if cf.bot_id == bot:
                     print()
                     context.bot.send_message(chat_id=update.effective_chat.id, text=cf.get_submit_msg())
-            context.bot.send_message(chat_id=update.effective_chat.id, text="以上为%s可以提交的活动互助码" % bot)
+            context.bot.send_message(chat_id=update.effective_chat.id, text="以上为 %s 可以提交的活动互助码" % bot)
     except:
         context.bot.send_message(chat_id=update.effective_chat.id,
                                  text="获取互助码消息生成配置文件失败，请检查%s文件是否存在" % _share_code_conf)
@@ -603,7 +603,7 @@ def gen_temp_code(update, context):
                 if cf.bot_id == bot:
                     print()
                     context.bot.send_message(chat_id=update.effective_chat.id, text=cf.get_submit_msg())
-            context.bot.send_message(chat_id=update.effective_chat.id, text="以上为%s可以提交的短期临时活动互助码" % bot)
+            context.bot.send_message(chat_id=update.effective_chat.id, text="以上为 %s 可以提交的短期临时活动互助码" % bot)
     except:
         context.bot.send_message(chat_id=update.effective_chat.id,
                                  text="获取互助码消息生成配置文件失败，请检查%s文件是否存在" % _share_code_conf)
@@ -631,7 +631,7 @@ def gen_daily_code(update, context):
                 if cf.bot_id == bot:
                     print()
                     context.bot.send_message(chat_id=update.effective_chat.id, text=cf.get_submit_msg())
-            context.bot.send_message(chat_id=update.effective_chat.id, text="以上为%s可以提交的每天变化活动互助码" % bot)
+            context.bot.send_message(chat_id=update.effective_chat.id, text="以上为 %s 可以提交的每天变化活动互助码" % bot)
     except:
         context.bot.send_message(chat_id=update.effective_chat.id,
                                  text="获取互助码消息生成配置文件失败，请检查%s文件是否存在" % _share_code_conf)
