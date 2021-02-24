@@ -30,6 +30,12 @@ fi
 cd /jds
 git pull origin master --rebase
 
+#将默认的互助码提交消息生成配置文件放入logs文件夹
+if [ ! -f $GEN_CODE_CONF ]; then
+    echo "将默认的互助码提交消息生成配置文件放入logs文件夹"
+    cp /jds/jd_scripts/gen_code_conf.list $GEN_CODE_CONF
+fi
+
 echo "------------------------------------------------执行定时任务任务shell脚本------------------------------------------------"
 sh /jds/jd_scripts/task_shell_script.sh
 echo "--------------------------------------------------默认定时任务执行完成---------------------------------------------------"
