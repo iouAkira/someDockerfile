@@ -23,6 +23,12 @@ _base_dir = '/scripts/'
 _logs_dir = '%slogs/' % _base_dir
 _docker_dir = '%sdocker/' % _base_dir
 _bot_dir = '%sbot/' % _docker_dir
+_share_code_conf = '%sgen_code_conf.list' % _logs_dir
+
+if 'GEN_CODE_CONF' in os.environ:
+    share_code_conf = os.getenv("share_code_conf")
+    if share_code_conf.startswith("/"):
+        _share_code_conf = share_code_conf
 
 
 def start(update, context):
@@ -31,23 +37,16 @@ def start(update, context):
         context.bot.send_message(chat_id=update.effective_chat.id,
                                  text="""
 限制自己使用的JD Scripts拓展机器人
-/start
-    开始并获取指令说明
-    
-/node
-    获取可执行脚本的列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/node /scripts/jd_818.js)
-    
-/git
-    获取可执行git指令列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/git -C /scripts/ pull)
-    
-/logs
-    获取logs下的日志文件列表，选择对应名字可以下载日志文件
-    
-/env
-    获取系统环境变量列表。(拓展使用：设置系统环境变量，例：/env export JD_DEBUG=true )'
-    
-/bash
-    执行执行命令。参考：/bash ls -l 未完善不开放使用
+
+/start 开始并获取指令说明
+/node 获取可执行脚本的列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/node /scripts/jd_818.js) 
+/git 获取可执行git指令列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/git -C /scripts/ pull)
+/logs 获取logs下的日志文件列表，选择对应名字可以下载日志文件
+/env 获取系统环境变量列表。(拓展使用：设置系统环境变量，例：/env export JD_DEBUG=true ) 
+/bash 执行执行命令。参考：/bash ls -l 未完善不开放使用
+/gen_long_code 长期活动互助码提交消息生成
+/gen_temp_code 短期临时活动互助码提交消息生成
+/gen_daily_code 每天变化互助码活动提交消息生成
 """)
     else:
         update.message.reply_text(text='此为私人使用bot,不能执行您的指令！')
@@ -293,7 +292,8 @@ def callback_run(update, context):
         if select_btn_type == 'cl':
             logger.info(f'crontab_l ==> {query.data.split()[1:]}')
             reply_markup = InlineKeyboardMarkup([
-                [InlineKeyboardButton(' '.join(query.data.split()[1:]), callback_data='pass')],
+                [InlineKeyboardButton(
+                    ' '.join(query.data.split()[1:]), callback_data='pass')],
                 [InlineKeyboardButton('⚡️执行', callback_data='cle %s' % ' '.join(query.data.split()[1:])),
                  InlineKeyboardButton('❌删除', callback_data='cld %s' % ' '.join(query.data.split()[1:]))]
             ])
@@ -397,20 +397,24 @@ def get_reply_markup_btn(cmd_type):
             keyboard_line.append([InlineKeyboardButton('清除日志', callback_data='logs clear'),
                                   InlineKeyboardButton('取消操作', callback_data='cancel')])
         else:
-            keyboard_line.append([InlineKeyboardButton('未找到相关日志文件', callback_data='cancel')])
+            keyboard_line.append([InlineKeyboardButton(
+                '未找到相关日志文件', callback_data='cancel')])
         reply_markup = InlineKeyboardMarkup(keyboard_line)
     elif cmd_type == 'crontab_l':
         button_list = list(set(get_crontab_list(cmd_type)))
         keyboard_line = []
         if len(button_list) > 0:
             for i in button_list:
-                keyboard_column = [InlineKeyboardButton(i, callback_data='cl %s' % i)]
+                keyboard_column = [InlineKeyboardButton(
+                    i, callback_data='cl %s' % i)]
 
                 button_list.remove(i)
                 keyboard_line.append(keyboard_column)
-            keyboard_line.append([InlineKeyboardButton('取消操作', callback_data='cancel')])
+            keyboard_line.append(
+                [InlineKeyboardButton('取消操作', callback_data='cancel')])
         else:
-            keyboard_line.append([InlineKeyboardButton('未从%s获取到任务列表' % crontab_list_file, callback_data='cancel')])
+            keyboard_line.append([InlineKeyboardButton(
+                '未从%s获取到任务列表' % crontab_list_file, callback_data='cancel')])
         reply_markup = InlineKeyboardMarkup(keyboard_line)
     elif cmd_type == 'node':
         button_list = list(set(get_crontab_list(cmd_type)))
@@ -461,7 +465,7 @@ def get_crontab_list(cmd_type):
     Parameters
     ----------
     cmd_type: 是任务的命令类型
-    #item_idx: 确定取的需要取之是定任务里面第几个空格后的值作为后面执行指令参数
+    # item_idx: 确定取的需要取之是定任务里面第几个空格后的值作为后面执行指令参数
 
     Returns
     -------
@@ -520,99 +524,117 @@ def is_admin(from_user_id):
         return False
 
 
-def gen_share_code(update, context):
+class CodeConf(object):
+    def __init__(self, bot_id, submit_code, log_name, activity_code, find_split_char):
+        self.bot_id = bot_id
+        self.submit_code = submit_code
+        self.log_name = log_name
+        self.activity_code = activity_code
+        self.find_split_char = find_split_char
+
+    def get_submit_msg(self):
+        code_list = []
+        ac = self.activity_code if self.activity_code != "@N" else ""
+        try:
+            with open("logs/%s" % (self.log_name), 'r') as lines:
+                array = lines.readlines()
+                for i in array:
+                    # print(self.find_split_char)
+                    if i.find(self.find_split_char) > -1:
+                        code_list.append(i.split(self.find_split_char)[
+                                             1].replace('\n', ''))
+            if self.activity_code == "@N":
+                return '%s %s' % (self.submit_code,
+                                  "&".join(list(set(code_list))))
+            else:
+                return '%s %s %s' % (self.submit_code, ac,
+                                     "&".join(list(set(code_list))))
+        except:
+            return "%s %s活动获取系统日志文件异常，请检查日志文件是否存在" % (self.submit_code, ac)
+
+
+def gen_long_code(update, context):
     """
-    提交互助码
+    长期活动互助码提交消息生成
     """
-    file_list = list(set(get_dir_file_list(_logs_dir, 'log')))
-    file_list.sort()
-    share_code_file = ""
-    for log_file in file_list:
-        print(log_file.find("share_code.log"))
-        if log_file.find("share_code.log") > -1:
-            share_code_file = log_file
-            break
-    print(share_code_file)
+    long_code_conf = []
+    bot_list = []
+    try:
+        with open(_share_code_conf, 'r') as lines:
+            array = lines.readlines()
+            for i in array:
+                if i.startswith("long"):
+                    bot_list.append(i.split('-')[1])
+                    code_conf = CodeConf(
+                        i.split('-')[1], i.split('-')[2], i.split('-')[3], i.split('-')[4],
+                        i.split('-')[5].replace('\n', ''))
+                    long_code_conf.append(code_conf)
 
-    ddfactory_code_list = []
-    jxfactory_code_list = []
-    jx_farm_code_list = []
-    pet_code_list = []
-    bean_code_list = []
-    farm_code_list = []
-    crazy_joy_code_list = []
-    bookshop_code_list = []
-    with open(share_code_file, 'r') as lines:
-        array = lines.readlines()
+        for bot in list(set(bot_list)):
+            for cf in long_code_conf:
+                if cf.bot_id == bot:
+                    print()
+                    context.bot.send_message(chat_id=update.effective_chat.id, text=cf.get_submit_msg())
+            context.bot.send_message(chat_id=update.effective_chat.id, text="以上为%s可以提交的活动互助码" % bot)
+    except:
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text="获取互助码消息生成配置文件失败，请检查%s文件是否存在" % _share_code_conf)
 
-        for i in array:
-            if i.find("东东工厂") > -1:
-                ddfactory_code_list.append(i.split("】")[1].replace("\n", ""))
-            if i.find("京喜工厂") > -1:
-                jxfactory_code_list.append(i.split("】")[1].replace("\n", ""))
-            if i.find("京喜农场助力") > -1:
-                jx_farm_code_list.append(i.split("】")[1].replace("\n", ""))
-            if i.find("京东萌宠") > -1:
-                pet_code_list.append(i.split("】")[1].replace("\n", ""))
-            if i.find("种豆得豆") > -1:
-                bean_code_list.append(i.split("】")[1].replace("\n", ""))
-            if i.find("京东农场") > -1:
-                farm_code_list.append(i.split("】")[1].replace("\n", ""))
-            if i.find("crazyJoy") > -1:
-                crazy_joy_code_list.append(i.split("】")[1].replace("\n", ""))
-            # items = i.split("=")
-            # if (items[0] == "NOTIFIED"):
-            #     logger.info(items)
-            #     notified = items[1]
-        # @TuringLabbot
-        logger.info("东东工厂助力码%s" % "&".join(list(set(ddfactory_code_list))))
-        logger.info("京喜工厂助力码%s" % "&".join(list(set(jxfactory_code_list))))
-        logger.info("京喜农场助力码%s" % "&".join(list(set(jx_farm_code_list))))
-        logger.info("京东萌宠助力码%s" % "&".join(list(set(pet_code_list))))
-        logger.info("种豆得豆助力码%s" % "&".join(list(set(bean_code_list))))
-        logger.info("京东农场助力码%s" % "&".join(list(set(farm_code_list))))
-        logger.info("submit_bookshop_code%s" % "&".join(list(set(bean_code_list))))
 
-        context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text="""
-                                @TuringLabbot 可以提交的互助码
-/submit_bean_code - 提交种豆得豆互助码
-/submit_farm_code - 提交东东农场互助码
-/submit_pet_code -  提交东东萌宠互助码
-/submit_jxfactory_code - 提交京喜工厂互助码
-/submit_ddfactory_code - 提交东东工厂互助码
-/submit_bookshop_code - 提交口袋书店互助码
-下面消息为生成的提交格式，复制发送或者转发到 @TuringLabbot 即可
-                                 """)
-        context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text="/submit_ddfactory_code %s" % "&".join(list(set(ddfactory_code_list))))
-        context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text="/submit_jxfactory_code %s" % "&".join(list(set(jxfactory_code_list))))
-        # context.bot.send_message(chat_id=update.effective_chat.id,
-        #                          text="/submit_jxnc_code %s" % "&".join(list(set(jx_farm_code_list))))
-        context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text="/submit_pet_code %s" % "&".join(list(set(pet_code_list))))
-        context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text="/submit_bean_code %s" % "&".join(list(set(bean_code_list))))
-        context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text="/submit_farm_code %s" % "&".join(list(set(farm_code_list))))
-        context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text="/submit_bookshop_code %s" % "&".join(list(set(ddfactory_code_list))))
+def gen_temp_code(update, context):
+    """
+    短期临时活动互助码提交消息生成
+    """
+    temp_code_conf = []
+    bot_list = []
+    try:
+        with open(_share_code_conf, 'r') as lines:
+            array = lines.readlines()
+            for i in array:
+                if i.startswith("temp"):
+                    bot_list.append(i.split('-')[1])
+                    code_conf = CodeConf(
+                        i.split('-')[1], i.split('-')[2], i.split('-')[3], i.split('-')[4],
+                        i.split('-')[5].replace('\n', ''))
+                    temp_code_conf.append(code_conf)
 
-        # @LvanLamCommitCodeBot
-        logger.info("crazyJoy助力码%s" % "\n".join(list(set(crazy_joy_code_list))))
+        for bot in list(set(bot_list)):
+            for cf in temp_code_conf:
+                if cf.bot_id == bot:
+                    print()
+                    context.bot.send_message(chat_id=update.effective_chat.id, text=cf.get_submit_msg())
+            context.bot.send_message(chat_id=update.effective_chat.id, text="以上为%s可以提交的短期临时活动互助码" % bot)
+    except:
         context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text="""
-                                @LvanLamCommitCodeBot 可以提交的互助码
-/jd - 提交种豆得豆互助码
-/jdcash - 提交JD签到领现金互助码
-/jdcrazyjoy -  提交crazyJoy互助码
-/jdnh - 提交JD年会互助码
-/jdzz - 提交JD赚赚互助码
-下面消息为生成的提交格式，复制发送到 @LvanLamCommitCodeBot 即可
-                                 """)
+                                 text="获取互助码消息生成配置文件失败，请检查%s文件是否存在" % _share_code_conf)
+
+
+def gen_daily_code(update, context):
+    """
+    每天变化互助码活动提交消息生成
+    """
+    daily_code_conf = []
+    bot_list = []
+    try:
+        with open(_share_code_conf, 'r') as lines:
+            array = lines.readlines()
+            for i in array:
+                if i.startswith("daily"):
+                    bot_list.append(i.split('-')[1])
+                    code_conf = CodeConf(
+                        i.split('-')[1], i.split('-')[2], i.split('-')[3], i.split('-')[4],
+                        i.split('-')[5].replace('\n', ''))
+                    daily_code_conf.append(code_conf)
+
+        for bot in list(set(bot_list)):
+            for cf in daily_code_conf:
+                if cf.bot_id == bot:
+                    print()
+                    context.bot.send_message(chat_id=update.effective_chat.id, text=cf.get_submit_msg())
+            context.bot.send_message(chat_id=update.effective_chat.id, text="以上为%s可以提交的每天变化活动互助码" % bot)
+    except:
         context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text="/jdcrazyjoy %s" % "\n".join(list(set(crazy_joy_code_list))))
+                                 text="获取互助码消息生成配置文件失败，请检查%s文件是否存在" % _share_code_conf)
 
 
 def unknown(update, context):
@@ -624,20 +646,14 @@ def unknown(update, context):
 ⚠️ 您输入了一个错误的指令，请参考说明使用
 
 /start 开始并获取指令说明
-/node    
-    获取可执行脚本的列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/node /scripts/jd_818.js)
-    
-/git
-    获取可执行git指令列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/git -C /scripts/ pull)
-    
-/logs
-    获取logs下的日志文件列表，选择对应名字可以下载日志文件
-    
-/env
-    获取系统环境变量列表。(拓展使用：设置系统环境变量，例：/env export JD_DEBUG=true )
-    
-/bash
-    执行执行命令。参考：/bash ls -l 未完善不开放使用
+/node 获取可执行脚本的列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/node /scripts/jd_818.js) 
+/git 获取可执行git指令列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/git -C /scripts/ pull)
+/logs 获取logs下的日志文件列表，选择对应名字可以下载日志文件
+/env 获取系统环境变量列表。(拓展使用：设置系统环境变量，例：/env export JD_DEBUG=true ) 
+/bash 执行执行命令。参考：/bash ls -l 未完善不开放使用
+/gen_long_code 长期活动互助码提交消息生成
+/gen_temp_code 短期临时活动互助码提交消息生成
+/gen_daily_code 每天变化互助码活动提交消息生成
 """,
                                   parse_mode=ParseMode.HTML)
     else:
@@ -693,9 +709,15 @@ def main():
 
     # 通过 env 函数 响应 '/env' 命令
     dp.add_handler(CommandHandler('env', env))
-    
-    # 通过 gen_share_code 函数 响应 '/gen_share_code' 命令
-    dp.add_handler(CommandHandler('gen_share_code', gen_share_code))
+
+    # 通过 gen_long_code 函数 响应 '/gen_long_code' 命令
+    dp.add_handler(CommandHandler('gen_long_code', gen_long_code))
+
+    # 通过 gen_temp_code 函数 响应 '/gen_temp_code' 命令
+    dp.add_handler(CommandHandler('gen_temp_code', gen_temp_code))
+
+    # 通过 gen_daily_code 函数 响应 '/gen_daily_code' 命令
+    dp.add_handler(CommandHandler('gen_daily_code', gen_daily_code))
 
     # 没找到对应指令
     dp.add_handler(MessageHandler(Filters.command, unknown))
