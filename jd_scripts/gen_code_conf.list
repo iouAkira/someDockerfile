@@ -1,7 +1,7 @@
 #格式为
 #互助类型-机器人ID-提交代码(根据bot作者配置得来)-活动脚本日志文件名-活动代码(根据bot作者配置得来)-查找互助码取字符串
 #长期活动示例
-#temp-@TuringLabbot-jd_sgmh.log-sgmh-暂无
+#long-@TuringLabbot-jd_sgmh.log-sgmh-暂无
 #临时活动示例
 #temp-@TuringLabbot-jd_sgmh.log-sgmh-暂无
 #每天变化活动示例
@@ -17,7 +17,8 @@ long-@TuringLabbot-/submit_activity_codes-jd_pet.log-pet-东东萌宠好友互�
 long-@TuringLabbot-/submit_activity_codes-jd_jdfactory.log-ddfactory-东东工厂好友互助码】
 #京喜工厂
 long-@TuringLabbot-/submit_activity_codes-jd_dreamFactory.log-jxfactory-京喜工厂好友互助码】
-
+#临时活动
+temp-@TuringLabbot-jd_sgmh.log-sgmh-您的好友助力码为:
 
 #分红狗活动
 long-@LvanLamCommitCodeBot-/jdcrazyjoy-jd_crazy_joy.log-@N-crazyJoy任务好友互助码】
