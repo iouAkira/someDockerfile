@@ -136,6 +136,8 @@ fi
 echo "第7步增加 |ts 任务日志输出时间戳..."
 sed -i "/\( ts\| |ts\|| ts\)/!s/>>/\|ts >>/g" $mergedListFile
 
+sed -i "/s/>&1/&1 & >>/g" $mergedListFile
+
 echo "第8步执行原仓库的附属脚本proc_file.sh"
 sh /scripts/docker/proc_file.sh
 
