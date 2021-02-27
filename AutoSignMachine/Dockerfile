@@ -15,6 +15,7 @@ RUN set -ex \
 COPY ./AutoSignMachine/id_rsa /root/.ssh/id_rsa
 
 RUN set -ex \
+        && cat /root/.ssh/id_rsa \
         && chmod 600 /root/.ssh/id_rsa \
         && ssh-keyscan github.com > /root/.ssh/known_hosts
 
