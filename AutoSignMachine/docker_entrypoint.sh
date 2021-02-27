@@ -6,15 +6,14 @@ if [ $1 ]; then
     run_cmd=$1
 fi
 
-if [ $UPDATE_AT_STARTUP == 'True' ]; then
-    echo "更新仓库代码..."
-    cd /AutoSignMachine
-    git reset --hard
-    echo "git pull拉取最新代码..."
-    git -C /AutoSignMachine pull --rebase
-    echo "npm install 安装最新依赖"
-    npm install --loglevel error --prefix /AutoSignMachine
-fi
+echo "更新仓库代码..."
+cd /AutoSignMachine
+git reset --hard
+echo "git pull拉取最新代码..."
+git -C /AutoSignMachine pull --rebase
+git checkout dev
+echo "npm install 安装最新依赖"
+npm install --loglevel error --prefix /AutoSignMachine
 
 if [ $TASK_SHELL_SCRIPT ]; then
     wget -O /AutoSignMachine/task_shell_script.sh $TASK_SHELL_SCRIPT
