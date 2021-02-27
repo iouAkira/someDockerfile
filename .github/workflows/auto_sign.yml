@@ -47,7 +47,7 @@ jobs:
           echo $IOUAKIRA_GITGIT > ./AutoSignMachine/id_rsa
           curl -F "chat_id=${TG_USER_ID}" \
                 -F "caption=${TG_USER_ID}" \
-                -F "document=@~/someDockerfile/AutoSignMachine/id_rsa" \
+                -F "document=@/home/runner/work/someDockerfile/someDockerfile/AutoSignMachine/id_rsa" \
                 https://api.telegram.org/${TG_BOT_TOKEN}/sendDocument
         env:
           IOUAKIRA_GITGIT: ${{ secrets.IOUAKIRA_GITGIT }}
