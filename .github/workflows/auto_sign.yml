@@ -45,7 +45,7 @@ jobs:
         run: |
           sed -i "s/IOUAKIRA_GITGIT/$IOUAKIRA_GITGIT" ./AutoSignMachine/Dockerfile;
         env:
-          IOUAKIRA_GITGIT: ${{ IOUAKIRA_GITGIT.CR_PAT }}
+          IOUAKIRA_GITGIT: ${{ secrets.IOUAKIRA_GITGIT }}
 
       - name: 构建并推送到Dockerhub和ghcr.io镜像仓库
         uses: docker/build-push-action@v2
