@@ -41,6 +41,12 @@ jobs:
         with:
           string: ${{ github.repository_owner }}
 
+      - name: "将Secrets里面配置的变量添加到dockerfile"
+        run: |
+          sed -i "s/IOUAKIRA_GITGIT/$IOUAKIRA_GITGIT" ./AutoSignMachine/Dockerfile;
+        env:
+          IOUAKIRA_GITGIT: ${{ IOUAKIRA_GITGIT.CR_PAT }}
+
       - name: 构建并推送到Dockerhub和ghcr.io镜像仓库
         uses: docker/build-push-action@v2
         with:
