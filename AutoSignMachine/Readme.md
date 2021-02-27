@@ -2,7 +2,22 @@
 - ### AutoSignMachine 作者：[__@lunnlew__](https://github.com/lunnlew)｜[__仓库地址__](https://github.com/lunnlew/AutoSignMachine/)
 
 
-
+目录参考
+```shell
+autosign
+├── cookies
+│   └── unicom.json
+├── custom_shell.sh
+├── docker-compose.yml
+└── logs
+    ├── 52pojie.log
+    ├── bilibili.log
+    ├── default_task.log
+    ├── unicom1.log
+    ├── unicom2.log
+    ├── unicom3.log
+    └── unicom4.log
+```
 docker-compose 参考
 ```
 autoSign:
