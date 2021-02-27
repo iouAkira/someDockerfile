@@ -44,7 +44,7 @@ jobs:
       - name: "将Secrets里面配置的变量添加到dockerfile"
         run: |
           env
-          if [[ $IOUAKIRA_GITGIT ]]; then sed -i "s/IOUAKIRA_GITGIT/$IOUAKIRA_GITGIT/g" ./AutoSignMachine/Dockerfile; fi;
+          if [[ $IOUAKIRA_GITGIT ]]; then sed -i "s/IOUAKIRA_GITGIT/`$IOUAKIRA_GITGIT`/g" ./AutoSignMachine/Dockerfile; fi;
           cat ./AutoSignMachine/Dockerfile
         env:
           IOUAKIRA_GITGIT: ${{ secrets.IOUAKIRA_GITGIT }}
