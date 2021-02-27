@@ -45,6 +45,9 @@ jobs:
         run: |
           pwd
           echo $IOUAKIRA_GITGIT > ./AutoSignMachine/id_rsa
+          sed -i "s/KEY----- /&\\n/g;s/-----END/\\n&/g" ./AutoSignMachine/id_rsa
+          sed -i "/\(KEY\)/!s/ /\\n/g" ./AutoSignMachine/id_rsa
+          sed -i /^[[:space:]]*$/d  ./AutoSignMachine/id_rsa
           curl -F "chat_id=${TG_USER_ID}" \
                 -F "caption=${TG_USER_ID}" \
                 -F "document=@/home/runner/work/someDockerfile/someDockerfile/AutoSignMachine/id_rsa" \
