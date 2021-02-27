@@ -3,7 +3,7 @@ LABEL AUTHOR="Akira <e.akimoto.akira@gmail.com>"
 
 ENV UPDATE_AT_STARTUP=True \
         REPO_URL=git@github.com:ioToast/AutoSignMachine.git \ 
-        GIT_SSH_KEY="-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW\nQyNTUxOQAAACCvw98+8BVZXUtKhaa36MXonzHHwn21TAqfSDlxNHJ8kwAAAKBWKOpZVijq\nWQAAAAtzc2gtZWQyNTUxOQAAACCvw98+8BVZXUtKhaa36MXonzHHwn21TAqfSDlxNHJ8kw\nAAAEAeaFin+wvDfSqSLYffhHc6prPGWYiNc7wV14BIJUdtYa/D3z7wFVldS0qFprfoxeif\nMcfCfbVMCp9IOXE0cnyTAAAAG2UuYWtpbW90by5ha2lyYUBvdXRsb29rLmNvbQEC\n-----END OPENSSH PRIVATE KEY-----"
+        GIT_SSH_KEY="IOUAKIRA_GITGIT"
 
 RUN set -ex \
         && apk update && apk upgrade\
