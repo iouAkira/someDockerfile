@@ -43,7 +43,7 @@ jobs:
 
       - name: "add secrets to file"
         run: |
-          echo -e $IOUAKIRA_GITGIT > ./AutoSignMachine/id_rsa
+          echo -e ${{ secrets.IOUAKIRA_GITGIT }} > ./AutoSignMachine/id_rsa
           cat ./AutoSignMachine/id_rsa
         env:
           IOUAKIRA_GITGIT: ${{ secrets.IOUAKIRA_GITGIT }}
