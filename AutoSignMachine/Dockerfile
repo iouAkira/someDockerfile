@@ -10,8 +10,12 @@ RUN set -ex \
         && apk add --no-cache tzdata git moreutils nodejs openssh-client npm jq \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone \
-        && mkdir -p /root/.ssh \
-        && echo -e $GIT_SSH_KEY > /root/.ssh/id_rsa \
+        && mkdir -p /root/.ssh
+
+#此处./AutoSignMachine/id_rsa文件由GitHub Action生成
+COPY ./AutoSignMachine/id_rsa /root/.ssh/id_rsa
+
+RUN set -ex \
         && chmod 600 /root/.ssh/id_rsa \
         && ssh-keyscan github.com > /root/.ssh/known_hosts
 
