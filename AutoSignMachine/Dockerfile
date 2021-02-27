@@ -2,8 +2,7 @@ FROM alpine
 LABEL AUTHOR="Akira <e.akimoto.akira@gmail.com>" 
 
 ENV UPDATE_AT_STARTUP=True \
-        REPO_URL=git@github.com:ioToast/AutoSignMachine.git \ 
-        GIT_SSH_KEY="IOUAKIRA_GITGIT"
+        REPO_URL=git@github.com:ioToast/AutoSignMachine.git
 
 RUN set -ex \
         && apk update && apk upgrade\
