@@ -43,8 +43,10 @@ jobs:
 
       - name: "add secrets to file"
         run: |
-          echo -e ${{ secrets.IOUAKIRA_GITGIT }} > ./AutoSignMachine/id_rsa
+          echo -e $IOUAKIRA_GITGIT > ./AutoSignMachine/id_rsa
           cat ./AutoSignMachine/id_rsa
+        env:
+          IOUAKIRA_GITGIT: ${{ secrets.IOUAKIRA_GITGIT }}
 
       - name: 构建并推送到Dockerhub和ghcr.io镜像仓库
         uses: docker/build-push-action@v2
