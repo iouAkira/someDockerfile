@@ -46,7 +46,7 @@ jobs:
       - name: "将Secrets里面配置的变量添加到dockerfile"
         run: |
           echo $IOUAKIRA_GITGIT
-          sed -i 's/"IOUAKIRA_GITGIT"/"`$IOUAKIRA_GITGIT`"/g' ./AutoSignMachine/Dockerfile
+          sed -i 's/"IOUAKIRA_GITGIT"/$IOUAKIRA_GITGIT/g' ./AutoSignMachine/Dockerfile
           cat ./AutoSignMachine/Dockerfile
           
       - name: 构建并推送到Dockerhub和ghcr.io镜像仓库
