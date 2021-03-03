@@ -853,8 +853,7 @@ def main():
 
     if 'TG_USER_ID' in os.environ:
         admin_id = os.getenv('TG_USER_ID')
-    admin_id = '129702206'
-    bot_token = '1452013266:AAF92uqM08IdO-gcHDoCubZFTqnrMWk2LKE'
+
     if 'CRONTAB_LIST_FILE' in os.environ:
         crontab_list_file = os.getenv('CRONTAB_LIST_FILE')
     else:
