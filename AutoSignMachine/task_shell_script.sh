@@ -1,6 +1,15 @@
 #!/bin/sh
 set -e
 
+echo "更新仓库代码..."
+cd /AutoSignMachine
+git reset --hard
+echo "git pull拉取最新代码..."
+git -C /AutoSignMachine pull --rebase
+git checkout azmodan
+echo "npm install 安装最新依赖..."
+npm install --loglevel error --prefix /AutoSignMachine
+
 mergedListFile="/AutoSignMachine/merged_list_file.sh"
 echo "定时任务文件路径为 ${mergedListFile}"
 echo '' >${mergedListFile}
@@ -24,41 +33,42 @@ else
 fi
 
 if [ $ENABLE_UNICOM ]; then
-    if [ -f $UNICOM_CONFIG ]; then
-        if type jq >/dev/null 2>&1; then
-            echo "jq已存在"
-        else
-            echo "安装jq"
-            apk add jq
-        fi
-        for accountSn  in `cat ${UNICOM_CONFIG} | jq -r .accountSn | sed 's/,/ /g'`
-        do 
-            echo "*/30 7-22 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js unicom --accountSn $accountSn  --config ${UNICOM_CONFIG} >> /AutoSignMachine/logs/unicom${accountSn}.log 2>&1 &" >>${mergedListFile}
-        done
-    else
-        echo "*/30 7-22 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js unicom --user ${UNICOM_PHONE} --password ${UNICOM_PWD} --appid ${UNICOM_APPID} >> /AutoSignMachine/logs/unicom.log 2>&1 &" >>${mergedListFile}
-    fi
-    ##兑换流量包脚本环境配置
-    if [ $ACTIVE_FLOW ]; then
-        if type bash >/dev/null 2>&1; then
-            echo "已安装 bash "
-        else
-            echo "安装bash"
-            apk add bash
-        fi
-        if type openssl >/dev/null 2>&1; then
-            echo "已安装 openssl "
-        else
-            echo "安装openssl"
-            apk add openssl
-        fi
-        if type curl >/dev/null 2>&1; then
-            echo "已安装 curl "
-        else
-            echo "安装curl"
-            apk add curl
-        fi
-    fi
+    echo "*/30 7-22 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js unicom >> /AutoSignMachine/logs/unicom.log 2>&1 &" >>${mergedListFile}
+#     if [ -f $UNICOM_CONFIG ]; then
+#         if type jq >/dev/null 2>&1; then
+#             echo "jq已存在"
+#         else
+#             echo "安装jq"
+#             apk add jq
+#         fi
+#         for accountSn  in `cat ${UNICOM_CONFIG} | jq -r .accountSn | sed 's/,/ /g'`
+#         do 
+#             echo "*/30 7-22 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js unicom --accountSn $accountSn  --config ${UNICOM_CONFIG} >> /AutoSignMachine/logs/unicom${accountSn}.log 2>&1 &" >>${mergedListFile}
+#         done
+#     else
+#         echo "*/30 7-22 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js unicom --user ${UNICOM_PHONE} --password ${UNICOM_PWD} --appid ${UNICOM_APPID} >> /AutoSignMachine/logs/unicom.log 2>&1 &" >>${mergedListFile}
+#     fi
+#     ##兑换流量包脚本环境配置
+#     if [ $ACTIVE_FLOW ]; then
+#         if type bash >/dev/null 2>&1; then
+#             echo "已安装 bash "
+#         else
+#             echo "安装bash"
+#             apk add bash
+#         fi
+#         if type openssl >/dev/null 2>&1; then
+#             echo "已安装 openssl "
+#         else
+#             echo "安装openssl"
+#             apk add openssl
+#         fi
+#         if type curl >/dev/null 2>&1; then
+#             echo "已安装 curl "
+#         else
+#             echo "安装curl"
+#             apk add curl
+#         fi
+#     fi
 else
     echo "未配置启用unicom签到任务环境变量ENABLE_UNICOM，故不添加unicom定时任务..."
 fi
