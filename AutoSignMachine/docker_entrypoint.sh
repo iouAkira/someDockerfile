@@ -22,7 +22,7 @@ if [ $TASK_SHELL_SCRIPT ]; then
 else
 	cd /pss
 	git pull origin master
-	cp pack_some_script/task_shell_script.sh /AutoSignMachine/task_shell_script.sh
+	cp /pss/AutoSignMachine/task_shell_script.sh /AutoSignMachine/task_shell_script.sh
 fi
 echo "------------------------------------------------执行定时任务任务shell脚本------------------------------------------------"
 sh /AutoSignMachine/task_shell_script.sh $run_cmd
