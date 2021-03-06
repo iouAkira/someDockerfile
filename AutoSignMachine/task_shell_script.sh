@@ -42,7 +42,17 @@ if [ $ENABLE_UNICOM ]; then
 	if [ -f $envFile ]; then
 		if [ -f $UNICOM_JOB_CONFIG ]; then
 			echo "找到联通细分任务配置故拆分，针对每个任务增加定时任务"
-			echo "*/30 7-22 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js unicom >> logs/unicom.log 2>&1 &" >>${mergedListFile}
+			mutine=0
+			hour=8
+			job_interval=6
+			for job in $(paste -d" " -s - <$UNICOM_JOB_CONFIG); do
+				echo "$mutine $hour * * * node node /AutoSignMachine/index.js unicom --tryrun --tasks $job >>/logs/unicom_$job.log 2>&1 &" >>${mergedListFile}
+				mutine=$(expr $mutine + $job_interval)
+				if [ $mutine -ge 60 ]; then
+					mutine=0
+					hour=$(expr $hour + 1)
+				fi
+			done
 		else
 			echo "*/30 7-22 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js unicom >> logs/unicom.log 2>&1 &" >>${mergedListFile}
 		fi
