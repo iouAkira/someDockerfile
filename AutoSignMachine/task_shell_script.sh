@@ -51,7 +51,7 @@ if [ $ENABLE_UNICOM ]; then
 			hour=8
 			job_interval=6
 			for job in $(paste -d" " -s - <$UNICOM_JOB_CONFIG); do
-				echo "$mutine $hour * * * node node /AutoSignMachine/index.js unicom --tryrun --tasks $job >>/logs/unicom_$job.log 2>&1 &" >>${mergedListFile}
+				echo "$mutine $hour * * * node /AutoSignMachine/index.js unicom --tryrun --tasks $job >>/logs/unicom_$job.log 2>&1 &" >>${mergedListFile}
 				mutine=$(expr $mutine + $job_interval)
 				if [ $mutine -ge 60 ]; then
 					mutine=0
