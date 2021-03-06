@@ -25,19 +25,19 @@ echo "定时任务文件路径为 ${mergedListFile}"
 echo '' >${mergedListFile}
 
 if [ $ENABLE_52POJIE ]; then
-	echo "10 13 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js 52pojie --htVD_2132_auth=${htVD_2132_auth} --htVD_2132_saltkey=${htVD_2132_saltkey} >> logs/52pojie.log 2>&1 &" >>${mergedListFile}
+	echo "10 13 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js 52pojie --htVD_2132_auth=${htVD_2132_auth} --htVD_2132_saltkey=${htVD_2132_saltkey} >> /logs/52pojie.log 2>&1 &" >>${mergedListFile}
 else
 	echo "未配置启用52pojie签到任务环境变量ENABLE_52POJIE，故不添加52pojie定时任务..."
 fi
 
 if [ $ENABLE_BILIBILI ]; then
-	echo "*/30 7-22 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js bilibili --username ${BILIBILI_ACCOUNT} --password ${BILIBILI_PWD} >> logs/bilibili.log 2>&1 &" >>${mergedListFile}
+	echo "*/30 7-22 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js bilibili --username ${BILIBILI_ACCOUNT} --password ${BILIBILI_PWD} >> /logs/bilibili.log 2>&1 &" >>${mergedListFile}
 else
 	echo "未配置启用bilibi签到任务环境变量ENABLE_BILIBILI，故不添加Bilibili定时任务..."
 fi
 
 if [ $ENABLE_IQIYI ]; then
-	echo "*/30 7-22 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js iqiyi --P00001 ${P00001} --P00PRU ${P00PRU} --QC005 ${QC005}  --dfp ${dfp} >> logs/iqiyi.log 2>&1 &" >>${mergedListFile}
+	echo "*/30 7-22 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js iqiyi --P00001 ${P00001} --P00PRU ${P00PRU} --QC005 ${QC005}  --dfp ${dfp} >> /logs/iqiyi.log 2>&1 &" >>${mergedListFile}
 else
 	echo "未配置启用iqiyi签到任务环境变量ENABLE_IQIYI，故不添加iqiyi定时任务..."
 fi
@@ -47,14 +47,14 @@ if [ $ENABLE_UNICOM ]; then
 		cp -f $envFile /AutoSignMachine/config/.env
 		if [ -f $UNICOM_JOB_CONFIG ]; then
 			echo "找到联通细分任务配置故拆分，针对每个任务增加定时任务"
-			mutine=0
+			minute=0
 			hour=8
 			job_interval=6
 			for job in $(paste -d" " -s - <$UNICOM_JOB_CONFIG); do
-				echo "$mutine $hour * * * node /AutoSignMachine/index.js unicom --tryrun --tasks $job >>/logs/unicom_$job.log 2>&1 &" >>${mergedListFile}
-				mutine=$(expr $mutine + $job_interval)
-				if [ $mutine -ge 60 ]; then
-					mutine=0
+				echo "$minute $hour * * * sleep \$((RANDOM % 60)); node /AutoSignMachine/index.js unicom --tryrun --tasks $job >>/logs/unicom_$job.log 2>&1 &" >>${mergedListFile}
+				minute=$(expr $minute + $job_interval)
+				if [ $minute -ge 60 ]; then
+					minute=0
 					hour=$(expr $hour + 1)
 				fi
 			done
@@ -104,7 +104,7 @@ else
 fi
 
 echo "增加默认脚本更新任务..."
-echo "21 */1 * * * docker_entrypoint.sh >> /AutoSignMachine/logs/default_task.log 2>&1" >>$mergedListFile
+echo "21 */1 * * * docker_entrypoint.sh >> /logs/default_task.log 2>&1" >>$mergedListFile
 
 echo "判断是否配置自定义shell执行脚本..."
 if [ 0"$CUSTOM_SHELL_FILE" = "0" ]; then
