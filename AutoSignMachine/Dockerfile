@@ -3,7 +3,7 @@ LABEL AUTHOR="Akira <e.akimoto.akira@gmail.com>"
 
 RUN set -ex \
         && apk update && apk upgrade\
-        && apk add --no-cache tzdata git moreutils nodejs openssh-client npm jq perl openssl libav-tools libjpeg-turbo-dev libpng-dev libtool libgomp tesseract-ocr graphicsmagick \
+        && apk add --no-cache tzdata git moreutils nodejs openssh-client npm jq \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone \
         && mkdir -p /root/.ssh
