@@ -9,7 +9,7 @@ RUN set -ex \
         && mkdir -p /root/.ssh
 
 # 创建工作目录
-RUN WORKDIR /AutoSignMachine \
+RUN mkdir /AutoSignMachine \
         && mkdir /logs \
         && mkdir /pss \
         && cd  /pss \
