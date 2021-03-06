@@ -3,7 +3,7 @@ set -e
 
 if [ $1 ]; then
 	echo "容器启动，补充安装一些系统组件包"
-	apk add perl openssl libav-tools libjpeg-turbo-dev libpng-dev libtool libgomp tesseract-ocr graphicsmagick
+	apk add perl openssl libjpeg-turbo-dev libpng-dev libtool libgomp tesseract-ocr graphicsmagick
 fi
 
 echo "更新仓库代码..."
