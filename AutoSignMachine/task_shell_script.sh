@@ -2,7 +2,9 @@
 set -e
 
 if [ $1 ]; then
-	echo "容器启动，补充安装一些系统组件包"
+	echo "更换为清华大学的源..."
+	sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
+	echo "容器启动，补充安装一些系统组件包..."
 	apk add perl openssl libjpeg-turbo-dev libpng-dev libtool libgomp tesseract-ocr graphicsmagick
 fi
 
