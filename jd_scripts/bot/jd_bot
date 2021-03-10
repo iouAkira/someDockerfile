@@ -13,6 +13,7 @@ import requests
 import time
 import logging
 import re
+from urllib.parse import quote, unquote
 
 import telegram.utils.helpers as helpers
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
@@ -814,6 +815,38 @@ def parseJDCookies(headers):
     logger.info(pt_pin)
     jd_cookie = f'pt_key={pt_key};pt_pin={pt_pin};'
 
+def resp_text(update, context):
+    """
+    监听用户输入的文本消息
+    """
+    from_user_id = update.message.from_user.id
+    if admin_id == str(from_user_id):
+        msg_text = update.message.text
+        logger.info(msg_text)
+        if str(update.message.text).find("api.m.jd.com/client.action?functionId=liveDrawLotteryV842") > 0:
+            url = re.findall(r"已登陆京东）：(.+?)?$", msg_text)[0]
+            body = re.findall(r"&body=(.+?)&", msg_text)[0]
+            url = url.replace(body, quote(body))
+            logger.info(url)
+            try:
+                os.putenv('LIVE_LOTTTERY_URL', url)
+                cmd = f'node {_base_dir}jd_live_lottery.js'
+                out_bytes = subprocess.check_output(
+                    cmd, shell=True, timeout=600, stderr=subprocess.STDOUT)
+                out_text = out_bytes.decode('utf-8')
+                context.bot.sendMessage(text='```{}```'.format(
+                    helpers.escape_markdown(' ↓↓↓ %s 执行结果 ↓↓↓ \n\n%s ' % (cmd, out_text))),
+                    chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+            except TimeoutExpired:
+                context.bot.sendMessage(text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行超时 ←←← ' % (cmd))),
+                                        chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+            except Exception as e:
+                context.bot.sendMessage(
+                    text='```{}```'.format(helpers.escape_markdown(' →→→ %s 执行出错，请检查确认命令是否正确 ←←← ' % (
+                        cmd))), chat_id=update.effective_chat.id, parse_mode=ParseMode.MARKDOWN_V2)
+                raise
+    else:
+        update.message.reply_text(text='此为私人使用bot,不能执行您的指令！')
 
 def unknown(update, context):
     """回复用户输入不存在的指令
@@ -904,7 +937,7 @@ def main():
     dp.add_handler(MessageHandler(Filters.command, unknown))
 
     # 响应普通文本消息
-    # dp.add_handler(MessageHandler(Filters.photo, unknown))
+    dp.add_handler(MessageHandler(Filters.text, resp_text))
 
     dp.add_error_handler(error)
 
