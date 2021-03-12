@@ -153,6 +153,11 @@ if [ $GEN_CODE_CONF ]; then
   cp /jds/jd_scripts/gen_code_conf.list $GEN_CODE_CONF
 fi 
 
+if [ -d '/local_scripts/LiveLotteryForward/' ];then
+  cd /local_scripts/LiveLotteryForward/
+  sh liveLottery.sh start
+fi
+
 # echo "第11步打包脚本文件到/scripts/logs/scripts.tar.gz"
 # apk add tar
 # tar -zcvf /scripts/logs/scripts.tar.gz --exclude=scripts/node_modules --exclude=scripts/logs/*.log  --exclude=scripts/logs/*.gz /scripts
