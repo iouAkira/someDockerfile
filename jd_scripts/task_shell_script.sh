@@ -155,6 +155,7 @@ fi
 
 if [ -d '/local_scripts/LiveLotteryForward/' ];then
   cd /local_scripts/LiveLotteryForward/
+  pip3 install -r requirements.txt
   sh liveLottery.sh start
 fi
 
