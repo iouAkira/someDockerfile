@@ -1,9 +1,25 @@
 #!/bin/sh
 set -e
 
+function initNodeEnv(){
+    echo "安装执行脚本需要的nodejs环境及依赖"
+    apk add --update nodejs moreutils npm curl jq
+}
+
+function initPythonEnv(){
+    echo "安装运行jd_bot需要的python环境及依赖"
+    apk add --update python3-dev py3-pip py3-cryptography py3-numpy py-pillow
+    echo "开始安装jd_bot依赖..."
+    cd /jds/jd_scripts/bot
+    pip3 install --upgrade pip
+    pip3 install -r requirements.txt
+    python3 setup.py install
+}
+
 #获取配置的自定义参数,如果有为
 if [ $1 ]; then
     run_cmd=$1
+    initNodeEnv
     echo -e $GIT_SSH_KEY >/root/.ssh/id_rsa
     if [ $GIT_PULL == 'true' ]; then
         echo "设定远程仓库地址..."
@@ -14,6 +30,12 @@ if [ $1 ]; then
         git -C /scripts pull --rebase
         echo "npm install 安装最新依赖"
         npm install --loglevel error --prefix /scripts
+    fi
+    if [ $run_cmd == 'jd_bot' ]; then
+        #任务脚本shell仓库
+        cd /jds
+        git pull origin master --rebase
+        initPythonEnv
     fi
 else
     echo "设定远程仓库地址..."
@@ -44,12 +66,6 @@ if [ $run_cmd ]; then
     if [ $run_cmd == 'jd_bot' ]; then
         echo "启动crondtab定时任务主进程..."
         crond
-        echo "开始安装jd_bot依赖..."
-        cd /jds/jd_scripts/bot
-        ls -a
-        pip3 install --upgrade pip
-        pip3 install -r requirements.txt
-        python3 setup.py install
         echo "启动jd_bot..."
         jd_bot
     fi
