@@ -47,6 +47,7 @@ if [ $run_cmd ]; then
         echo "开始安装jd_bot依赖..."
         cd /jds/jd_scripts/bot
         ls -a
+        apk add gcc
         pip3 install --upgrade pip
         pip3 install -r requirements.txt
         python3 setup.py install
