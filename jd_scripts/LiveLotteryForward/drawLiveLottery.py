@@ -33,21 +33,22 @@ def resp_text(update, context):
         global url, body, shop_name
         logger.info(update.message)
         msg_text = update.message.text
-        shop_name = re.findall(r"^(.+?) ", msg_text)[0]
+        shop_name = re.findall(r"^(.+?) ", msg_text)
 
         for ent in update.message.entities:
-            if str(ent.url).find("api.m.jd.com/client.action?functionId=liveDrawLotteryV842") > 0:
+            if str(ent.url).startswith("https://api.m.jd.com/client.action?functionId=liveDrawLotteryV842"):
                 url = ent.url
                 break
 
-        if str(update.message.text).find("api.m.jd.com/client.action?functionId=liveDrawLotteryV842") > 0:
+        if str(update.message.text).startswith("https://api.m.jd.com/client.action?functionId=liveDrawLotteryV842"):
             url = re.findall(r"已登陆京东）：(.+?)?$", msg_text)[0]
             body = re.findall(r"&body=(.+?)&", msg_text)[0]
             url = url.replace(body, quote(body))
 
-        logger.info(url)
-        if str(url).find("api.m.jd.com/client.action?functionId=liveDrawLotteryV842") > 0:
+        # logger.info(url)
+        if str(url).startswith("https://api.m.jd.com/client.action?functionId=liveDrawLotteryV842"):
             try:
+                logger.info(url)
                 os.putenv('LIVE_LOTTERY_URL', url)
                 cmd = f'node {_base_dir}jd_live_lottery.js {shop_name}'
                 out_bytes = subprocess.check_output(
@@ -68,17 +69,11 @@ def resp_text(update, context):
         update.message.reply_text(text='此为私人使用bot,不能执行您的指令！')
 
 
-def error(update, context):
-    """Log Errors caused by Updates."""
-    logger.warning('Update "%s" caused error "%s"', update, context.error)
-    context.bot.send_message(
-        'Update "%s" caused error "%s"', update, context.error)
-
 
 def main():
     global admin_id, bot_token, crontab_list_file
 
-    bot_token = '50***********************9E'
+    bot_token = '505000000005:AAFcb0WIdfsdfsfsdf***********5Nvv9E'
     admin_id = '129702206'
     # 创建更新程序并参数为你Bot的TOKEN。
     updater = Updater(bot_token, use_context=True)
