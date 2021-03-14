@@ -159,7 +159,6 @@ if [ -d '/local_scripts/LiveLotteryForward/' ];then
   sh liveLottery.sh start
 fi
 
-apk add py3-numpy py-pillow
 # echo "第11步打包脚本文件到/scripts/logs/scripts.tar.gz"
 # apk add tar
 # tar -zcvf /scripts/logs/scripts.tar.gz --exclude=scripts/node_modules --exclude=scripts/logs/*.log  --exclude=scripts/logs/*.gz /scripts
