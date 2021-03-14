@@ -46,11 +46,11 @@ else
     git -C /scripts pull --rebase
     echo "npm install 安装最新依赖"
     npm install --loglevel error --prefix /scripts
-fi
 
-#任务脚本shell仓库
-cd /jds
-git pull origin master --rebase
+    #任务脚本shell仓库
+    cd /jds
+    git pull origin master --rebase
+fi
 
 #将默认的互助码提交消息生成配置文件放入logs文件夹
 if [ ! -f $GEN_CODE_CONF ]; then
