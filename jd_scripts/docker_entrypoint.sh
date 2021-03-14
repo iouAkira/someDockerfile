@@ -42,15 +42,18 @@ echo "--------------------------------------------------默认定时任务执行
 
 if [ $run_cmd ]; then
     if [ $run_cmd == 'jd_bot' ]; then
-        echo "Start crontab task main process..."
         echo "启动crondtab定时任务主进程..."
         crond
-        echo "Start crontab task main process..."
+        echo "开始安装jd_bot依赖..."
+        cd /jds/jd_scripts/bot
+        ls -a
+        pip3 install --upgrade pip
+        pip3 install -r requirements.txt
+        python3 setup.py install
         echo "启动jd_bot..."
         jd_bot
     fi
     if [ $run_cmd == 'crond' ]; then
-        echo "Start crontab task main process..."
         echo "启动crondtab定时任务主进程..."
         crond -f
     fi
