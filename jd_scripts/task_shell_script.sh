@@ -153,10 +153,20 @@ if [ $GEN_CODE_CONF ]; then
   cp /jds/jd_scripts/gen_code_conf.list $GEN_CODE_CONF
 fi 
 
+echo "附加功能1，京东直播间抽奖监控"
 if [ -d '/local_scripts/LiveLotteryForward/' ];then
   cd /local_scripts/LiveLotteryForward/
   pip3 install -r requirements.txt
   sh liveLottery.sh start
+fi
+
+echo "附加功能2，cookie写入文件，为jd_bot扫码获自动取cookies服务"
+if [ $_JD_COOKIE ];then
+    if [ -f '/logs/cookies.conf' ];then
+        echo "/logs/cookies.conf cookies文件已经存在跳过将环境变量写入，如果需要更新cookie请修改cookies.conf文件"
+    else
+        echo $JD_COOKIE | sed "s/\( &\|&\)/\\n/g" > /logs/cookies.conf
+    fi
 fi
 
 # echo "第11步打包脚本文件到/scripts/logs/scripts.tar.gz"
