@@ -168,9 +168,9 @@ if [ 0"$JD_COOKIE" = "0" ]; then
     fi
 else
     if [ -f "/scripts/logs/cookies.conf" ];then
-        echo "logs/cookies.conf cookies文件已经存在跳过将环境变量写入,如果需要更新cookie请修改cookies.conf文件"
+        echo "cookies.conf文件已经存在跳过,如果需要更新cookie请修改logs/cookies.conf文件内容"
     else
-        echo "环境变量 cookies写入logs/cookies.conf文件,如果需要更新cookie请修改cookies.conf文件"
+        echo "环境变量 cookies写入logs/cookies.conf文件,如果需要更新cookie请修改cookies.conf文件内容"
         echo $JD_COOKIE | sed "s/\( &\|&\)/\\n/g" > /scripts/logs/cookies.conf
     fi
 fi
