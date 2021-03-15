@@ -161,11 +161,16 @@ if [ -d '/local_scripts/LiveLotteryForward/' ];then
 fi
 
 echo "附加功能2，cookie写入文件，为jd_bot扫码获自动取cookies服务"
-if [ $JD_COOKIE ];then
+if [ 0"$JD_COOKIE" = "0" ]; then
     if [ -f "/scripts/logs/cookies.conf" ];then
-        echo "logs/cookies.conf cookies文件已经存在跳过将环境变量写入，如果需要更新cookie请修改cookies.conf文件"
+        echo '' > /scripts/logs/cookies.conf
+        echo "未配置JD_COOKIE环境变量，logs/cookies.conf文件已生成,请将cookies写入logs/cookies.conf文件，格式每个Cookie一行"
+    fi
+else
+    if [ -f "/scripts/logs/cookies.conf" ];then
+        echo "logs/cookies.conf cookies文件已经存在跳过将环境变量写入,如果需要更新cookie请修改cookies.conf文件"
     else
-        echo "环境变量 cookies写入logs/cookies.conf文件"
+        echo "环境变量 cookies写入logs/cookies.conf文件,如果需要更新cookie请修改cookies.conf文件"
         echo $JD_COOKIE | sed "s/\( &\|&\)/\\n/g" > /scripts/logs/cookies.conf
     fi
 fi
