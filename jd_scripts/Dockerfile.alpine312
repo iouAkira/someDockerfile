@@ -32,7 +32,8 @@ RUN mkdir /jds \
         && git pull origin master
 
 RUN cp /jds/jd_scripts/docker_entrypoint.sh /usr/local/bin \
-        && chmod +x /usr/local/bin/docker_entrypoint.sh
+        && chmod +x /usr/local/bin/docker_entrypoint.sh \
+        && alias spnode="export JD_COOKIE=$(cat cookies.conf | paste -s -d "&") ; node "
 
 WORKDIR /scripts
 
