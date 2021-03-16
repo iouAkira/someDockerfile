@@ -33,7 +33,7 @@ RUN mkdir /jds \
 
 RUN cp /jds/jd_scripts/docker_entrypoint.sh /usr/local/bin \
         && chmod +x /usr/local/bin/docker_entrypoint.sh \
-        && alias spnode="export JD_COOKIE=\$\(cat cookies.conf | paste -s -d '&'\) ; node "
+        && echo -e "alias spnode=\"export JD_COOKIE=\$\(cat /scripts/logs/cookies.conf | paste -s -d '&'\) ; node \""
 
 WORKDIR /scripts
 
