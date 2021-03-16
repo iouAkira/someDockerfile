@@ -116,7 +116,7 @@ sh /scripts/docker/proc_file.sh
 
 echo "替换node使用spnode执行任务"
 sed -i "s/node/spnode/g" $mergedListFile
-sed "/\(jd_xtg.js\|jd_bean_change.js\)/s/spnode/spnode conc/g"  $mergedListFile
+sed -i "/\(jd_xtg.js\|jd_bean_change.js\)/s/spnode/spnode conc/g" $mergedListFile
 
 echo "第9步加载最新的定时任务文件..."
 crontab $mergedListFile
