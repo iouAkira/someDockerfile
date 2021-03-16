@@ -12,16 +12,20 @@ cmd=\$*
 echo \${cmd/\$1/}
 if [ \$1 == "conc" ]; then
     for job in \$(paste -d" " -s - <\$COOKIES_CONF); do
-        export JD_COOKIE=\$job && node \${cmd/\$1/}
+        { export JD_COOKIE=\$job && node \${cmd/\$1/} 
+        }&
     done
 elif [ -n "\$(echo \$first | sed -n "/^[0-9]\+\$/p")" ]; then
     echo "\$(echo \$first | sed -n "/^[0-9]\+\$/p")"
-    export JD_COOKIE=\$(sed -n "\${first}p" \$COOKIES_CONF) && node \${cmd/\$1/}
+    { export JD_COOKIE=\$(sed -n "\${first}p" \$COOKIES_CONF) && node \${cmd/\$1/}
+    }&
 elif [ -n "\$(cat \$COOKIES_CONF  | grep "pt_pin=\$first")" ];then
     echo "\$(cat \$COOKIES_CONF  | grep "pt_pin=\$first")"
-    export JD_COOKIE=\$(cat \$COOKIES_CONF | grep "pt_pin=\$first") && node \${cmd/\$1/}
+    { export JD_COOKIE=\$(cat \$COOKIES_CONF | grep "pt_pin=\$first") && node \${cmd/\$1/}
+    }&
 else
-    export JD_COOKIE=\$(cat \$COOKIES_CONF | paste -s -d '&') && node \$*
+    { export JD_COOKIE=\$(cat \$COOKIES_CONF | paste -s -d '&') && node \$*
+    }&
 fi
 EOF
 ) > /usr/local/bin/spnode
