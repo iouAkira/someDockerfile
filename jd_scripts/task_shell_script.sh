@@ -77,7 +77,7 @@ echo "第5步判断是否配置了随即延迟参数..."
 if [ $RANDOM_DELAY_MAX ]; then
     if [ $RANDOM_DELAY_MAX -ge 1 ]; then
         echo "已设置随机延迟为 $RANDOM_DELAY_MAX , 设置延迟任务中..."
-        sed -i "/\(jd_bean_sign.js\|jd_blueCoin.js\|jd_5g.js\|jd_818.js\|jd_newYearMoney.js\|jd_newYearMoney_lottery.js\|jd_joy_reward.js\|jd_joy_steal.js\|jd_joy_feedPets.js\|jd_car_exchange.js\)/!s/node/sleep \$((RANDOM % \$RANDOM_DELAY_MAX)); node/g" $mergedListFile
+        sed -i "/\(jd_xtg.js\|jd_bean_sign.js\|jd_blueCoin.js\|jd_5g.js\|jd_818.js\|jd_newYearMoney.js\|jd_newYearMoney_lottery.js\|jd_joy_reward.js\|jd_joy_steal.js\|jd_joy_feedPets.js\|jd_car_exchange.js\)/!s/node/sleep \$((RANDOM % \$RANDOM_DELAY_MAX)); node/g" $mergedListFile
     fi
 else
     echo "未配置随即延迟对应的环境变量，故不设置延迟任务..."
@@ -113,6 +113,10 @@ sed -i "/\(>&1 &\|> &1 &\)/!s/>&1/>\&1 \&/g" $mergedListFile
 
 echo "第8步执行原仓库的附属脚本proc_file.sh"
 sh /scripts/docker/proc_file.sh
+
+echo "替换node使用spnode执行任务"
+sed -i "s/node/spnode/g" $mergedListFile
+sed "/\(jd_xtg.js\|jd_bean_change.js\)/s/spnode/spnode conc/g"  $mergedListFile
 
 echo "第9步加载最新的定时任务文件..."
 crontab $mergedListFile
