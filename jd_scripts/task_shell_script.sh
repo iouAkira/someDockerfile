@@ -2,7 +2,31 @@
 set -e
 
 echo "增加一个命令组合spnode ，使用该命令spnode jd_xxxx.js 执行js脚本会读取cookies.conf里面的jd cokie账号来执行脚本"
-echo -e "#!/bin/sh \nexport JD_COOKIE=\$(cat /scripts/logs/cookies.conf | paste -s -d '&') ; node $*" > /usr/local/bin/spnode
+(
+cat <<EOF
+#!/bin/sh
+set -e
+
+first=\$1
+cmd=\$*
+echo \${cmd/\$1/}
+echo "\$(cat \$COOKIES_CONF  | grep pt_pin=\$first)"
+if [ \$1 == 'conc' ]; then
+    for job in \$(paste -d" " -s - <\$COOKIES_CONF); do
+        export JD_COOKIE=\$job && node \${cmd/\$1/}
+    done
+elif [ -n "\$(echo \$first | sed -n "/^[0-9]\+\$/p")" ]; then
+    echo "\$(echo \$first | sed -n "/^[0-9]\+\$/p")"
+    export JD_COOKIE=\$(sed -n "\${first}p" \$COOKIES_CONF) && node \${cmd/\$1/}
+elif [ -n "\$(cat \$COOKIES_CONF  | grep "pt_pin=\$first")" ];then
+    echo "\$(cat \$COOKIES_CONF  | grep "pt_pin=\$first")"
+    export JD_COOKIE=\$(cat \$COOKIES_CONF | grep "pt_pin=\$first") && node \${cmd/\$1/}
+else
+    export JD_COOKIE=\$(cat \$COOKIES_CONF | paste -s -d '&') && node \$*
+fi
+EOF
+) > /usr/local/bin/spnode
+
 chmod +x /usr/local/bin/spnode
 
 echo "定义定时任务合并处理用到的文件路径..."
@@ -112,16 +136,16 @@ fi
 
 echo "附加功能2，cookie写入文件，为jd_bot扫码获自动取cookies服务"
 if [ 0"$JD_COOKIE" = "0" ]; then
-    if [ -f "/scripts/logs/cookies.conf" ];then
-        echo '' > /scripts/logs/cookies.conf
-        echo "未配置JD_COOKIE环境变量，logs/cookies.conf文件已生成,请将cookies写入logs/cookies.conf文件，格式每个Cookie一行"
+    if [ -f "$COOKIES_CONF" ];then
+        echo '' > $COOKIES_CONF
+        echo "未配置JD_COOKIE环境变量，$COOKIES_CONF文件已生成,请将cookies写入$COOKIES_CONF文件，格式每个Cookie一行"
     fi
 else
-    if [ -f "/scripts/logs/cookies.conf" ];then
-        echo "cookies.conf文件已经存在跳过,如果需要更新cookie请修改logs/cookies.conf文件内容"
+    if [ -f "$COOKIES_CONF" ];then
+        echo "cookies.conf文件已经存在跳过,如果需要更新cookie请修改$COOKIES_CONF文件内容"
     else
-        echo "环境变量 cookies写入logs/cookies.conf文件,如果需要更新cookie请修改cookies.conf文件内容"
-        echo $JD_COOKIE | sed "s/\( &\|&\)/\\n/g" > /scripts/logs/cookies.conf
+        echo "环境变量 cookies写入$COOKIES_CONF文件,如果需要更新cookie请修改cookies.conf文件内容"
+        echo $JD_COOKIE | sed "s/\( &\|&\)/\\n/g" > $COOKIES_CONF
     fi
 fi
 
