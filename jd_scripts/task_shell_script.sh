@@ -10,8 +10,7 @@ set -e
 first=\$1
 cmd=\$*
 echo \${cmd/\$1/}
-echo "\$(cat \$COOKIES_CONF  | grep pt_pin=\$first)"
-if [ \$1 == 'conc' ]; then
+if [ \$1 == "conc" ]; then
     for job in \$(paste -d" " -s - <\$COOKIES_CONF); do
         export JD_COOKIE=\$job && node \${cmd/\$1/}
     done
