@@ -1,59 +1,9 @@
 #!/bin/sh
 set -e
 
-# 取消镜像自动通知
-# ######################################获取docker构建文件里面的自定义信息方法-start#####################################################
-# function getDockerImageLabel() {
-#     repo=akyakya/jd_scripts
-#     imageTag=latest
-#     token=$(curl -s "https://auth.docker.io/token?service=registry.docker.io&scope=repository:${repo}:pull" | jq -r '.token')
-#     digest=$(curl -s -H "Accept: application/vnd.docker.distribution.manifest.v2+json" -H "Authorization: Bearer $token" "https://registry-1.docker.io/v2/${repo}/manifests/${imageTag}" | jq .config.digest -r)
-#     labels=$(curl -s -L -H "Accept: application/vnd.docker.distribution.manifest.v2+json" -H "Authorization: Bearer $token" "https://registry-1.docker.io/v2/${repo}/blobs/$digest" | jq .config.Labels)
-#     echo $labels
-# }
-# ######################################获取docker构建文件里面的自定义信息方法-end#####################################################
-
-# ######################################对比版本版本号大小方法-start###################################################################
-# function version_gt() {
-#     test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"
-# }
-# ######################################对比版本版本号大小方法-end###################################################################
-
-# #######################################通知用户更新镜像-start#####################################################################
-# echo "check docker images update..."
-# echo "检查docker镜像更新更新..."
-# if type jq >/dev/null 2>&1; then
-#     echo "get dockerhub repo images labels..."
-#     echo "获取dockerhub仓库镜像labels信息..."
-#     labels=$(getDockerImageLabel)
-#     export NOTIFY_CONTENT=$(echo $labels | jq -r .UPDATE_CONTENT)
-#     version=$(echo $labels | jq -r .VERSION)
-# else
-#     # 第一版通知逻辑无法包含在上面判断里面，镜像构建好直接开启通知
-#     echo "Current container version is too old, send update notification"
-#     echo "当前版本过旧，发送镜像更新通知"
-#     export NOTIFY_CONTENT="更新内容较多，重新阅读仓库Readme(https://github.com/lxk0301/jd_scripts/tree/master/docker)，更新镜像并更新配置后使用。"
-#     cd /scripts/docker
-#     node notify_docker_user.js
-# fi
-
-# #通知通知用户更新镜像
-# if [ ! $BUILD_VERSION ]; then
-#     if [ $version ]; then
-#         echo "Current container version is empty, dockerhub lastet $version, send update notification"
-#         echo "当前容器版本为空，dockerhub仓库版本为$version，发送更新通知"
-#         cd /scripts/docker
-#         node notify_docker_user.js
-#     fi
-# else
-#     if version_gt $version $BUILD_VERSION; then
-#         echo "Current container version $BUILD_VERSION, dockerhub lastet version $version, send update notification"
-#         echo "当前容器版本为$BUILD_VERSION，dockerhub仓库版本为$version，发送通知"
-#         cd /scripts/docker
-#         node notify_docker_user.js
-#     fi
-# fi
-# #######################################通知用户更新镜像-end#####################################################################
+echo "增加一个命令组合spnode ，使用该命令spnode jd_xxxx.js 执行js脚本会读取cookies.conf里面的jd cokie账号来执行脚本"
+echo -e "#!/bin/sh \nexport JD_COOKIE=\$(cat /scripts/logs/cookies.conf | paste -s -d '&') ; node $*" > /usr/local/bin/spnode
+chmod +x /usr/local/bin/spnode
 
 echo "定义定时任务合并处理用到的文件路径..."
 defaultListFile="/scripts/docker/$DEFAULT_LIST_FILE"
