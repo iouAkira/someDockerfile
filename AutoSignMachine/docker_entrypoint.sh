@@ -9,8 +9,12 @@ if [ $1 ]; then
 	echo -e ${CUST_SSH_KEY} >/root/.ssh/id_rsa
 	chmod 600 /root/.ssh/id_rsa
 	ssh-keyscan github.com >/root/.ssh/known_hosts
-	echo "容器启动，拉取脚本仓库代码..."
-	git clone ${CUST_REPO_URL} /AutoSignMachine
+	if [ -f "/AutoSignMachine/AutoSignMachine.js" ];then
+		echo "容器启动，脚本仓库代码已拉取，跳过.."
+	else
+	    	echo "容器启动，拉取脚本仓库代码..."
+		git clone ${CUST_REPO_URL} /AutoSignMachine
+	fi
 fi
 
 if [ $TASK_SHELL_SCRIPT ]; then
