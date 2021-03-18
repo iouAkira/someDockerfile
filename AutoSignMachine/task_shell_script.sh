@@ -60,7 +60,7 @@ if [ $ENABLE_UNICOM ]; then
                     hour=$(expr $hour + 1)
                 fi
                 if [ -z "$(crontab -l | grep $job)" ];then
-                    echo "发现新增加任务所以在当前时间后面增加一个 $n_hour时$n_minute分的单次任务，防止今天漏跑"
+                    echo "  ->发现新增加任务$job所以在当前时间后面增加一个 $n_hour时$n_minute分 的单次任务，防止今天漏跑"
                     echo "$n_minute $n_hour * * * sleep \$((RANDOM % 60)); node /AutoSignMachine/index.js unicom --tryrun --tasks $job >>/logs/unicom_$job.log 2>&1 &" >>${mergedListFile}
                     n_minute=$(expr $n_minute + $job_interval)
                     if [ $n_minute -ge 60 ];then
