@@ -51,10 +51,10 @@ if [ $ENABLE_UNICOM ]; then
             hour=8
             n_hour="`date +%H`"
             n_minute="`date +%M`"
-            job_interval=6
+            #job_interval=6
             for job in $(awk '/scheduler.regTask/{getline a;print a}' /AutoSignMachine/commands/tasks/unicom/unicom.js | sed "/\//d" | sed "s/\( \|,\|\"\|\\t\)//g"|tr "\n" " "); do
                 echo "$minute $hour * * * sleep \$((RANDOM % 60)); node /AutoSignMachine/index.js unicom --tryrun --tasks $job >>/logs/unicom_$job.log 2>&1 &" >>${mergedListFile}
-                minute=$(expr $minute + $job_interval)
+                minute=$(expr $minute + $((RANDOM % 10+4)))
                 if [ $minute -ge 60 ]; then
                     minute=0
                     hour=$(expr $hour + 1)
@@ -62,7 +62,7 @@ if [ $ENABLE_UNICOM ]; then
                 if [ -z "$(crontab -l | grep $job)" ];then
                     echo "  ->发现新增加任务$job所以在当前时间后面增加一个 $n_hour时$n_minute分 的单次任务，防止今天漏跑"
                     echo "$n_minute $n_hour * * * sleep \$((RANDOM % 60)); node /AutoSignMachine/index.js unicom --tryrun --tasks $job >>/logs/unicom_$job.log 2>&1 &" >>${mergedListFile}
-                    n_minute=$(expr $n_minute + $job_interval)
+                    n_minute=$(expr $n_minute + $((RANDOM % 10+4)))
                     if [ $n_minute -ge 60 ];then
                         n_minute=0
                         n_hour=$(expr $n_hour + 1)
@@ -118,7 +118,7 @@ else
 fi
 
 echo "增加默认脚本更新任务..."
-echo "21 */1 * * * docker_entrypoint.sh >> /logs/default_task.log 2>&1" >>$mergedListFile
+echo "01 */1 * * * docker_entrypoint.sh >> /logs/default_task.log 2>&1" >>$mergedListFile
 
 echo "判断是否配置自定义shell执行脚本..."
 if [ 0"$CUSTOM_SHELL_FILE" = "0" ]; then
