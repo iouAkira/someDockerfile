@@ -50,7 +50,7 @@ if [ $ENABLE_UNICOM ]; then
             minute=0
             hour=8
             job_interval=6
-            for job in $(awk '/scheduler.regTask/{getline a;print a}' commands/tasks/unicom/unicom.js | sed "/\//d" | sed "s/\( \|,\|\\t\)//g"|tr "\n" " "); do
+            for job in $(awk '/scheduler.regTask/{getline a;print a}' /AutoSignMachine/commands/tasks/unicom/unicom.js | sed "/\//d" | sed "s/\( \|,\|\\t\)//g"|tr "\n" " "); do
                 echo "$minute $hour * * * sleep \$((RANDOM % 60)); node /AutoSignMachine/index.js unicom --tryrun --tasks $job >>/logs/unicom_$job.log 2>&1 &" >>${mergedListFile}
                 minute=$(expr $minute + $job_interval)
                 if [ $minute -ge 60 ]; then
