@@ -47,14 +47,14 @@ if [ $ENABLE_UNICOM ]; then
         cp -f $envFile /AutoSignMachine/config/.env
         if [ $UNICOM_TRYRUN_NODE ]; then
             echo "联通配置了UNICOM_TRYRUN_NODE参数，所以定时任务以tryrun模式生成"
-            minute=0
+            minute=$((RANDOM % 10+4))
             hour=8
             n_hour="`date +%H`"
             n_minute="`date +%M`"
             #job_interval=6
             for job in $(awk '/scheduler.regTask/{getline a;print a}' /AutoSignMachine/commands/tasks/unicom/unicom.js | sed "/\//d" | sed "s/\( \|,\|\"\|\\t\)//g"|tr "\n" " "); do
                 
-                minute2=$(expr $minute + $((RANDOM % 10+4)))
+                minute2=$(expr $minute + $((RANDOM % 10+3)))
                 echo "$minute,$minute2 $hour * * * sleep \$((RANDOM % 40)); node /AutoSignMachine/index.js unicom --tryrun --tasks $job >>/logs/unicom_$job.log 2>&1 &" >>${mergedListFile}
                 minute=$(expr $minute + $((RANDOM % 10+4)))
                 if [ $minute -ge 60 ]; then
