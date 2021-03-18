@@ -49,6 +49,8 @@ if [ $ENABLE_UNICOM ]; then
             echo "联通配置了UNICOM_TRYRUN_NODE参数，所以定时任务以tryrun模式生成"
             minute=0
             hour=8
+            n_hour="`date +%H`"
+            n_minute="`date +%M`"
             job_interval=6
             for job in $(awk '/scheduler.regTask/{getline a;print a}' /AutoSignMachine/commands/tasks/unicom/unicom.js | sed "/\//d" | sed "s/\( \|,\|\\t\)//g"|tr "\n" " "); do
                 echo "$minute $hour * * * sleep \$((RANDOM % 60)); node /AutoSignMachine/index.js unicom --tryrun --tasks $job >>/logs/unicom_$job.log 2>&1 &" >>${mergedListFile}
@@ -58,10 +60,16 @@ if [ $ENABLE_UNICOM ]; then
                     hour=$(expr $hour + 1)
                 fi
                 if [ -n $(crontab -l | grep $job) ];then
-                    n_hour="`date +%H`"
-                    n_minute=$(expr "`date +%M`" + 10)
                     echo "发现新增加任务所以在当前时间后面增加一个 $n_hour时$n_minute分的单次任务，防止今天漏跑"
                     echo "$n_minute $n_minute * * * sleep \$((RANDOM % 60)); node /AutoSignMachine/index.js unicom --tryrun --tasks $job >>/logs/unicom_$job.log 2>&1 &" >>${mergedListFile}
+                    n_minute=$(expr $n_minute + $job_interval)
+                    if [ $n_minute -ge 60 ];then
+                        n_minute=0
+                        n_hour=$(expr $n_hour + 1)
+                    fi
+                    if [ $n_hour -ge 24 ];then
+                        n_hour=0
+                    fi
                 fi
             done
         else
