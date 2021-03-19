@@ -170,7 +170,7 @@ for scriptFile in $(ls | grep -E "jd_|z_" | tr "\n" " "); do
         cp $scriptFile /scripts
         echo "#$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
         echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
-        if [ -n "$(crontab -l | grep $scriptFile)" ]; then
+        if [ ! -n "$(crontab -l | grep $scriptFile)" ]; then
             echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
             node /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
         fi
