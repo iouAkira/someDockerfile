@@ -123,6 +123,7 @@ sed -i "s/node/spnode/g" $mergedListFile
 sed -i "/\(jd_xtg.js\|jd_car_exchange.js\)/s/spnode/spnode conc/g" $mergedListFile
 
 echo "第9步加载最新的定时任务文件..."
+crontab -l > /scripts/befor_cronlist.sh
 crontab $mergedListFile
 
 echo "第10步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
@@ -168,9 +169,13 @@ cd /i-chenzhe
 for scriptFile in $(ls | grep -E "jd_|z_" | tr "\n" " "); do
     if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
         cp $scriptFile /scripts
-        if [ -z "$(crontab -l | grep $scriptFile)" ]; then
-            echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-#             node /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+        if [ -z "$(cat /scripts/befor_cronlist.sh | grep $scriptFile)" ]; then
+            if [ $1 ];then
+                echo "skip"
+            else
+                echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
+                nohup node /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+            fi
         fi
         echo "#$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)" >>$mergedListFile
         echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
