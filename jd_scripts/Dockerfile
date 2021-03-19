@@ -33,8 +33,7 @@ RUN mkdir /jds \
         && git pull origin master
 
 RUN cp /jds/jd_scripts/docker_entrypoint.sh /usr/local/bin \
-        && chmod +x /usr/local/bin/docker_entrypoint.sh \
-        && sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
+        && chmod +x /usr/local/bin/docker_entrypoint.sh
 
 WORKDIR /scripts
 
