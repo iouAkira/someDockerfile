@@ -155,7 +155,7 @@ else
     fi
 fi
 
-echo "附加功能3，colone i-chenzhe 仓库的代码，并增加相关任务"
+echo "附加功能3，拉取 i-chenzhe 仓库的代码，并增加相关任务"
 if [ -d "/i-chenzhe" ]; then
     cd /i-chenzhe
     git reset --hard
