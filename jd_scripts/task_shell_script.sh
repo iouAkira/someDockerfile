@@ -168,13 +168,13 @@ cd /i-chenzhe
 for scriptFile in $(ls | grep -E "jd_|z_" | tr "\n" " "); do
     if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
         cp $scriptFile /scripts
-        echo "#$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
-        echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
-        chk=$(crontab -l | grep "$scriptFile")
-        if [ -n "$chk" ]; then
+        if [ ! -n "$(cat $mergedListFile | grep "/$scriptFile)" ]; then
             echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
             node /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
         fi
+        echo "#$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
+        echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
+        chk=$(crontab -l | grep "$scriptFile")
     fi
 done
 
