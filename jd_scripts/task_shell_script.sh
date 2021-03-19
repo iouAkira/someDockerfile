@@ -177,6 +177,9 @@ for scriptFile in $(ls | grep -E "jd_|z_" | tr "\n" " "); do
     fi
 done
 
+echo "加载最新的附加功能定时任务文件..."
+crontab $mergedListFile
+
 # echo "第11步打包脚本文件到/scripts/logs/scripts.tar.gz"
 # apk add tar
 # tar -zcvf /scripts/logs/scripts.tar.gz --exclude=scripts/node_modules --exclude=scripts/logs/*.log  --exclude=scripts/logs/*.gz /scripts
