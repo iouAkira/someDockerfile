@@ -3,7 +3,7 @@ set -e
 
 echo "增加一个命令组合spnode ，使用该命令spnode jd_xxxx.js 执行js脚本会读取cookies.conf里面的jd cokie账号来执行脚本"
 (
-cat <<EOF
+    cat <<EOF
 #!/bin/sh
 set -e
 
@@ -28,7 +28,7 @@ else
     }&
 fi
 EOF
-) > /usr/local/bin/spnode
+) >/usr/local/bin/spnode
 
 chmod +x /usr/local/bin/spnode
 
@@ -129,8 +129,8 @@ echo "第10步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bi
 cat /jds/jd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
 
 if [ $GEN_CODE_CONF ]; then
-  cp /jds/jd_scripts/gen_code_conf.list $GEN_CODE_CONF
-fi 
+    cp /jds/jd_scripts/gen_code_conf.list $GEN_CODE_CONF
+fi
 
 # echo "附加功能1，京东直播间抽奖监控"
 # if [ -d '/local_scripts/LiveLotteryForward/' ];then
@@ -141,18 +141,41 @@ fi
 
 echo "附加功能2，cookie写入文件，为jd_bot扫码获自动取cookies服务"
 if [ 0"$JD_COOKIE" = "0" ]; then
-    if [ -f "$COOKIES_CONF" ];then
-        echo '' > $COOKIES_CONF
+    if [ -f "$COOKIES_CONF" ]; then
+        echo '' >$COOKIES_CONF
         echo "未配置JD_COOKIE环境变量，$COOKIES_CONF文件已生成,请将cookies写入$COOKIES_CONF文件，格式每个Cookie一行"
     fi
 else
-    if [ -f "$COOKIES_CONF" ];then
+    if [ -f "$COOKIES_CONF" ]; then
         echo "cookies.conf文件已经存在跳过,如果需要更新cookie请修改$COOKIES_CONF文件内容"
     else
         echo "环境变量 cookies写入$COOKIES_CONF文件,如果需要更新cookie请修改cookies.conf文件内容"
-        echo $JD_COOKIE | sed "s/\( &\|&\)/\\n/g" > $COOKIES_CONF
+        echo $JD_COOKIE | sed "s/\( &\|&\)/\\n/g" >$COOKIES_CONF
     fi
 fi
+
+echo "附加功能3，colone i-chenzhe 仓库的代码，并增加相关任务"
+if [ -d "/i-chenzhe" ]; then
+    cd /i-chenzhe
+    git reset --hard
+    echo "git pull拉取最新代码..."
+    git -C /i-chenzhe pull --rebase
+else
+    git clone https://github.com/i-chenzhe/qx.git /i-chenzhe
+fi
+
+cd /i-chenzhe
+for scriptFile in $(ls | grep -E "jd_|z_" | tr "\n" " "); do
+    if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
+        cp $scriptFile /scripts
+        echo "#$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
+        echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
+        if [ -z "$(crontab -l | grep $scriptFile)" ]; then
+            echo "发现以前crontab里面不存在的任务，先跑为敬"
+            node /scripts/$scriptFile >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+        fi
+    fi
+done
 
 # echo "第11步打包脚本文件到/scripts/logs/scripts.tar.gz"
 # apk add tar
@@ -164,4 +187,3 @@ sed -i "s/https:\/\/raw.githubusercontent.com\/LXK9301\/updateTeam\/master\/jd_u
 sed -i "s/https:\/\/gitee.com\/lxk0301\/updateTeam\/raw\/master\/shareCodes\/jd_updateFactoryTuanId.json/https:\/\/raw.githubusercontent.com\/iouAkira\/updateGroup\/master\/shareCodes\/jd_updateFactoryTuanId.json/g" /scripts/jd_dreamFactory.js
 sed -i "s/\(.*\/\/.*joinLeaderTuan.*\)/   await joinLeaderTuan();/g" /scripts/jd_dreamFactory.js
 sed -i "s/6S9y4sJUfA2vPQP6TLdVIQ==/MUdRsCXI13_DDYMcnD8v7g==/g" /scripts/jd_dreamFactory.js
- 
