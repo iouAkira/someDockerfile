@@ -45,7 +45,26 @@ fi
 if [ $ENABLE_UNICOM ]; then
   if [ -f $envFile ]; then
     cp -f $envFile /AutoSignMachine/config/.env
-    if [ $UNICOM_TRYRUN_MODE ]; then
+    if [ -n "$UNICOM_SUBDIR_MODE" ]; then
+      echo "联通配置了UNICOM_SUBDIR_MODE参数，所以使用每个账户自动创建单独目录及配置来执行任务"
+      pwds=$(cat ~/.AutoSignMachine/.env | grep UNICOM_PASSWORD | sed -n "s/.*'\(.*\)'.*/\1/p")
+      appids=$(cat ~/.AutoSignMachine/.env | grep UNICOM_APPID | sed -n "s/.*'\(.*\)'.*/\1/p")
+      i=1
+      for username in $(cat ~/.AutoSignMachine/.env | grep UNICOM_USERNAME | sed -n "s/.*'\(.*\)'.*/\1/p" | sed "s/,/ /g"); do
+        sub_dir="asm${username:0:4}"
+        cp -rf /AutoSignMachine /"$sub_dir"
+        echo "$sub_dir"
+        pwd=$(echo $pwds | cut -d ',' -f$i)
+        appid="$(echo $appids | cut -d ',' -f$i)"
+        #echo $appid
+        echo "UNICOM_USERNAME = '$username'" >/"$sub_dir"/config/.env
+        echo "UNICOM_PASSWORD = '$pwd'" >>/"$sub_dir"/config/.env
+        echo "UNICOM_APPID = '$appid'" >>/"$sub_dir"/config/.env
+        echo "ASYNC_TASKS = true" >>/"$sub_dir"/config/.env
+        i=$(expr $i + 1)
+        echo "*/10 6-23 * * * cd /$sub_dir; node /AutoSignMachine/index.js unicom >> /logs/unicom${username:0:4}.log 2>&1 &" >>${mergedListFile}
+      done
+    elif [ $UNICOM_TRYRUN_MODE ]; then
       echo "联通配置了UNICOM_TRYRUN_NODE参数，所以定时任务以tryrun模式生成"
       minute=$((RANDOM % 10 + 4))
       hour=8
@@ -77,24 +96,6 @@ if [ $ENABLE_UNICOM ]; then
           fi
         fi
       done
-    elif [ -n "$UNICOM_SUBDIR_MODE" ]; then
-      pwds=$(cat ~/.AutoSignMachine/.env | grep UNICOM_PASSWORD | sed -n "s/.*'\(.*\)'.*/\1/p")
-      appids=$(cat ~/.AutoSignMachine/.env | grep UNICOM_APPID | sed -n "s/.*'\(.*\)'.*/\1/p")
-      i=1
-      for username in $(cat ~/.AutoSignMachine/.env | grep UNICOM_USERNAME | sed -n "s/.*'\(.*\)'.*/\1/p" | sed "s/,/ /g"); do
-        sub_dir="asm${username:0:4}"
-        cp -rf /AutoSignMachine /"$sub_dir"
-        echo "$sub_dir"
-        pwd=$(echo $pwds | cut -d ',' -f$i)
-        appid="$(echo $appids | cut -d ',' -f$i)"
-        #echo $appid
-        echo "UNICOM_USERNAME = '$username'" >/"$sub_dir"/config/.env
-        echo "UNICOM_PASSWORD = '$pwd'" >>/"$sub_dir"/config/.env
-        echo "UNICOM_APPID = '$appid'" >>/"$sub_dir"/config/.env
-        echo "ASYNC_TASKS = true" >>/"$sub_dir"/config/.env
-        i=$(expr $i + 1)
-        echo "*/10 6-23 * * * cd $sub_dir; node /AutoSignMachine/index.js unicom >> /logs/unicom${username:0:4}.log 2>&1 &" >>${mergedListFile}
-      done
     else
       echo "*/10 6-23 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js unicom >> /logs/unicom.log 2>&1 &" >>${mergedListFile}
     fi
@@ -108,7 +109,7 @@ if [ $ENABLE_UNICOM ]; then
 #             echo "安装jq"
 #             apk add jq
 #         fi
-#         for accountSn  in `cat ${UNICOM_CONFIG} | jq -r .accountSn | sed 's/,/ /g'`
+#         for accountSn  in `cat ${UNICOS_CONFIG} | jq -r .accountSn | sed 's/,/ /g'`
 #         do
 #             echo "*/30 7-22 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js unicom --accountSn $accountSn  --config ${UNICOM_CONFIG} >> /AutoSignMachine/logs/unicom${accountSn}.log 2>&1 &" >>${mergedListFile}
 #         done
