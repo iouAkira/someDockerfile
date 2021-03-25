@@ -2,7 +2,7 @@
 # @Author    : iouAkira(lof)
 # @mail      : e.akimoto.akira@gmail.com
 # @CreateTime: 2020-11-02
-# @UpdateTime: 2021-03-23
+# @UpdateTime: 2021-03-25
 
 import math
 import os
@@ -471,16 +471,18 @@ def get_reply_markup_btn(cmd_type):
         reply_markup = InlineKeyboardMarkup(keyboard_line)
     elif cmd_type == 'crontab_l':
         button_list = list(set(get_crontab_list(cmd_type)))
+        logger.info(button_list)
         keyboard_line = []
         if len(button_list) > 0:
-            for i in button_list:
-                keyboard_column = [InlineKeyboardButton(
-                    i, callback_data='cl %s' % i)]
-
-                button_list.remove(i)
+            for i in range(math.ceil(len(button_list) / 3)):
+                ret = button_list[0:3]
+                keyboard_column = []
+                for ii in ret:
+                    keyboard_column.append(InlineKeyboardButton(
+                        ii.split('/')[-1], callback_data=ii))
+                    button_list.remove(ii)
                 keyboard_line.append(keyboard_column)
-            keyboard_line.append(
-                [InlineKeyboardButton('取消操作', callback_data='cancel')])
+            keyboard_line.append([InlineKeyboardButton('取消操作', callback_data='cancel')])
         else:
             keyboard_line.append([InlineKeyboardButton(
                 '未从%s获取到任务列表' % crontab_list_file, callback_data='cancel')])
@@ -542,27 +544,66 @@ def get_crontab_list(cmd_type):
     """
     button_list = []
     try:
-        with open(_docker_dir + crontab_list_file) as lines:
-            array = lines.readlines()
-            for i in array:
-                i = i.replace('|ts', '').strip('\n')
+        if cmd_type == 'crontab_l':
+            match_cmd = 'crontab -l'
+            crontab_list = []
+            p = subprocess.Popen(match_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            while p.poll() is None:
+                line = p.stdout.readline()
+                logger.info(line.decode('utf-8'))
+                crontab_list.append(line.decode('utf-8'))
+            icnt = 1
+            for i in crontab_list:
+                logger.info(icnt)
+                # if icnt > 100:
+                #     break
                 if i.startswith('#') or len(i) < 5:
+                    logger.info(i)
                     pass
                 else:
                     items = i.split('>>')
-                    item_sub = items[0].split()[5:]
-                    # logger.info(item_sub[0])
-                    if cmd_type.find(item_sub[0]) > -1:
-                        if cmd_type == 'spnode':
-                            # logger.info(str(' '.join(item_sub)).replace('node','spnode'))
-                            button_list.append(str(' '.join(item_sub)).replace('node', 'spnode'))
-                        elif cmd_type == 'crontab_l':
-                            button_list.append(items[0].replace('node','spnode'))
-                        else:
-                            button_list.append(' '.join(item_sub))
-    except:
-        logger.warning(f'读取定时任务配置文件 {crontab_list_file} 出错')
+                    item_sub = items[0].split()
+                    logger.info(" ".join(item_sub))
+                    if "cd" in item_sub:
+                        button_list.append(' '.join(item_sub[item_sub.index("cd"):item_sub.index("cd") + 5]))
+                    elif "spnode" in item_sub:
+                        button_list.append(' '.join(item_sub[item_sub.index("spnode"):item_sub.index("spnode") + 2]))
+                    elif "node" in item_sub:
+                        button_list.append(' '.join(item_sub[item_sub.index("node"):item_sub.index("node") + 2]))
+                    elif "sh" in item_sub:
+                        pass
+                        # button_list.append(' '.join(item_sub[item_sub.index("sh"):]))
+                    elif "find" in item_sub:
+                        pass
+                        # button_list.append(' '.join(item_sub[item_sub.index("find"):]))
+                    elif "docker_entrypoint.sh" in item_sub:
+                        button_list.append(' '.join(
+                            item_sub[item_sub.index("docker_entrypoint.sh"):item_sub.index("docker_entrypoint.sh")]))
+                    else:
+                        pass
+                    logger.info(button_list)
+                    icnt += 1
+        else:
+            with open(_docker_dir + crontab_list_file) as lines:
+                array = lines.readlines()
+                for i in array:
+                    i = i.replace('|ts', '').strip('\n')
+                    if i.startswith('#') or len(i) < 5:
+                        pass
+                    else:
+                        items = i.split('>>')
+                        item_sub = items[0].split()[5:]
+                        # logger.info(item_sub[0])
+                        if cmd_type.find(item_sub[0]) > -1:
+                            if cmd_type == 'spnode':
+                                # logger.info(str(' '.join(item_sub)).replace('node','spnode'))
+                                button_list.append(str(' '.join(item_sub)).replace('node', 'spnode'))
+                            else:
+                                button_list.append(' '.join(item_sub))
+    except Exception as e:
+        logger.warning(f'读取定时任务配置文件 {crontab_list_file} 出错{e}')
     finally:
+        logger.info(button_list)
         return button_list
 
 
