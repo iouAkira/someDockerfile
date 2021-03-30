@@ -51,12 +51,12 @@ if [ $ENABLE_UNICOM ]; then
       appids=$(cat ~/.AutoSignMachine/.env | grep UNICOM_APPID | sed -n "s/.*'\(.*\)'.*/\1/p")
       i=1
       for username in $(cat ~/.AutoSignMachine/.env | grep UNICOM_USERNAME | sed -n "s/.*'\(.*\)'.*/\1/p" | sed "s/,/ /g"); do
-        sub_dir="asm${username:0:4}"
+        sub_dir="asm${username:7:4}"
         if [ ! -d "/$sub_dir/node_modules/" ]; then
           cp -rf /AutoSignMachine /"$sub_dir"
         else
           if type rsync >/dev/null 2>&1; then
-            echo "skip"
+            echo " "
           else
             apk add async
           fi
@@ -72,8 +72,8 @@ if [ $ENABLE_UNICOM ]; then
         echo "UNICOM_APPID = '$appid'" >>/"$sub_dir"/config/.env
         echo "ASYNC_TASKS = true" >>/"$sub_dir"/config/.env
         i=$(expr $i + 1)
-        echo "*/20 6-23 * * * cd /$sub_dir; sleep \$((RANDOM % 40)); node index.js unicom >> /logs/unicom${username:0:4}.log 2>&1 &" >>${mergedListFile}
-        echo "33 0 * * * cd /$sub_dir; sleep \$((RANDOM % 60)); node index.js unicom --tryrun --tasks dailyOtherRewardVideo >> /logs/unicom${username:0:4}dailyOtherRewardVideo.log 2>&1 &" >>${mergedListFile}
+        echo "*/20 6-23 * * * cd /$sub_dir; sleep \$((RANDOM % 40)); node index.js unicom >> /logs/unicom${username:7:4}.log 2>&1 &" >>${mergedListFile}
+        echo "33 0 * * * cd /$sub_dir; sleep \$((RANDOM % 60)); node index.js unicom --tryrun --tasks dailyOtherRewardVideo >> /logs/unicom${username:7:4}dailyOtherRewardVideo.log 2>&1 &" >>${mergedListFile}
       done
     elif [ $UNICOM_TRYRUN_MODE ]; then
       echo "联通配置了UNICOM_TRYRUN_NODE参数，所以定时任务以tryrun模式生成"
