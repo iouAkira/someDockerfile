@@ -182,3 +182,6 @@ sed -i "/\( ts\| |ts\|| ts\)/!s/>>/\|ts >>/g" $mergedListFile
 
 echo "加载最新的定时任务文件..."
 crontab $mergedListFile
+
+echo "启动asmbot..."
+sh /AutoSignMachine/docker/bot/asmbot.sh
