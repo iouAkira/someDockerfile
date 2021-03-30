@@ -117,8 +117,8 @@ else
   echo "未配置启用unicom签到任务环境变量ENABLE_UNICOM，故不添加unicom定时任务..."
 fi
 
-echo "因为多账户多任务可能会堵住，所每个小时kill一次所有的unicom任务..."
-echo "59 */1 * * * docker_entrypoint.sh >> /logs/default_task.log 2>&1" >>$mergedListFile
+# echo "因为多账户多任务可能会堵住，所每个小时kill一次所有的unicom任务..."
+# echo "59 */1 * * * docker_entrypoint.sh >> /logs/default_task.log 2>&1" >>$mergedListFile
 
 echo "增加默认脚本更新任务..."
 echo "01 */1 * * * docker_entrypoint.sh >> /logs/default_task.log 2>&1" >>$mergedListFile
