@@ -5,7 +5,7 @@ if [ $1 ]; then
   echo "更换为清华大学的源..."
   sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
   echo "容器启动，补充安装一些系统组件包..."
-  apk add perl openssl libjpeg-turbo-dev libpng-dev libtool libgomp tesseract-ocr graphicsmagick async
+  apk add perl openssl libjpeg-turbo-dev libpng-dev libtool libgomp tesseract-ocr graphicsmagick rsync
   echo "npm更换为淘宝镜像源"
   npm config set registry http://registry.npm.taobao.org/
 fi
@@ -55,7 +55,7 @@ if [ $ENABLE_UNICOM ]; then
         if [ ! -d "/$sub_dir/node_modules/" ]; then
           cp -rf /AutoSignMachine /"$sub_dir"
         else
-          if type async >/dev/null 2>&1; then
+          if type rsync >/dev/null 2>&1; then
             echo "skip"
           else
             apk add async
