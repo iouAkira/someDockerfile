@@ -5,7 +5,7 @@ if [ $1 ]; then
   echo "更换为清华大学的源..."
   sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
   echo "容器启动，补充安装一些系统组件包..."
-  apk add perl openssl libjpeg-turbo-dev libpng-dev libtool libgomp tesseract-ocr graphicsmagick
+  apk add perl openssl libjpeg-turbo-dev libpng-dev libtool libgomp tesseract-ocr graphicsmagick async
   echo "npm更换为淘宝镜像源"
   npm config set registry http://registry.npm.taobao.org/
 fi
@@ -52,7 +52,17 @@ if [ $ENABLE_UNICOM ]; then
       i=1
       for username in $(cat ~/.AutoSignMachine/.env | grep UNICOM_USERNAME | sed -n "s/.*'\(.*\)'.*/\1/p" | sed "s/,/ /g"); do
         sub_dir="asm${username:0:4}"
-        cp -rf /AutoSignMachine /"$sub_dir"
+        if [ ! -d "/$sub_dir/node_modules/" ]; then
+          cp -rf /AutoSignMachine /"$sub_dir"
+        else
+          if type python3 >/dev/null 2>&1; then
+            echo "skip"
+          else
+            apk add async
+          fi
+          rsync -a /AutoSignMachine/* /"$sub_dir" --exclude node_modules
+        fi
+
         echo "$sub_dir"
         pwd=$(echo $pwds | cut -d ',' -f$i)
         appid="$(echo $appids | cut -d ',' -f$i)"
@@ -63,6 +73,7 @@ if [ $ENABLE_UNICOM ]; then
         echo "ASYNC_TASKS = true" >>/"$sub_dir"/config/.env
         i=$(expr $i + 1)
         echo "*/20 6-23 * * * cd /$sub_dir; sleep \$((RANDOM % 40)); node index.js unicom >> /logs/unicom${username:0:4}.log 2>&1 &" >>${mergedListFile}
+        echo "33 0 * * * cd /$sub_dir; sleep \$((RANDOM % 60)); node index.js unicom --tryrun --tasks dailyOtherRewardVideo >> /logs/unicom${username:0:4}dailyOtherRewardVideo.log 2>&1 &" >>${mergedListFile}
       done
     elif [ $UNICOM_TRYRUN_MODE ]; then
       echo "联通配置了UNICOM_TRYRUN_NODE参数，所以定时任务以tryrun模式生成"
@@ -102,41 +113,6 @@ if [ $ENABLE_UNICOM ]; then
   else
     echo "未找到 .env配置文件，故不添加unicom定时任务。"
   fi
-#     if [ -f $UNICOM_CONFIG ]; then
-#         if type jq >/dev/null 2>&1; then
-#             echo "jq已存在"
-#         else
-#             echo "安装jq"
-#             apk add jq
-#         fi
-#         for accountSn  in `cat ${UNICOS_CONFIG} | jq -r .accountSn | sed 's/,/ /g'`
-#         do
-#             echo "*/30 7-22 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js unicom --accountSn $accountSn  --config ${UNICOM_CONFIG} >> /AutoSignMachine/logs/unicom${accountSn}.log 2>&1 &" >>${mergedListFile}
-#         done
-#     else
-#         echo "*/30 7-22 * * * sleep \$((RANDOM % 120)); node /AutoSignMachine/index.js unicom --user ${UNICOM_PHONE} --password ${UNICOM_PWD} --appid ${UNICOM_APPID} >> /AutoSignMachine/logs/unicom.log 2>&1 &" >>${mergedListFile}
-#     fi
-#     ##兑换流量包脚本环境配置
-#     if [ $ACTIVE_FLOW ]; then
-#         if type bash >/dev/null 2>&1; then
-#             echo "已安装 bash "
-#         else
-#             echo "安装bash"
-#             apk add bash
-#         fi
-#         if type openssl >/dev/null 2>&1; then
-#             echo "已安装 openssl "
-#         else
-#             echo "安装openssl"
-#             apk add openssl
-#         fi
-#         if type curl >/dev/null 2>&1; then
-#             echo "已安装 curl "
-#         else
-#             echo "安装curl"
-#             apk add curl
-#         fi
-#     fi
 else
   echo "未配置启用unicom签到任务环境变量ENABLE_UNICOM，故不添加unicom定时任务..."
 fi
