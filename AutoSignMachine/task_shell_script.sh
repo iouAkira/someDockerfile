@@ -10,6 +10,8 @@ if [ $1 ]; then
   npm config set registry http://registry.npm.taobao.org/
 fi
 
+[ -f /AutoSignMachine/package.json ] && PackageListOld=$(cat /AutoSignMachine/package.json)
+
 echo "更新仓库代码..."
 cd /AutoSignMachine
 git reset --hard
@@ -17,7 +19,17 @@ echo "git pull拉取最新代码..."
 git -C /AutoSignMachine pull --rebase
 git checkout azmodan
 echo "npm install 安装最新依赖..."
-npm install --loglevel error --prefix /AutoSignMachine
+if [ ! -d /AutoSignMachine/scripts/node_modules ]; then
+    echo -e "检测到首次部署, 运行 npm install...\n"
+    npm install --loglevel error --prefix /AutoSignMachine
+else
+  if [[ "${PackageListOld}" != "$(cat /AutoSignMachine/package.json)" ]]; then
+    echo -e "检测到package.json有变化，运行 npm install...\n"
+    npm install --loglevel error --prefix /AutoSignMachine
+  else
+    echo -e "检测到package.json无变化，跳过...\n"
+  fi
+fi
 
 mergedListFile="/AutoSignMachine/merged_list_file.sh"
 envFile="/root/.AutoSignMachine/.env"
