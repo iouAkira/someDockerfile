@@ -19,7 +19,7 @@ echo "git pull拉取最新代码..."
 git -C /AutoSignMachine pull --rebase
 git checkout azmodan
 echo "npm install 安装最新依赖..."
-if [ ! -d /AutoSignMachine/scripts/node_modules ]; then
+if [ ! -d /AutoSignMachine/node_modules ]; then
     echo -e "检测到首次部署, 运行 npm install...\n"
     npm install --loglevel error --prefix /AutoSignMachine
 else
