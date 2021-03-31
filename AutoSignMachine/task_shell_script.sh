@@ -141,10 +141,10 @@ if [ 0"$CUSTOM_SHELL_FILE" = "0" ]; then
 else
   if expr "$CUSTOM_SHELL_FILE" : 'http.*' &>/dev/null; then
     echo "自定义shell脚本为远程脚本，开始下在自定义远程脚本。"
-    wget -O /jds/shell_script_mod.sh $CUSTOM_SHELL_FILE
+    wget -O /AutoSignMachine/shell_script_mod.sh $CUSTOM_SHELL_FILE
     echo "下载完成，开始执行..."
     echo "#远程自定义shell脚本追加定时任务" >>$mergedListFile
-    sh /jds/shell_script_mod.sh
+    sh /AutoSignMachine/shell_script_mod.sh
     echo "自定义远程shell脚本下载并执行结束。"
   else
     if [ ! -f $CUSTOM_SHELL_FILE ]; then
