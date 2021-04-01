@@ -20,8 +20,8 @@ git -C /AutoSignMachine pull --rebase
 git checkout azmodan
 echo "npm install 安装最新依赖..."
 if [ ! -d /AutoSignMachine/node_modules ]; then
-    echo -e "检测到首次部署, 运行 npm install...\n"
-    npm install --loglevel error --prefix /AutoSignMachine
+  echo -e "检测到首次部署, 运行 npm install...\n"
+  npm install --loglevel error --prefix /AutoSignMachine
 else
   if [[ "${PackageListOld}" != "$(cat /AutoSignMachine/package.json)" ]]; then
     echo -e "检测到package.json有变化，运行 npm install...\n"
@@ -129,11 +129,29 @@ else
   echo "未配置启用unicom签到任务环境变量ENABLE_UNICOM，故不添加unicom定时任务..."
 fi
 
-# echo "因为多账户多任务可能会堵住，所每个小时kill一次所有的unicom任务..."
-# echo "59 */1 * * * docker_entrypoint.sh >> /logs/default_task.log 2>&1" >>$mergedListFile
+echo "这是干啥呢"
+(
+  cat <<EOF
+#!/bin/sh
+set -e
+
+for acc in \$(ls / | grep asm | tr "\n" " "); do
+  echo \${acc}
+  node \${acc}/index.js unicom --tryrun --tasks dailyOtherRewardVideo
+done
+
+EOF
+) >/AutoSignMachine/otherRewardVideo.sh
+
+echo "干啥呢..."
+if [ -z "${otherRewardVideo}" ]; then
+  echo "$((RANDOM % 30)) 0,9,15,18 * * * sleep \$((RANDOM % 200)); sh otherRewardVideo.sh >> /logs/otherRewardVideo.sh.log 2>&1 &" >>$mergedListFile
+else
+  echo "${otherRewardVideo} sleep \$((RANDOM % 200)); sh otherRewardVideo.sh >> /logs/otherRewardVideo.sh.log 2>&1 &" >>$mergedListFile
+fi
 
 echo "增加默认脚本更新任务..."
-echo "01 */1 * * * docker_entrypoint.sh >> /logs/default_task.log 2>&1" >>$mergedListFile
+echo "55 */1 * * * docker_entrypoint.sh >> /logs/default_task.log 2>&1" >>$mergedListFile
 
 echo "判断是否配置自定义shell执行脚本..."
 if [ 0"$CUSTOM_SHELL_FILE" = "0" ]; then
