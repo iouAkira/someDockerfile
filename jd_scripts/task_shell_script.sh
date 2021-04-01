@@ -3,7 +3,7 @@ set -e
 
 echo "增加一个命令组合spnode ，使用该命令spnode jd_xxxx.js 执行js脚本会读取cookies.conf里面的jd cokie账号来执行脚本"
 (
-    cat <<EOF
+  cat <<EOF
 #!/bin/sh
 set -e
 
@@ -36,8 +36,8 @@ echo "定义定时任务合并处理用到的文件路径..."
 defaultListFile="/scripts/docker/$DEFAULT_LIST_FILE"
 echo "默认文件定时任务文件路径为 ${defaultListFile}"
 if [ $CUSTOM_LIST_FILE ]; then
-    customListFile="/scripts/docker/$CUSTOM_LIST_FILE"
-    echo "自定义定时任务文件路径为 ${customListFile}"
+  customListFile="/scripts/docker/$CUSTOM_LIST_FILE"
+  echo "自定义定时任务文件路径为 ${customListFile}"
 fi
 mergedListFile="/scripts/docker/merged_list_file.sh"
 echo "合并后定时任务文件路径为 ${mergedListFile}"
@@ -47,67 +47,67 @@ cat $defaultListFile >$mergedListFile
 
 echo "第2步判断是否存在自定义任务任务列表并追加..."
 if [ $CUSTOM_LIST_FILE ]; then
-    echo "您配置了自定义任务文件：$CUSTOM_LIST_FILE，自定义任务类型为：$CUSTOM_LIST_MERGE_TYPE..."
-    if [ -f "$customListFile" ]; then
-        if [ $CUSTOM_LIST_MERGE_TYPE == "append" ]; then
-            echo "合并默认定时任务文件：$DEFAULT_LIST_FILE 和 自定义定时任务文件：$CUSTOM_LIST_FILE"
-            echo -e "" >>$mergedListFile
-            cat $customListFile >>$mergedListFile
-        elif [ $CUSTOM_LIST_MERGE_TYPE == "overwrite" ]; then
-            echo "配置了自定义任务文件：$CUSTOM_LIST_FILE，自定义任务类型为：$CUSTOM_LIST_MERGE_TYPE..."
-            cat $customListFile >$mergedListFile
-        else
-            echo "配置配置了错误的自定义定时任务类型：$CUSTOM_LIST_MERGE_TYPE，自定义任务类型为只能为append或者overwrite..."
-        fi
+  echo "您配置了自定义任务文件：$CUSTOM_LIST_FILE，自定义任务类型为：$CUSTOM_LIST_MERGE_TYPE..."
+  if [ -f "$customListFile" ]; then
+    if [ $CUSTOM_LIST_MERGE_TYPE == "append" ]; then
+      echo "合并默认定时任务文件：$DEFAULT_LIST_FILE 和 自定义定时任务文件：$CUSTOM_LIST_FILE"
+      echo -e "" >>$mergedListFile
+      cat $customListFile >>$mergedListFile
+    elif [ $CUSTOM_LIST_MERGE_TYPE == "overwrite" ]; then
+      echo "配置了自定义任务文件：$CUSTOM_LIST_FILE，自定义任务类型为：$CUSTOM_LIST_MERGE_TYPE..."
+      cat $customListFile >$mergedListFile
     else
-        echo "配置的自定义任务文件：$CUSTOM_LIST_FILE未找到，使用默认配置$DEFAULT_LIST_FILE..."
+      echo "配置配置了错误的自定义定时任务类型：$CUSTOM_LIST_MERGE_TYPE，自定义任务类型为只能为append或者overwrite..."
     fi
+  else
+    echo "配置的自定义任务文件：$CUSTOM_LIST_FILE未找到，使用默认配置$DEFAULT_LIST_FILE..."
+  fi
 else
-    echo "当前只使用了默认定时任务文件 $DEFAULT_LIST_FILE ..."
+  echo "当前只使用了默认定时任务文件 $DEFAULT_LIST_FILE ..."
 fi
 
 echo "第3步判断是否配置了默认脚本更新任务..."
 if [ $(grep -c "default_task.sh" $mergedListFile) -eq '0' ]; then
-    echo "合并后的定时任务文件，未包含必须的默认定时任务，增加默认定时任务..."
-    echo -e >>$mergedListFile
-    echo "21 */1 * * * sleep \$((RANDOM % \$RANDOM_DELAY_MAX)); docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
+  echo "合并后的定时任务文件，未包含必须的默认定时任务，增加默认定时任务..."
+  echo -e >>$mergedListFile
+  echo "21 */1 * * * sleep \$((RANDOM % \$RANDOM_DELAY_MAX)); docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
 else
-    sed -i "/default_task.sh/d" $mergedListFile
-    echo "#脚本追加默认定时任务" >>$mergedListFile
-    echo "21 */1 * * * sleep \$((RANDOM % \$RANDOM_DELAY_MAX)); docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
+  sed -i "/default_task.sh/d" $mergedListFile
+  echo "#脚本追加默认定时任务" >>$mergedListFile
+  echo "21 */1 * * * sleep \$((RANDOM % \$RANDOM_DELAY_MAX)); docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
 fi
 
 echo "第5步判断是否配置了随即延迟参数..."
 if [ $RANDOM_DELAY_MAX ]; then
-    if [ $RANDOM_DELAY_MAX -ge 1 ]; then
-        echo "已设置随机延迟为 $RANDOM_DELAY_MAX , 设置延迟任务中..."
-        sed -i "/\(jd_xtg.js\|jd_bean_sign.js\|jd_blueCoin.js\|jd_5g.js\|jd_818.js\|jd_newYearMoney.js\|jd_newYearMoney_lottery.js\|jd_joy_reward.js\|jd_joy_steal.js\|jd_joy_feedPets.js\|jd_car_exchange.js\)/!s/node/sleep \$((RANDOM % \$RANDOM_DELAY_MAX)); node/g" $mergedListFile
-    fi
+  if [ $RANDOM_DELAY_MAX -ge 1 ]; then
+    echo "已设置随机延迟为 $RANDOM_DELAY_MAX , 设置延迟任务中..."
+    sed -i "/\(jd_xtg.js\|jd_bean_sign.js\|jd_blueCoin.js\|jd_5g.js\|jd_818.js\|jd_newYearMoney.js\|jd_newYearMoney_lottery.js\|jd_joy_reward.js\|jd_joy_steal.js\|jd_joy_feedPets.js\|jd_car_exchange.js\)/!s/node/sleep \$((RANDOM % \$RANDOM_DELAY_MAX)); node/g" $mergedListFile
+  fi
 else
-    echo "未配置随即延迟对应的环境变量，故不设置延迟任务..."
+  echo "未配置随即延迟对应的环境变量，故不设置延迟任务..."
 fi
 
 echo "第6步判断是否配置自定义shell执行脚本..."
 if [ 0"$CUSTOM_SHELL_FILE" = "0" ]; then
-    echo "未配置自定shell脚本文件，跳过执行。"
+  echo "未配置自定shell脚本文件，跳过执行。"
 else
-    if expr "$CUSTOM_SHELL_FILE" : 'http.*' &>/dev/null; then
-        echo "自定义shell脚本为远程脚本，开始下在自定义远程脚本。"
-        wget -O /jds/shell_script_mod.sh $CUSTOM_SHELL_FILE
-        echo "下载完成，开始执行..."
-        echo "#远程自定义shell脚本追加定时任务" >>$mergedListFile
-        sh /jds/shell_script_mod.sh
-        echo "自定义远程shell脚本下载并执行结束。"
+  if expr "$CUSTOM_SHELL_FILE" : 'http.*' &>/dev/null; then
+    echo "自定义shell脚本为远程脚本，开始下在自定义远程脚本。"
+    wget -O /jds/shell_script_mod.sh $CUSTOM_SHELL_FILE
+    echo "下载完成，开始执行..."
+    echo "#远程自定义shell脚本追加定时任务" >>$mergedListFile
+    sh /jds/shell_script_mod.sh
+    echo "自定义远程shell脚本下载并执行结束。"
+  else
+    if [ ! -f $CUSTOM_SHELL_FILE ]; then
+      echo "自定义shell脚本为docker挂载脚本文件，但是指定挂载文件不存在，跳过执行。"
     else
-        if [ ! -f $CUSTOM_SHELL_FILE ]; then
-            echo "自定义shell脚本为docker挂载脚本文件，但是指定挂载文件不存在，跳过执行。"
-        else
-            echo "docker挂载的自定shell脚本，开始执行..."
-            echo "#docker挂载自定义shell脚本追加定时任务" >>$mergedListFile
-            sh $CUSTOM_SHELL_FILE
-            echo "docker挂载的自定shell脚本，执行结束。"
-        fi
+      echo "docker挂载的自定shell脚本，开始执行..."
+      echo "#docker挂载自定义shell脚本追加定时任务" >>$mergedListFile
+      sh $CUSTOM_SHELL_FILE
+      echo "docker挂载的自定shell脚本，执行结束。"
     fi
+  fi
 fi
 
 echo "第7步增加 |ts 任务日志输出时间戳..."
@@ -118,19 +118,42 @@ sed -i "/\(>&1 &\|> &1 &\)/!s/>&1/>\&1 \&/g" $mergedListFile
 echo "第8步执行原仓库的附属脚本proc_file.sh"
 sh /scripts/docker/proc_file.sh
 
+echo "附加功能提前，拉取monk-coder仓库的代码，并增加相关任务"
+if [ ! -d "/monk/" ]; then
+  echo "未检查到monk-coder仓库脚本，初始化下载相关脚本..."
+  git clone https://github.com/monk-coder/dust /monk
+else
+  echo "更新monk-coder脚本相关文件..."
+  git -C /monk reset --hard
+  git -C /monk pull --rebase
+fi
+
+if [ -n "$(ls /monk/car/*_*.js)" ]; then
+  cp -f /monk/car/*_*.js /scripts
+fi
+if [ -n "$(ls /monk/i-chenzhe/*_*.js)" ]; then
+  cp -f /monk/i-chenzhe/*_*.js /scripts
+fi
+if [ -n "$(ls /monk/member/*_*.js)" ]; then
+  cp -f /monk/member/*_*.js /scripts
+fi
+if [ -n "$(ls /monk/normal/*_*.js)" ]; then
+  cp -f /monk/normal/*_*.js /scripts
+fi
+
 echo "替换node使用spnode执行任务"
 sed -i "s/node/spnode/g" $mergedListFile
 sed -i "/\(jd_carnivalcity.js\|jd_car_exchange.js\)/s/spnode/spnode conc/g" $mergedListFile
 
 echo "第9步加载最新的定时任务文件..."
-crontab -l > /scripts/befor_cronlist.sh
+crontab -l >/scripts/befor_cronlist.sh
 crontab $mergedListFile
 
 echo "第10步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
 cat /jds/jd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
 
 if [ $GEN_CODE_CONF ]; then
-    cp /jds/jd_scripts/gen_code_conf.list $GEN_CODE_CONF
+  cp /jds/jd_scripts/gen_code_conf.list $GEN_CODE_CONF
 fi
 
 # echo "附加功能1，京东直播间抽奖监控"
@@ -142,62 +165,18 @@ fi
 
 echo "附加功能2，cookie写入文件，为jd_bot扫码获自动取cookies服务"
 if [ 0"$JD_COOKIE" = "0" ]; then
-    if [ -f "$COOKIES_CONF" ]; then
-        echo '' >$COOKIES_CONF
-        echo "未配置JD_COOKIE环境变量，$COOKIES_CONF文件已生成,请将cookies写入$COOKIES_CONF文件，格式每个Cookie一行"
-    fi
+  if [ -f "$COOKIES_CONF" ]; then
+    echo '' >$COOKIES_CONF
+    echo "未配置JD_COOKIE环境变量，$COOKIES_CONF文件已生成,请将cookies写入$COOKIES_CONF文件，格式每个Cookie一行"
+  fi
 else
-    if [ -f "$COOKIES_CONF" ]; then
-        echo "cookies.conf文件已经存在跳过,如果需要更新cookie请修改$COOKIES_CONF文件内容"
-    else
-        echo "环境变量 cookies写入$COOKIES_CONF文件,如果需要更新cookie请修改cookies.conf文件内容"
-        echo $JD_COOKIE | sed "s/\( &\|&\)/\\n/g" >$COOKIES_CONF
-    fi
+  if [ -f "$COOKIES_CONF" ]; then
+    echo "cookies.conf文件已经存在跳过,如果需要更新cookie请修改$COOKIES_CONF文件内容"
+  else
+    echo "环境变量 cookies写入$COOKIES_CONF文件,如果需要更新cookie请修改cookies.conf文件内容"
+    echo $JD_COOKIE | sed "s/\( &\|&\)/\\n/g" >$COOKIES_CONF
+  fi
 fi
-
-#echo "附加功能3，拉取 i-chenzhe 仓库的代码，并增加相关任务"
-#if [ -d "/i-chenzhe" ]; then
-#    cd /i-chenzhe
-#    git reset --hard
-#    echo "git pull拉取最新代码..."
-#    git -C /i-chenzhe pull --rebase
-#else
-#    git clone https://github.com/i-chenzhe/qx.git /i-chenzhe
-#fi
-#
-#cd /i-chenzhe
-#for scriptFile in $(ls | grep -E "jd_|z_" | tr "\n" " "); do
-#    if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
-#        cp $scriptFile /scripts
-#        if [ -z "$(cat /scripts/befor_cronlist.sh | grep $scriptFile)" ]; then
-#            if [ $1 ];then
-#                echo "skip"
-#            else
-#                echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-#                nohup node /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
-#            fi
-#        fi
-#        echo "#$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)" >>$mergedListFile
-#        echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
-#    fi
-#done
-
-echo "附加功能3，拉取monk-coder仓库的代码，并增加相关任务"
-if [ ! -d "/monk/" ]; then
-    echo "未检查到monk-coder仓库脚本，初始化下载相关脚本..."
-    git clone https://github.com/monk-coder/dust /monk
-else
-    echo "更新monk-coder脚本相关文件..."
-    git -C /monk reset --hard
-    git -C /monk pull origin main --rebase
-fi
-cp -f /monk/car/*_*.js /scripts
-cp -f /monk/i-chenzhe/*_*.js /scripts
-cp -f /monk/member/*_*.js /scripts
-cp -f /monk/normal/*_*.js /scripts
-
-## 合并monk&i-chenzhe大师脚本进入crontab列表
-cat /monk/i-chenzhe/remote_crontab_list.sh /monk/remote_crontab_list.sh >> /scripts/docker/merged_list_file.sh
 
 echo "加载最新的附加功能定时任务文件..."
 crontab $mergedListFile
