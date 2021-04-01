@@ -85,7 +85,6 @@ if [ $ENABLE_UNICOM ]; then
         echo "ASYNC_TASKS = true" >>/"$sub_dir"/config/.env
         i=$(expr $i + 1)
         echo "*/20 6-23 * * * sleep \$((RANDOM % 40)); node /$sub_dir/index.js unicom >> /logs/unicom${username:7:4}.log 2>&1 &" >>${mergedListFile}
-        echo "33 0 * * * sleep \$((RANDOM % 60)); node /$sub_dir/index.js unicom --tryrun --tasks dailyOtherRewardVideo >> /logs/unicom${username:7:4}dailyOtherRewardVideo.log 2>&1 &" >>${mergedListFile}
       done
     elif [ $UNICOM_TRYRUN_MODE ]; then
       echo "联通配置了UNICOM_TRYRUN_NODE参数，所以定时任务以tryrun模式生成"
