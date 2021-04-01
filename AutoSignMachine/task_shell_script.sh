@@ -136,8 +136,8 @@ echo "这是干啥呢"
 set -e
 
 for acc in \$(ls / | grep asm | tr "\n" " "); do
-  echo \${acc}
-  node \${acc}/index.js unicom --tryrun --tasks dailyOtherRewardVideo
+  echo /\${acc}
+  node /\${acc}/index.js unicom --tryrun --tasks dailyOtherRewardVideo
 done
 
 EOF
