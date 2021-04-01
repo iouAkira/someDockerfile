@@ -140,7 +140,7 @@ fi
 if [ -n "$(ls /monk/normal/*_*.js)" ]; then
   cp -f /monk/normal/*_*.js /scripts
 fi
-
+cat /monk/i-chenzhe/remote_crontab_list.sh /monk/remote_crontab_list.sh >> $mergedListFile
 echo "替换node使用spnode执行任务"
 sed -i "s/node/spnode/g" $mergedListFile
 sed -i "/\(jd_carnivalcity.js\|jd_car_exchange.js\)/s/spnode/spnode conc/g" $mergedListFile
