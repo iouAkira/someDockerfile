@@ -8,7 +8,7 @@ import logging
 import os
 
 import jdutils
-from aiogram import Bot, Dispatcher, executor, types
+from aiogram import Bot, Dispatcher, executor, types, filters
 from aiogram.types import ChatType, ParseMode
 
 # 日志输出格式配置
@@ -45,8 +45,10 @@ _bot_dir = f'{_docker_dir}bot/'
 _share_code_conf = f'{_logs_dir}/code_gen_conf.list'
 _crontabs_root = '/var/spool/cron/crontabs/root'
 _crontabs_root = 'crontabs'
+_gen_code_conf = f'{_logs_dir}/code_gen_conf.list'
 
 _interactive_cmd_list = ['node', 'spnode', 'crontab']
+_gen_code_cmd_list = ['gen_long_code', 'gen_temp_code', 'gen_daily_code']
 
 
 @dp.message_handler(commands=['start', 'help'], chat_type=[ChatType.PRIVATE], chat_id=[chat_id])
@@ -99,6 +101,15 @@ async def node_handler(message: types.Message):
                            parse_mode=ParseMode.MARKDOWN)
 
 
+@dp.message_handler(commands=_gen_code_cmd_list, chat_type=[ChatType.PRIVATE], chat_id=[chat_id])
+async def gen_code_handler(message: types.Message):
+    logger.info(message)
+    gen_code_cmd = message.text.lstrip("/").split()
+    msg_list = jdutils.gen_code_msg_list(gen_code_cmd=' '.join(gen_code_cmd), gen_code_conf=_gen_code_cmd_list)
+    for msg in msg_list:
+        await bot.send_message(chat_id=message.from_user.id, text=msg)
+
+
 @dp.message_handler(commands=['cmd'], chat_type=[ChatType.PRIVATE], chat_id=[chat_id])
 async def sys_cmd_handler(message: types.Message):
     logger.info(message)
@@ -115,7 +126,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery, callback
     await query.answer(query.data)
     if callback_type == "cancel":
         await query.message.edit_text(
-            text='➡️` 操作已取消 `⬅️',
+            text='➡️ `操作已取消` ⬅️',
             parse_mode=types.ParseMode.MARKDOWN_V2)
     else:
         command = query.data

@@ -22,7 +22,6 @@ async def get_path_file(file_dir):
     :param file_dir: 文件夹路径
     :return: js文件个数，文件名列表
     """
-
     btn_data_list = []
     btn_cnt = 0
     if Path(file_dir).is_dir():
@@ -80,7 +79,7 @@ async def exec_script(command="", log_dir="/scripts/logs"):
     指令按钮选中的要执行
     :param command: 执行的指令
     :param log_dir: 超长时候输出的日志目录
-    :return: 是超长，执行结果/日志路径
+    :return: 是否超长，执行结果/日志路径
     """
     is_long = False
     cmd = command + "|ts"
@@ -107,3 +106,69 @@ async def exec_script(command="", log_dir="/scripts/logs"):
         out_text = "%s任务执行出错：%s" % (cmd, e)
     # logger.info(out_text)
     return is_long, out_text
+
+
+def gen_code_msg_list(gen_code_cmd: str, gen_code_conf):
+    """
+    生成互助提交的消息
+    """
+    msg_list = []
+    cmd_split = gen_code_cmd.split()
+    try:
+        bot_list, code_conf_list = get_code_conf(code_type=cmd_split[0].split("_")[1],
+                                                 gen_code_conf=gen_code_conf,
+                                                 activity_list=' '.join(cmd_split[1:]) if len(cmd_split) > 1 else '')
+        for bot in list(set(bot_list)):
+            for cf in code_conf_list:
+                if cf.bot_id == bot:
+                    msg_list.append(cf.get_submit_msg())
+            msg_list.append(f"以上为 {bot} 可以提交的活动互助码")
+    except Exception as e:
+        msg_list.append(f"执行`{gen_code_cmd}`生成互助码消息失败，请查看日志/检查`{gen_code_conf}`文件\n{e}")
+
+    return msg_list
+
+
+def get_code_conf(code_type, gen_code_conf, activity_list):
+    bot_list = []
+    code_conf_list = []
+    with open(gen_code_conf, 'r') as lines:
+        array = lines.readlines()
+        for i in array:
+            is_all = True if i.split()[4] in activity_list.split() or activity_list == '' else False
+            if i.startswith(code_type) and is_all:
+                bot_list.append(i.split('-')[1])
+                code_conf = CodeConf(
+                    i.split('-')[1], i.split('-')[2], i.split('-')[3], i.split('-')[4],
+                    i.split('-')[5].replace('\n', ''))
+                code_conf_list.append(code_conf)
+    return bot_list, code_conf_list
+
+
+class CodeConf(object):
+    def __init__(self, bot_id, submit_code, log_name, activity_code, find_split_char):
+        self.bot_id = bot_id
+        self.submit_code = submit_code
+        self.log_name = log_name
+        self.activity_code = activity_code
+        self.find_split_char = find_split_char
+
+    def get_submit_msg(self):
+        code_list = []
+        ac = self.activity_code if self.activity_code != "@N" else ""
+        try:
+            with open("%s%s" % (_logs_dir, self.log_name), 'r') as lines:
+                array = lines.readlines()
+                for i in array:
+                    # print(self.find_split_char)
+                    if i.find(self.find_split_char) > -1:
+                        code_list.append(i.split(self.find_split_char)[
+                                             1].replace('\n', ''))
+            if self.activity_code == "@N":
+                return '%s %s' % (self.submit_code,
+                                  "&".join(list(set(code_list))))
+            else:
+                return '%s %s %s' % (self.submit_code, ac,
+                                     "&".join(list(set(code_list))))
+        except:
+            return "%s %s活动获取系统日志文件异常，请检查日志文件是否存在" % (self.submit_code, ac)

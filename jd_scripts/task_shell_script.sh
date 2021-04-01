@@ -120,7 +120,7 @@ sh /scripts/docker/proc_file.sh
 
 echo "替换node使用spnode执行任务"
 sed -i "s/node/spnode/g" $mergedListFile
-sed -i "/\(jd_xtg.js\|jd_car_exchange.js\)/s/spnode/spnode conc/g" $mergedListFile
+sed -i "/\(jd_carnivalcity.js\|jd_car_exchange.js\)/s/spnode/spnode conc/g" $mergedListFile
 
 echo "第9步加载最新的定时任务文件..."
 crontab -l > /scripts/befor_cronlist.sh
@@ -155,32 +155,49 @@ else
     fi
 fi
 
-echo "附加功能3，拉取 i-chenzhe 仓库的代码，并增加相关任务"
-if [ -d "/i-chenzhe" ]; then
-    cd /i-chenzhe
-    git reset --hard
-    echo "git pull拉取最新代码..."
-    git -C /i-chenzhe pull --rebase
-else
-    git clone https://github.com/i-chenzhe/qx.git /i-chenzhe
-fi
+#echo "附加功能3，拉取 i-chenzhe 仓库的代码，并增加相关任务"
+#if [ -d "/i-chenzhe" ]; then
+#    cd /i-chenzhe
+#    git reset --hard
+#    echo "git pull拉取最新代码..."
+#    git -C /i-chenzhe pull --rebase
+#else
+#    git clone https://github.com/i-chenzhe/qx.git /i-chenzhe
+#fi
+#
+#cd /i-chenzhe
+#for scriptFile in $(ls | grep -E "jd_|z_" | tr "\n" " "); do
+#    if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
+#        cp $scriptFile /scripts
+#        if [ -z "$(cat /scripts/befor_cronlist.sh | grep $scriptFile)" ]; then
+#            if [ $1 ];then
+#                echo "skip"
+#            else
+#                echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
+#                nohup node /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+#            fi
+#        fi
+#        echo "#$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)" >>$mergedListFile
+#        echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
+#    fi
+#done
 
-cd /i-chenzhe
-for scriptFile in $(ls | grep -E "jd_|z_" | tr "\n" " "); do
-    if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
-        cp $scriptFile /scripts
-        if [ -z "$(cat /scripts/befor_cronlist.sh | grep $scriptFile)" ]; then
-            if [ $1 ];then
-                echo "skip"
-            else
-                echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                nohup node /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
-            fi
-        fi
-        echo "#$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)" >>$mergedListFile
-        echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
-    fi
-done
+echo "附加功能3，拉取monk-coder仓库的代码，并增加相关任务"
+if [ ! -d "/monk/" ]; then
+    echo "未检查到monk-coder仓库脚本，初始化下载相关脚本..."
+    git clone https://github.com/monk-coder/dust /monk
+else
+    echo "更新monk-coder脚本相关文件..."
+    git -C /monk reset --hard
+    git -C /monk pull origin main --rebase
+fi
+cp -f /monk/car/*_*.js /scripts
+cp -f /monk/i-chenzhe/*_*.js /scripts
+cp -f /monk/member/*_*.js /scripts
+cp -f /monk/normal/*_*.js /scripts
+
+## 合并monk&i-chenzhe大师脚本进入crontab列表
+cat /monk/i-chenzhe/remote_crontab_list.sh /monk/remote_crontab_list.sh >> /scripts/docker/merged_list_file.sh
 
 echo "加载最新的附加功能定时任务文件..."
 crontab $mergedListFile
