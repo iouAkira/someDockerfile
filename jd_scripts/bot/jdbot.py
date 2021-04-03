@@ -16,7 +16,7 @@ from aiogram.types import ChatType, ParseMode
 logging.basicConfig(format='%(asctime)s-%(name)s-%(levelname)s=> [%(funcName)s] %(message)s ', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-bot_token, chat_id, _EXT = "", "", ""
+bot_token, chat_id, _EXT = "", "", "_EXT"
 if 'EXT' in os.environ:
     _EXT = os.getenv('EXT')
 if "TG_BOT_TOKEN" in os.environ:
@@ -70,11 +70,12 @@ async def help_handler(message: types.Message):
                         "如需___停用___请配置环境变量 -DISABLE_SPNODE=True" \
                         "```"
     await bot.send_message(chat_id=message.from_user.id,
-                           text="`限制自己使用的交互拓展机器人`\n" \
-                                "\n" \
-                                f"支持的的指令列表为：/{' | /'.join(_interactive_cmd_list)} \n"
-                                f"/{' | /'.join(gen_cmd_list)}\n"
-                                f"/{' | /'.join(_sys_cmd_list)}\n" \
+                           text="`限制自己使用的交互拓展机器人`\n" +
+                                "\n" +
+                                f"`支持的的指令列表为：`" +
+                                f"/{' | /'.join(_interactive_cmd_list)}\n".replace("_", "\_") +
+                                f"/{' | /'.join(gen_cmd_list)}.\n".replace("_", "\_") +
+                                f"/{' | /'.join(_sys_cmd_list)}\n\n".replace("_", "\_") +
                                 f"{spnode_readme}",
                            parse_mode=ParseMode.MARKDOWN)
 
