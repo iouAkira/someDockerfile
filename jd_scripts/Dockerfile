@@ -19,15 +19,11 @@ RUN set -ex \
 COPY ./jd_scripts/id_rsa /root/.ssh/id_rsa
 
 RUN set -ex \
-    && chmod 600 /root/.ssh/id_rsa 
-RUN set -ex \
-    && ssh-keyscan gitee.com > /root/.ssh/known_hosts 
-RUN set -ex \ 
+    && chmod 600 /root/.ssh/id_rsa \
+    && ssh-keyscan gitee.com > /root/.ssh/known_hosts \
     && git clone ${REPO_URL} /scripts \
     && mkdir -p /scripts/logs \
-    && git checkout master
-    
-RUN  set -ex \
+    && git checkout master \
     && mkdir /jds \
     && cd  /jds \
     && git init \
