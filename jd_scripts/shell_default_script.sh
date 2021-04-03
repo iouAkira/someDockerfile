@@ -114,8 +114,20 @@ sed -i "/\( ts\| |ts\|| ts\)/!s/>>/\|ts >>/g" $mergedListFile
 
 sed -i "/\(>&1 &\|> &1 &\)/!s/>&1/>\&1 \&/g" $mergedListFile
 
-echo "第8步执行原仓库的附属脚本proc_file.sh"
-sh /scripts/docker/proc_file.sh
+echo "第8步判断是否需要生成${COOKIE_LIST}文件"
+if [ 0"$JD_COOKIE" = "0" ]; then
+  if [ -f "$COOKIE_LIST" ]; then
+    echo '' >"$COOKIE_LIST"
+    echo "└──未配置JD_COOKIE环境变量，${COOKIE_LIST}文件已生成,请将cookies写入${COOKIE_LIST}文件，格式每个Cookie一行"
+  fi
+else
+  if [ -f "$COOKIE_LIST" ]; then
+    echo "└──cookies.conf文件已经存在跳过,如果需要更新cookie请修改${COOKIE_LIST}文件内容"
+  else
+    echo "└──环境变量 cookies写入${COOKIE_LIST}文件,如果需要更新cookie请修改cookies.list文件内容"
+    echo "$COOKIE_LIST" | sed "s/\( &\|&\)/\\n/g" >"$COOKIE_LIST"
+  fi
+fi
 
 echo "第9步加载最新的定时任务文件..."
 crontab -l >/scripts/befor_cronlist.sh
@@ -124,7 +136,7 @@ crontab $mergedListFile
 echo "第10步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
 cat /jds/jd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
 
-echo "加载最新的附加功能定时任务文件..."
+echo "最后加载最新的附加功能定时任务文件..."
 crontab $mergedListFile
 
 # echo "第11步打包脚本文件到/scripts/logs/scripts.tar.gz"
@@ -132,7 +144,7 @@ crontab $mergedListFile
 # tar -zcvf /scripts/logs/scripts.tar.gz --exclude=scripts/node_modules --exclude=scripts/logs/*.log  --exclude=scripts/logs/*.gz /scripts
 #!/bin/sh
 
-echo "特殊任务处理jd_crazy_joy_coin。。。"
+echo "附加额外特殊任务处理jd_crazy_joy_coin。。。"
 if [ ! "$CRZAY_JOY_COIN_ENABLE" ]; then
   echo "└──默认启用jd_crazy_joy_coin杀掉jd_crazy_joy_coin任务，并重启"
   eval $(ps -ef | grep "jd_crazy" | grep -v "grep" | awk '{print "kill "$1}')
