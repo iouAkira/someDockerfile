@@ -98,6 +98,7 @@ async def interactive_handler(message: types.Message):
         keyboard_markup = await jdutils.gen_reply_markup_btn(interactive_cmd=interactive_cmd[0],
                                                              scripts_file_path=scripts_file_path,
                                                              row_btn_cnt=2)
+        logger.info(keyboard_markup)
         keyboard_markup.add(types.InlineKeyboardButton(text="取消", callback_data="cancel"))
         await bot.send_message(chat_id=message.from_user.id,
                                text=f"⬇️⬇️ `请选择` {interactive_cmd[0]}` 需要执行的任务/脚本`",
