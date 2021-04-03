@@ -23,7 +23,9 @@ RUN set -ex \
     && ssh-keyscan gitee.com > /root/.ssh/known_hosts \
     && git clone ${REPO_URL} /scripts \
     && mkdir -p /scripts/logs \
-    && git checkout master \
+    && git checkout master
+    
+RUN  set -ex \
     && mkdir /jds \
     && cd  /jds \
     && git init \
