@@ -48,7 +48,7 @@ jobs:
           sed -i "/\(KEY\)/!s/ /\\n/g" ./jd_scripts/id_rsa
           sed -i /^[[:space:]]*$/d  ./jd_scripts/id_rsa
         env:
-          JDS_SSHKEY: ${{ secrets.$JDS_SSHKEY }}
+          JDS_SSHKEY: ${{ secrets.JDS_SSHKEY }}
 
       - name: 构建并推送到Dockerhub和ghcr.io镜像仓库
         uses: docker/build-push-action@v2
