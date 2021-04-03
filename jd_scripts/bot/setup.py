@@ -8,6 +8,6 @@ from setuptools import setup
 
 setup(
     name='jd-scripts-bot',
-    version='0.1',
-    scripts=['jd_bot', ],
+    version='1.0',
+    scripts=['jdbot.py', 'jdutils.py'],
 )

@@ -1,78 +1,57 @@
 #!/bin/sh
 set -e
 
-function initNodeEnv(){
-    echo "安装执行脚本需要的nodejs环境及依赖"
-    apk add --update nodejs moreutils npm curl jq
-}
-
-function initPythonEnv(){
-    echo "安装运行jd_bot需要的python环境及依赖"
-    apk add --update python3-dev py3-pip py3-cryptography py3-numpy py-pillow
-    echo "开始安装jd_bot依赖..."
-    cd /jds/jd_scripts/bot
-    pip3 install --upgrade pip
-    pip3 install -r requirements.txt
-    python3 setup.py install
+function initNodeEnv() {
+  echo "安装执行脚本需要的nodejs环境及依赖"
+  apk add --update nodejs moreutils npm curl jq
 }
 
 #获取配置的自定义参数,如果有为
-if [ $1 ]; then
-    run_cmd=$1
-    initNodeEnv
-    echo -e $GIT_SSH_KEY >/root/.ssh/id_rsa
-    if [ $GIT_PULL == 'true' ]; then
-        echo "设定远程仓库地址..."
-        cd /scripts
-        git remote set-url origin $REPO_URL
-        git reset --hard
-        echo "git pull拉取最新代码..."
-        git -C /scripts pull --rebase
-        echo "npm install 安装最新依赖"
-        npm install --loglevel error --prefix /scripts
-    fi
-    if [ $run_cmd == 'jd_bot' ]; then
-        #任务脚本shell仓库
-        cd /jds
-        git pull origin master --rebase
-        initPythonEnv
-    fi
+if [ "$1" ]; then
+  initNodeEnv
+  run_cmd=$1
+fi
+[ -f /scripts/package.json ] && before_package_json=$(cat /scripts/package.json)
+
+if [ -f "/scripts/logs/pull.lock" ]; then
+  echo "存在更新锁定文件，跳过git pull操作..."
 else
-    echo "设定远程仓库地址..."
-    cd /scripts
-    git remote set-url origin $REPO_URL
-    git reset --hard
-    echo "git pull拉取最新代码..."
-    git -C /scripts pull --rebase
-    echo "npm install 安装最新依赖"
+  echo "设定远程仓库地址..."
+  cd /scripts
+  git remote set-url origin "$REPO_URL"
+  git reset --hard
+  echo "git pull拉取最新代码..."
+  git -C /scripts pull --rebase
+  if [ ! -d /scripts/node_modules ]; then
+    echo "容器首次启动，执行npm install..."
     npm install --loglevel error --prefix /scripts
-
-    #任务脚本shell仓库
-    cd /jds
-    git pull origin master --rebase
+  else
+    if [[ "${before_package_json}" != "$(cat /scripts/package.json)" ]]; then
+      echo "package.json有更新，执行npm install..."
+      npm install --loglevel error --prefix /scripts
+    else
+      echo "package.json无变化，跳过npm install..."
+    fi
+  fi
 fi
 
-#将默认的互助码提交消息生成配置文件放入logs文件夹
-if [ ! -f $GEN_CODE_CONF ]; then
-    echo "将默认的互助码提交消息生成配置文件放入logs文件夹"
-    cp /jds/jd_scripts/gen_code_conf.list $GEN_CODE_CONF
-fi
+#任务脚本shell仓库
+cd /jds
+git pull origin master --rebase
 
 echo "------------------------------------------------执行定时任务任务shell脚本------------------------------------------------"
-sh /jds/jd_scripts/task_shell_script.sh $1
+sh /jds/jd_scripts/task_shell_script.sh "$run_cmd"
 echo "--------------------------------------------------默认定时任务执行完成---------------------------------------------------"
 
-if [ $run_cmd ]; then
-    if [ $run_cmd == 'jd_bot' ]; then
-        echo "启动crondtab定时任务主进程..."
-        crond
-        echo "启动jd_bot..."
-        jd_bot
-    fi
-    if [ $run_cmd == 'crond' ]; then
-        echo "启动crondtab定时任务主进程..."
-        crond -f
-    fi
+if [ "$run_cmd" ]; then
+
+  if [ "$run_cmd" == 'jdbot' ]; then
+    # 启动jdbot安装依赖等操作操作放到后台，不耽阻塞定crontab启动工作
+    sh "$BOT_DIR/jdbot.sh" >>"$LOGS_DIR/jdbot_start.log" 2>&1 &
+    echo "启动crontab定时任务主进程..."
+  fi
+  echo "启动crontab定时任务主进程..."
+  crond -f
 else
-    echo "默认定时任务执行结束。"
+  echo "默认定时任务执行结束。"
 fi

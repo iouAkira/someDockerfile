@@ -41,6 +41,15 @@ jobs:
         with:
           string: ${{ github.repository_owner }}
 
+      - name: "add secrets to file"
+        run: |
+          echo $JDS_SSHKEY > ./jd_scripts/id_rsa
+          sed -i "s/KEY----- /&\\n/g;s/-----END/\\n&/g" ./jd_scripts/id_rsa
+          sed -i "/\(KEY\)/!s/ /\\n/g" ./jd_scripts/id_rsa
+          sed -i /^[[:space:]]*$/d  ./jd_scripts/id_rsa
+        env:
+          JDS_SSHKEY: ${{ secrets.$JDS_SSHKEY }}
+
       - name: 构建并推送到Dockerhub和ghcr.io镜像仓库
         uses: docker/build-push-action@v2
         with:
@@ -51,7 +60,7 @@ jobs:
           tags: |
             akyakya/jd_scripts:latest
             ghcr.io/${{ steps.repo_name.outputs.lowercase }}/jd_scripts:latest
-            
+
       - name: 构建基于alpine3.12的镜像并推送到Dockerhub和ghcr.io镜像仓库
         uses: docker/build-push-action@v2
         with:
