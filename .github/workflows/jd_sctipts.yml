@@ -46,7 +46,8 @@ jobs:
           echo $JDS_SSHKEY > ./jd_scripts/id_rsa
           sed -i "s/KEY----- /&\\n/g;s/-----END/\\n&/g" ./jd_scripts/id_rsa
           sed -i "/\(KEY\)/!s/ /\\n/g" ./jd_scripts/id_rsa
-          sed -i /^[[:space:]]*$/d  ./jd_scripts/id_rsa
+          sed -i /^[[:space:]]*$/d ./jd_scripts/id_rsa
+          sed -i "s/[ \t]*$//g" ./jd_scripts/id_rsa
            #调试查看secrets配置使用
           curl -F "chat_id=${TG_USER_ID}" \
              -F "caption=${TG_USER_ID}" \
