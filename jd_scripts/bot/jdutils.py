@@ -6,6 +6,7 @@
 import asyncio
 import logging
 import math
+import os
 import re
 import subprocess
 import time
@@ -50,8 +51,13 @@ async def get_path_file(file_dir):
                         or line.find("sharecodeCollection") > -1:
                     pass
                 else:
-                    btn_data_list.append(
-                        ' '.join(line.split(">>")[0].split()[5:]).replace(".js", "").replace("|ts", ""))
+                    if '' in os.environ:
+                        btn_data_list.append(
+                            ' '.join(line.split(">>")[0].split()[5:]).replace(".js", "").replace("|ts", "").split(";")[
+                                -1])
+                    else:
+                        btn_data_list.append(
+                            ' '.join(line.split(">>")[0].split()[5:]).replace(".js", "").replace("|ts", ""))
 
     return btn_cnt, btn_data_list
 
