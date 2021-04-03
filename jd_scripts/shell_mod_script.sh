@@ -4,7 +4,7 @@ set -e
 mergedListFile="/scripts/docker/merged_list_file.sh"
 
 echo "附加功能1，使用jds仓库的gen_code_conf.list文件"
-cp /jds/jd_scripts/gen_code_conf.list "$GEN_CODE_LSIT"
+cp /jds/jd_scripts/gen_code_conf.list "$GEN_CODE_LIST"
 
 echo "附加功能2，cookie写入文件，为jd_bot扫码获自动取cookies服务"
 if [ 0"$JD_COOKIE" = "0" ]; then

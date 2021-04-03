@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author    : iouAkira(lof)
-# @mail      : e.akimoto.akira@gmail.com
+# @mail      : ZS5ha2ltb3RvLmFraXJhQGdtYWlsLmNvbQ==
 # @CreateTime: 2021-03-31
-# @UpdateTime: 2021-03-31
+# @UpdateTime: 2021-04-03
 import asyncio
 import logging
 import math

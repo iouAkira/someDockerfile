@@ -4,7 +4,7 @@ LABEL AUTHOR="iouAkira <ZS5ha2ltb3RvLmFraXJhQGdtYWlsLmNvbQ==>"
 ENV DEFAULT_LIST_FILE=crontab_list.sh \
     CUSTOM_LIST_MERGE_TYPE=append \
     COOKIE_LIST=/scripts/logs/cookies.list \
-    GEN_CODE_LSIT=/scripts/logs/gen_code_conf.list \
+    GEN_CODE_LIST=/scripts/logs/gen_code_conf.list \
     REPO_URL=git@gitee.com:lxk0301/jd_scripts.git \
     BOT_DIR=/jds/jd_scripts/bot \
     LOGS_DIR=/scripts/logs

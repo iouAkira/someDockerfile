@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author    : iouAkira(lof)
-# @mail      : e.akimoto.akira@gmail.com
+# @mail      : ZS5ha2ltb3RvLmFraXJhQGdtYWlsLmNvbQ==
 # @CreateTime: 2021-03-31
-# @UpdateTime: 2021-03-31
+# @UpdateTime: 2021-04-03
 
 import logging
 import os
@@ -43,6 +43,10 @@ _docker_dir = f'{_base_dir}/docker'
 _bot_dir = f'{_docker_dir}bot/'
 _gen_code_conf = f'{_logs_dir}/code_gen_conf.list'
 _crontabs_root = '/var/spool/cron/crontabs/root'
+if "BOT_DIR" in os.environ:
+    _bot_dir = os.getenv("BOT_DIR")
+if "GEN_CODE_LIST" in os.environ:
+    _gen_code_conf = os.getenv("GEN_CODE_LIST")
 
 _interactive_cmd_list = ['node', 'spnode', 'crontab']
 _gen_code_cmd_list = ['gen_long_code', 'gen_temp_code', 'gen_daily_code', _EXT]
@@ -56,23 +60,10 @@ async def help_handler(message: types.Message):
     gen_cmd_list = _gen_code_cmd_list
     if _EXT in _gen_code_cmd_list:
         gen_cmd_list.remove(_EXT)
-    if "DISABLE_SPNODE" not in os.environ:
-        spnode_readme = "/spnode `获取可执行脚本的列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/spnode /scripts/jd_818.js)`\n\n" \
-                        "```" \
-                        "使用bot交互+spnode后 后续用户的cookie维护更新只需要更新logs/cookies.list即可\n" \
-                        "使用bot交互+spnode后 后续执行脚本命令请使用spnode否者无法使用logs/cookies.list的cookies执行脚本，定时任务也将自动替换为spnode命令执行\n" \
-                        "spnode功能概述示例\n" \
-                        "spnode conc /scripts/jd_bean_change.js \n >>>为每个cookie单独执行jd_bean_change脚本（伪并发\n" \
-                        "spnode 1 /scripts/jd_bean_change.js \n >>>为logs/cookies.list文件里面第一行cookie账户单独执行jd_bean_change脚本\n" \
-                        "spnode jd_XXXX /scripts/jd_bean_change.js \n >>>为logs/cookies.list文件里面pt_pin=jd_XXXX的cookie账户单独执行jd_bean_change脚本\n" \
-                        "spnode /scripts/jd_bean_change.js \n >>>为logs/cookies.list所有cookies账户一起执行jd_bean_change脚本\n" \
-                        "请仔细阅读并理解上面的内容，使用bot交互默认开启spnode指令功能功能。\n" \
-                        "如需___停用___请配置环境变量 -DISABLE_SPNODE=True" \
-                        "```"
     await bot.send_message(chat_id=message.from_user.id,
                            text="`限制自己使用的交互拓展机器人`\n" +
                                 "\n" +
-                                f"`支持的的指令列表为：`" +
+                                f"`支持的的指令列表为：`\n" +
                                 f"/{' | /'.join(_interactive_cmd_list)}\n".replace("_", "\_") +
                                 f"/{' | /'.join(gen_cmd_list)}.\n".replace("_", "\_") +
                                 f"/{' | /'.join(_sys_cmd_list)}\n\n".replace("_", "\_") +
@@ -165,7 +156,7 @@ async def sys_cmd_handler(message: types.Message):
             await message.delete()
         except Exception as e:
             pass
-        cmd_split = ['sh', f'{os.getenv("BOT_DIR")}/jdbot.sh', 'restart_bot', '>>/dev/null 2>&1 &']
+        cmd_split = ['sh', f'{_bot_dir}/jdbot.sh', 'restart_bot', '>>/dev/null 2>&1 &']
         done_msg_text = "➡️ `jd bot重启指令已发送...`"
 
     done_msg = await bot.send_message(chat_id=message.from_user.id,
