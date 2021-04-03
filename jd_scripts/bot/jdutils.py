@@ -51,7 +51,7 @@ async def get_path_file(file_dir):
                         or line.find("sharecodeCollection") > -1:
                     pass
                 else:
-                    if '' in os.environ:
+                    if 'RANDOM_DELAY_MAX' in os.environ:
                         btn_data_list.append(
                             ' '.join(line.split(">>")[0].split()[5:]).replace(".js", "").replace("|ts", "").split(";")[
                                 -1])
