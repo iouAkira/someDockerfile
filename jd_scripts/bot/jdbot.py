@@ -54,7 +54,8 @@ async def help_handler(message: types.Message):
     # logger.info(message)
     spnode_readme = ""
     gen_cmd_list = _gen_code_cmd_list
-    gen_cmd_list.remove('glc')
+    if _EXT in _gen_code_cmd_list:
+        gen_cmd_list.remove(_EXT)
     if "DISABLE_SPNODE" not in os.environ:
         spnode_readme = "/spnode `获取可执行脚本的列表，选择对应的按钮执行。(拓展使用：运行指定路径脚本，例：/spnode /scripts/jd_818.js)`\n\n" \
                         "```" \
@@ -71,9 +72,9 @@ async def help_handler(message: types.Message):
     await bot.send_message(chat_id=message.from_user.id,
                            text="`限制自己使用的交互拓展机器人`\n" \
                                 "\n" \
-                                f"支持的的指令列表为：/{'| /'.join(_interactive_cmd_list)} \n"
-                                f"/{'| /'.join(gen_cmd_list)}\n"
-                                f"/{'| /'.join(_sys_cmd_list)} " \
+                                f"支持的的指令列表为：/{' | /'.join(_interactive_cmd_list)} \n"
+                                f"/{' | /'.join(gen_cmd_list)}\n"
+                                f"/{' | /'.join(_sys_cmd_list)}\n" \
                                 f"{spnode_readme}",
                            parse_mode=ParseMode.MARKDOWN)
 
