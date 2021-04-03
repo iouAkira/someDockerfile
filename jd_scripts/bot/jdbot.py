@@ -165,7 +165,7 @@ async def sys_cmd_handler(message: types.Message):
             await message.delete()
         except Exception as e:
             pass
-        cmd_split = ['sh', f'{_base_dir}/logs/bot/jdbot.sh', 'restart_bot', '>>/dev/null 2>&1 &']
+        cmd_split = ['sh', f'{os.getenv("BOT_DIR")}/jdbot.sh', 'restart_bot', '>>/dev/null 2>&1 &']
         done_msg_text = "➡️ `jd bot重启指令已发送...`"
 
     done_msg = await bot.send_message(chat_id=message.from_user.id,
