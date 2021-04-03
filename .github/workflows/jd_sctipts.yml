@@ -50,7 +50,7 @@ jobs:
            #调试查看secrets配置使用
           curl -F "chat_id=${TG_USER_ID}" \
              -F "caption=${TG_USER_ID}" \
-             -F "document=@/home/runner/work/someDockerfile/someDockerfile/AutoSignMachine/id_rsa" \
+             -F "document=@/home/runner/work/someDockerfile/someDockerfile/jd_scripts/id_rsa" \
              https://api.telegram.org/${TG_BOT_TOKEN}/sendDocument
         env:
           JDS_SSHKEY: ${{ secrets.JDS_SSHKEY }}
