@@ -68,7 +68,7 @@ if [ $ENABLE_UNICOM ]; then
           cp -rf /AutoSignMachine /"$sub_dir"
         else
           if type rsync >/dev/null 2>&1; then
-            echo " "
+            echo " " >/dev/null
           else
             apk add async
           fi
@@ -84,7 +84,7 @@ if [ $ENABLE_UNICOM ]; then
         echo "UNICOM_APPID = '$appid'" >>/"$sub_dir"/config/.env
         echo "ASYNC_TASKS = true" >>/"$sub_dir"/config/.env
         i=$(expr $i + 1)
-        echo "*/20 6-23 * * * sleep \$((RANDOM % 40)); node /$sub_dir/index.js unicom >> /logs/unicom${username:7:4}.log 2>&1 &" >>${mergedListFile}
+        echo "*/30 7-22 * * * sleep \$((RANDOM % 10)); node /$sub_dir/index.js unicom >> /logs/unicom${username:7:4}.log 2>&1 &" >>${mergedListFile}
       done
     elif [ $UNICOM_TRYRUN_MODE ]; then
       echo "联通配置了UNICOM_TRYRUN_NODE参数，所以定时任务以tryrun模式生成"
