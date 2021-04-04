@@ -49,7 +49,7 @@ if "GEN_CODE_LIST" in os.environ:
 
 _interactive_cmd_list = ['node', 'spnode', 'crontab']
 _gen_code_cmd_list = ['gen_long_code', 'gen_temp_code', 'gen_daily_code', _EXT]
-_sys_cmd_list = ['ps', 'ls', 'wget', 'cat', 'echo', 'sed', 'restart']
+_sys_cmd_list = ['ps', 'ls', 'wget', 'cat', 'echo', 'sed', 'restart', 'update']
 
 os.chdir(_base_dir)
 
@@ -160,6 +160,8 @@ async def sys_cmd_handler(message: types.Message):
             pass
         cmd_split = ['sh', f'{_bot_dir}/jdbot.sh', 'restart_bot', '>>/dev/null 2>&1 &']
         done_msg_text = "➡️ `jd bot重启指令已发送...`"
+    elif cmd_split[0] == "update":
+        cmd_split = ['docker_entrypoint.sh']
 
     done_msg = await bot.send_message(chat_id=message.from_user.id,
                                       text=done_msg_text,
