@@ -92,7 +92,7 @@ if [ 0"$CUSTOM_SHELL_FILE" = "0" ]; then
   echo "└──未配置自定shell脚本文件，跳过执行。"
 else
   if expr "$CUSTOM_SHELL_FILE" : 'http.*' &>/dev/null; then
-    echo "└──自定义shell脚本为远程脚本，开始下在自定义远程脚本。"
+    echo "└──自定义shell脚本为远程脚本，开始下在自定义远程脚本${CUSTOM_SHELL_FILE}。"
     wget -O /jds/shell_mod.sh "$CUSTOM_SHELL_FILE"
     echo "└──下载完成，开始执行..."
     echo "#远程自定义shell脚本追加定时任务" >>$mergedListFile
@@ -100,7 +100,7 @@ else
     echo "└──自定义远程shell脚本下载并执行结束。"
   else
     if [ ! -f "$CUSTOM_SHELL_FILE" ]; then
-      echo "└──自定义shell脚本为docker挂载脚本文件，但是指定挂载文件不存在，跳过执行。"
+      echo "└──自定义shell脚本为docker挂载脚本文件，但是指定挂载文件${CUSTOM_SHELL_FILE}不存在，跳过执行。"
     else
       echo "└──docker挂载的自定shell脚本，开始执行..."
       sh "$CUSTOM_SHELL_FILE"
