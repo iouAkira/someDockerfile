@@ -117,8 +117,10 @@ sed -i "/\(>&1 &\|> &1 &\)/!s/>&1/>\&1 \&/g" $mergedListFile
 echo "第8步判断是否需要生成${COOKIE_LIST}文件"
 if [ 0"$JD_COOKIE" = "0" ]; then
   if [ -f "$COOKIE_LIST" ]; then
+    echo "└──未配置JD_COOKIE环境变量，${COOKIE_LIST}文件已存在,请将cookies写入${COOKIE_LIST}文件，格式每个Cookie一行"
+  else
     echo '' >"$COOKIE_LIST"
-    echo "└──未配置JD_COOKIE环境变量，${COOKIE_LIST}文件已生成,请将cookies写入${COOKIE_LIST}文件，格式每个Cookie一行"
+    echo "└──未配置JD_COOKIE环境变量，且${COOKIE_LIST}文件不存在，已为你生成,请将cookies写入${COOKIE_LIST}文件，格式每个Cookie一行"
   fi
 else
   if [ -f "$COOKIE_LIST" ]; then
