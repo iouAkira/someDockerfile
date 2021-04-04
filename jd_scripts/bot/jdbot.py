@@ -16,7 +16,7 @@ from aiogram.types import ChatType, ParseMode
 logging.basicConfig(format='%(asctime)s-%(name)s-%(levelname)s=> [%(funcName)s] %(message)s ', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-bot_token, chat_id, _EXT = "", "", "_EXT"
+bot_token, chat_id, _EXT, _EXT_SYS_CMD = "", "", "_EXT", ""
 if 'EXT' in os.environ:
     _EXT = os.getenv('EXT')
 if 'EXT_SYS_CMD' in os.environ:
