@@ -172,9 +172,14 @@ async def sys_cmd_handler(message: types.Message):
                                 caption=f'⬆️ {" ".join(cmd_split)} `执行结果超长,请查看log` ⬆️' % (' '.join(cmd_split)),
                                 parse_mode=types.ParseMode.MARKDOWN_V2)
     else:
-        await done_msg.edit_text(
-            text=f'⬇️ {" ".join(cmd_split)} `执行结果` ⬇️\n\n```{result}```',
-            parse_mode=types.ParseMode.MARKDOWN)
+        if result == "":
+            await done_msg.edit_text(
+                text=f'⬇️ {" ".join(cmd_split)} `指令已执行完成，无报错且无返回结果。` ⬇️'.replace("_", "\_"),
+                parse_mode=types.ParseMode.MARKDOWN)
+        else:
+            await done_msg.edit_text(
+                text=f'⬇️ {" ".join(cmd_split)} `执行结果` ⬇️\n\n```{result}```',
+                parse_mode=types.ParseMode.MARKDOWN)
 
 
 async def query_callback_filter(query: types.CallbackQuery):
