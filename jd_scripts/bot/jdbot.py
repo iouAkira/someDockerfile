@@ -168,12 +168,13 @@ async def sys_cmd_handler(message: types.Message):
                                       parse_mode=types.ParseMode.MARKDOWN)
     is_long, result = await jdutils.exec_sys_cmd(sh_cmd=' '.join(cmd_split),
                                                  log_dir=_base_dir)
+    logger.info(result)
     if is_long:
         await done_msg.delete()
         await bot.send_document(chat_id=message.from_user.id,
                                 document=open(result, 'rb'),
                                 caption=f'⬆️ {" ".join(cmd_split)} `执行结果超长,请查看log` ⬆️' % (' '.join(cmd_split)),
-                                parse_mode=types.ParseMode.MARKDOWN_V2)
+                                parse_mode=types.ParseMode.MARKDOWN)
     else:
         if result == "":
             await done_msg.edit_text(

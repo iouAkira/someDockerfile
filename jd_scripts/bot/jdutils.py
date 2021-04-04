@@ -138,24 +138,36 @@ async def exec_sys_cmd(sh_cmd="node", log_dir="/scripts/logs"):
     """
     执行系统相关指令
     """
+    sp_cmd = ["docker_entrypoint.sh"]
     is_long = False
     out_text = ''
     try:
-        proc = await asyncio.create_subprocess_shell(sh_cmd,
-                                                     stdout=asyncio.subprocess.PIPE,
-                                                     stderr=asyncio.subprocess.PIPE)
-        stdout, stderr = await proc.communicate()
-        logger.info(sh_cmd)
-        if stdout:
-            out_text = stdout.decode("utf-8")
-            if len(out_text.split('\n')) > 50:
-                is_long = True
-                log_name = f'{log_dir}/bot_{sh_cmd.split()[0]}.log'
-                with open(log_name, 'w') as wf:
-                    wf.write(out_text)
-                out_text = log_name
-        if stderr:
-            out_text = "stderr：" + stderr.decode("utf-8")
+        if sh_cmd.split()[0] in sp_cmd:
+            p = subprocess.Popen(sh_cmd,
+                                 shell=True,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.STDOUT)
+            while p.poll() is None:
+                line = p.stdout.readline()
+                logger.info(line.decode('utf-8'))
+                out_text = out_text + line.decode('utf-8')
+        else:
+            proc = await asyncio.create_subprocess_shell(sh_cmd,
+                                                         stdout=asyncio.subprocess.PIPE,
+                                                         stderr=asyncio.subprocess.PIPE)
+            stdout, stderr = await proc.communicate()
+            logger.info(sh_cmd)
+            if stdout:
+                out_text = stdout.decode("utf-8")
+            if stderr:
+                out_text = "stderr：" + stderr.decode("utf-8")
+
+        if len(out_text.split('\n')) > 50:
+            is_long = True
+            log_name = f'{log_dir}/bot_{sh_cmd.split()[0]}.log'
+            with open(log_name, 'w') as wf:
+                wf.write(out_text)
+            out_text = log_name
     except Exception as e:
         out_text = f"任务执行出错：{e}"
     # logger.info(out_text)
