@@ -182,7 +182,7 @@ async def sys_cmd_handler(message: types.Message):
                 parse_mode=types.ParseMode.MARKDOWN)
         else:
             await done_msg.edit_text(
-                text=f'⬇️ {" ".join(cmd_split)} `执行结果` ⬇️\n\n```{result}```',
+                text=f'⬇️ {" ".join(cmd_split)} `执行结果` ⬇️\n\n'.replace("_", "\_") + f'```{result}```',
                 parse_mode=types.ParseMode.MARKDOWN)
 
 
