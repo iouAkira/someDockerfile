@@ -35,7 +35,6 @@ dp = Dispatcher(bot)
 # 启用日志
 logging.basicConfig(format='%(asctime)s-%(name)s-%(levelname)s=> [%(funcName)s] %(message)s ', level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 _base_dir = '/scripts'
 # _base_dir = '/Users/akira/jd_scripts'
 _logs_dir = f'{_base_dir}/logs'
@@ -51,6 +50,8 @@ if "GEN_CODE_LIST" in os.environ:
 _interactive_cmd_list = ['node', 'spnode', 'crontab']
 _gen_code_cmd_list = ['gen_long_code', 'gen_temp_code', 'gen_daily_code', _EXT]
 _sys_cmd_list = ['ps', 'ls', 'wget', 'cat', 'echo', 'sed', 'restart']
+
+os.chdir(_base_dir)
 
 
 @dp.message_handler(commands=['start', 'help'], chat_type=[ChatType.PRIVATE], chat_id=[chat_id])
