@@ -137,6 +137,8 @@ echo "第10步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bi
 cat /jds/jd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
 
 echo "最后加载最新的附加功能定时任务文件..."
+echo "└──替换任务列表的node指令为spnode"
+sed -i "s/ node / spnode /g" $mergedListFile
 crontab $mergedListFile
 
 # echo "第11步打包脚本文件到/scripts/logs/scripts.tar.gz"
