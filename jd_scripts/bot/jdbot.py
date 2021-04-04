@@ -174,7 +174,7 @@ async def sys_cmd_handler(message: types.Message):
     else:
         if result == "":
             await done_msg.edit_text(
-                text=f'⬇️ {" ".join(cmd_split)} `指令已执行完成，无报错且无返回结果。` ⬇️'.replace("_", "\_"),
+                text=f'➡️️ {cmd_split[0]} `指令已执行完成，无报错且无返回结果。` ⬅️️'.replace("_", "\_"),
                 parse_mode=types.ParseMode.MARKDOWN)
         else:
             await done_msg.edit_text(
