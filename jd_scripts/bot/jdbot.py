@@ -93,7 +93,7 @@ async def interactive_handler(message: types.Message):
                                     parse_mode=types.ParseMode.MARKDOWN)
         else:
             await done_msg.edit_text(
-                text=f'⬇️ {" ".join(interactive_cmd)} `执行结果` ⬇️\n\n'.replace("_", "\_") + f'``` {result} ```',
+                text=f'⬇️ {" ".join(interactive_cmd)} `执行结果` ⬇️\n'.replace("_", "\_") + f'```\n{result} ```',
                 parse_mode=types.ParseMode.MARKDOWN)
 
     else:
@@ -124,7 +124,7 @@ async def gen_code_handler(message: types.Message):
         await chk_msg.delete()
         if ec == 0:
             succ_msg = await bot.send_message(chat_id=message.from_user.id,
-                                              text=f"⬇️️ `Scan success` ⬇️" + "\n\n" + f"``` {result} ```",
+                                              text=f"⬇️️ `Scan success` ⬇️" + "\n" + f"```\n{result} ```",
                                               parse_mode=ParseMode.MARKDOWN)
             if len(gen_code_cmd) > 1:
                 if gen_code_cmd[1] == '-tw':
@@ -138,11 +138,11 @@ async def gen_code_handler(message: types.Message):
                                                       caption=f'⬆️ `测试执行结果超长，请查看日志` ⬆️',
                                                       parse_mode=types.ParseMode.MARKDOWN)
                     else:
-                        await test_msg.edit_text(text=f'⬇️ `测试执行结果` ⬇️\n\n' + f'``` {result} ```',
+                        await test_msg.edit_text(text=f'⬇️ `测试执行结果` ⬇️\n' + f'```\n{result} ```',
                                                  parse_mode=types.ParseMode.MARKDOWN)
         else:
             await bot.send_message(chat_id=message.from_user.id,
-                                   text=f"➡️ ```{result}``` ⬅️️",
+                                   text=f"➡️ ```\n{result} ``` ⬅️️",
                                    parse_mode=ParseMode.MARKDOWN)
     else:
         msg_list = jdutils.gen_code_msg_list(gen_code_cmd=' '.join(gen_code_cmd), gen_code_conf=_gen_code_conf)
@@ -185,7 +185,7 @@ async def sys_cmd_handler(message: types.Message):
                 parse_mode=types.ParseMode.MARKDOWN)
         else:
             await done_msg.edit_text(
-                text=f'⬇️ {" ".join(cmd_split)} `执行结果` ⬇️\n\n'.replace("_", "\_") + f'``` {result} ```',
+                text=f'⬇️ {" ".join(cmd_split)} `执行结果` ⬇️\n'.replace("_", "\_") + f'```\n{result} ```',
                 parse_mode=types.ParseMode.MARKDOWN)
 
 
@@ -217,7 +217,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery, callback
                                     parse_mode=types.ParseMode.MARKDOWN)
         else:
             await query.message.edit_text(
-                text=f'⬇️ {command} `执行结果` ⬇️\n\n'.replace("_", "\_") + f'``` {result} ```',
+                text=f'⬇️ {command} `执行结果` ⬇️\n'.replace("_", "\_") + f'```\n{result} ```',
                 parse_mode=types.ParseMode.MARKDOWN)
 
 
