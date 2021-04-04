@@ -113,6 +113,8 @@ async def exec_script(command="", log_dir="/scripts/logs"):
                                                          stdout=asyncio.subprocess.PIPE,
                                                          stderr=asyncio.subprocess.PIPE)
             stdout, stderr = await proc.communicate()
+            logger.info(stdout)
+            logger.info(stderr)
             if stdout:
                 out_text = stdout.decode("utf-8")
             if stderr:
