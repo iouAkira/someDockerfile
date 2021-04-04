@@ -19,6 +19,8 @@ logger = logging.getLogger(__name__)
 bot_token, chat_id, _EXT = "", "", "_EXT"
 if 'EXT' in os.environ:
     _EXT = os.getenv('EXT')
+if 'EXT_SYS_CMD' in os.environ:
+    _EXT_SYS_CMD = os.getenv('EXT_SYS_CMD')
 if "TG_BOT_TOKEN" in os.environ:
     bot_token = os.getenv("TG_BOT_TOKEN")
 if 'TG_USER_ID' in os.environ:
@@ -49,8 +51,9 @@ if "GEN_CODE_LIST" in os.environ:
 
 _interactive_cmd_list = ['node', 'spnode', 'crontab']
 _gen_code_cmd_list = ['gen_long_code', 'gen_temp_code', 'gen_daily_code', _EXT]
-_sys_cmd_list = ['ps', 'ls', 'wget', 'cat', 'echo', 'sed', 'restart', 'update']
-
+_sys_cmd_list = ['ls', 'cp', 'cat', 'echo', 'ps', 'sed', 'wget', 'update', 'restart', ]
+if len(_EXT_SYS_CMD.split("&")) > 0:
+    _sys_cmd_list.extend(_EXT_SYS_CMD.split("&"))
 os.chdir(_base_dir)
 
 
@@ -173,7 +176,7 @@ async def sys_cmd_handler(message: types.Message):
         await done_msg.delete()
         await bot.send_document(chat_id=message.from_user.id,
                                 document=open(result, 'rb'),
-                                caption=f'⬆️ {" ".join(cmd_split)} `执行结果超长,请查看log` ⬆️' % (' '.join(cmd_split)),
+                                caption=f'⬆️ {" ".join(cmd_split)} `执行结果超长,请查看log` ⬆️'.replace("_", "\_"),
                                 parse_mode=types.ParseMode.MARKDOWN)
     else:
         if result == "":
