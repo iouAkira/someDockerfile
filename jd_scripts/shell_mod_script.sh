@@ -9,11 +9,12 @@ cp /jds/jd_scripts/gen_code_conf.list "$GEN_CODE_LIST"
 echo "附加功能2，拉取monk-coder仓库的代码，并增加相关任务"
 if [ ! -d "/monk/" ]; then
   echo "未检查到monk-coder仓库脚本，初始化下载相关脚本..."
-  git clone https://github.com/monk-coder/dust /monk
+  cp -rf /local_scripts/monk/ /monk
+#   git clone https://github.com/monk-coder/dust /monk
 else
   echo "更新monk-coder脚本相关文件..."
-  git -C /monk reset --hard
-  git -C /monk pull --rebase
+#   git -C /monk reset --hard
+#   git -C /monk pull --rebase
 fi
 
 if [ -n "$(ls /monk/car/*_*.js)" ]; then
