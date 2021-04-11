@@ -170,20 +170,6 @@ else
   echo "未配置启用unicom签到任务环境变量ENABLE_UNICOM，故不添加unicom定时任务..."
 fi
 
-echo "这是干啥呢"
-(
-  cat <<EOF
-#!/bin/sh
-set -e
-
-for acc in \$(ls / | grep asm | tr "\n" " "); do
-  echo /\${acc}
-  node /\${acc}/index.js unicom --tryrun --tasks dailyOtherRewardVideo
-done
-
-EOF
-) >/AutoSignMachine/otherRewardVideo.sh
-
 if [ -z "${otherRewardVideo}" ]; then
   echo "$((RANDOM % 30)) 1,10,19,22 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyOtherRewardVideo >> /logs/otherRewardVideo.sh.log 2>&1 &" >>$mergedListFile
 else
@@ -192,6 +178,12 @@ fi
 
 echo "增加默认脚本更新任务..."
 echo "55 */1 * * * docker_entrypoint.sh >> /logs/default_task.log 2>&1" >>$mergedListFile
+
+echo "默认任务里面不执行dailyBookRead10doDraw"
+for taskFile in $(ls ~/.AutoSignMachine/ | grep taskFile_unicom_1 | tr "\n" " ");do
+	echo "${taskFile}"
+  sed -i "s/dailyBookRead10doDraw\",\"taskState\":0/dailyBookRead10doDraw\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
+done
 
 echo "判断是否配置自定义shell执行脚本..."
 if [ 0"$CUSTOM_SHELL_FILE" = "0" ]; then
