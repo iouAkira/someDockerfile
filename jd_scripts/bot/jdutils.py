@@ -263,7 +263,7 @@ def get_glc():
 
 
 async def chk_glc(token, okl_token, cookie):
-    expired_time = time.time() + 10 * 3
+    expired_time = time.time() + 60 * 3
     while True:
         check_time_stamp = int(time.time() * 1000)
         check_url = 'https://plogin.m.jd.com/cgi-bin/m/tmauthchecktoken?&token=%s&ou_state=0&okl_token=%s' % (
