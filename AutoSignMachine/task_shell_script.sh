@@ -185,9 +185,9 @@ EOF
 ) >/AutoSignMachine/otherRewardVideo.sh
 
 if [ -z "${otherRewardVideo}" ]; then
-  echo "$((RANDOM % 30)) 1,10,19,22 * * * sh /AutoSignMachine/otherRewardVideo.sh >> /logs/otherRewardVideo.sh.log 2>&1 &" >>$mergedListFile
+  echo "$((RANDOM % 30)) 1,10,19,22 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyOtherRewardVideo >> /logs/otherRewardVideo.sh.log 2>&1 &" >>$mergedListFile
 else
-  echo "${otherRewardVideo} sh /AutoSignMachine/otherRewardVideo.sh >> /logs/otherRewardVideo.sh.log 2>&1 &" >>$mergedListFile
+  echo "${otherRewardVideo} sh /AutoSignMachine/SequentialTryRunJob.sh dailyOtherRewardVideo >> /logs/otherRewardVideo.sh.log 2>&1 &" >>$mergedListFile
 fi
 
 echo "增加默认脚本更新任务..."
