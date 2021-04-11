@@ -31,6 +31,37 @@ else
   fi
 fi
 
+echo "增加一个莫名其妙的脚本"
+(
+  cat <<EOF
+#!/bin/sh
+set -e
+
+if [ "$1" ]; then
+  JOBS=$1
+else
+  echo "执行SequentialTryRunJob.sh请正确传入参数。"
+  echo "示例: 第一个参数为要执行的jobs，多个用,隔开，第二个参数为账户目录多个用,隔开，第二个参数不则自动取/根目录下的账户/asm****目录"
+  echo "sh SequentialTryRunJob.sh job1,job2 /asm7225"
+  exit 0
+fi
+
+if [ "$2" ]; then
+  for acc in $(echo "$2" | sed "s/,/ /g"); do
+    echo "正在为/${acc}账户,执行${JOBS}任务..."
+    node /"${acc}"/index.js unicom --tryrun --tasks "$JOBS"
+  done
+else
+
+  for acc in $(ls / | grep asm | tr "\n" " "); do
+    echo "正在为/${acc}账户,执行${JOBS}任务..."
+    node /"${acc}"/index.js unicom --tryrun --tasks "$JOBS"
+  done
+fi
+
+EOF
+) >/AutoSignMachine/otherRewardVideo.sh
+
 mergedListFile="/AutoSignMachine/merged_list_file.sh"
 envFile="/root/.AutoSignMachine/.env"
 echo "定时任务文件路径为 ${mergedListFile}"
@@ -63,6 +94,7 @@ if [ $ENABLE_UNICOM ]; then
       appids=$(cat ~/.AutoSignMachine/.env | grep UNICOM_APPID | sed -n "s/.*'\(.*\)'.*/\1/p")
       bookReadFlows=$(cat ~/.AutoSignMachine/.env | grep ENABLE_BOOK_READ | sed -n "s/.*'\(.*\)'.*/\1/p")
       i=1
+      bookReadFlowAccs=""
       for username in $(cat ~/.AutoSignMachine/.env | grep UNICOM_USERNAME | sed -n "s/.*'\(.*\)'.*/\1/p" | sed "s/,/ /g"); do
         sub_dir="asm${username:7:4}"
         if [ ! -d "/$sub_dir/node_modules/" ]; then
@@ -85,12 +117,17 @@ if [ $ENABLE_UNICOM ]; then
         echo "UNICOM_PASSWORD = '$pwd'" >>/"$sub_dir"/config/.env
         echo "UNICOM_APPID = '$appid'" >>/"$sub_dir"/config/.env
         echo "ASYNC_TASKS = true" >>/"$sub_dir"/config/.env
-        i=$(expr $i + 1)
         echo "*/30 7-22 * * * sleep \$((RANDOM % 10)); node /$sub_dir/index.js unicom >> /logs/unicom${username:7:4}.log 2>&1 &" >>${mergedListFile}
         if [[ -n "${bookReadFlow}" && "${bookReadFlow}" == "true" ]]; then
-          echo "17 10,16 * * * sleep \$((RANDOM % 120)); node /$sub_dir/index.js unicom --tryrun --tasks dailyBookRead10doDraw >> /logs/book_read${username:7:4}.log 2>&1 &" >>${mergedListFile}
+          if [ i == 1 ]; then
+            bookReadFlowAccs="/${sub_dir}"
+          else
+            bookReadFlowAccs="${bookReadFlowAccs},/${sub_dir}"
+          fi
         fi
+        i=$(expr $i + 1)
       done
+      echo "17 10,16 * * * sh /AutoSignMachine/otherRewardVideo.sh dailyBookRead10doDraw ${bookReadFlowAccs} >> /logs/seq_book_read.log 2>&1 &" >>${mergedListFile}
     elif [ $UNICOM_TRYRUN_MODE ]; then
       echo "联通配置了UNICOM_TRYRUN_NODE参数，所以定时任务以tryrun模式生成"
       minute=$((RANDOM % 10 + 4))
@@ -147,7 +184,6 @@ done
 EOF
 ) >/AutoSignMachine/otherRewardVideo.sh
 
-echo "干啥呢..."
 if [ -z "${otherRewardVideo}" ]; then
   echo "$((RANDOM % 30)) 1,10,19,22 * * * sh /AutoSignMachine/otherRewardVideo.sh >> /logs/otherRewardVideo.sh.log 2>&1 &" >>$mergedListFile
 else
@@ -163,7 +199,7 @@ if [ 0"$CUSTOM_SHELL_FILE" = "0" ]; then
 else
   if expr "$CUSTOM_SHELL_FILE" : 'http.*' &>/dev/null; then
     echo "自定义shell脚本为远程脚本，开始下在自定义远程脚本。"
-    wget -O /AutoSignMachine/shell_script_mod.sh $CUSTOM_SHELL_FILE
+    wget -O /AutoSignMachine/shell_script_mod.sh "$CUSTOM_SHELL_FILE"
     echo "下载完成，开始执行..."
     echo "#远程自定义shell脚本追加定时任务" >>$mergedListFile
     sh /AutoSignMachine/shell_script_mod.sh
@@ -174,21 +210,21 @@ else
     else
       echo "docker挂载的自定shell脚本，开始执行..."
       echo "#docker挂载自定义shell脚本追加定时任务" >>$mergedListFile
-      sh $CUSTOM_SHELL_FILE
+      sh "$CUSTOM_SHELL_FILE"
       echo "docker挂载的自定shell脚本，执行结束。"
     fi
   fi
 fi
 
-echo "判断是否配置了随即延迟参数..."
-if [ $RANDOM_DELAY_MAX ]; then
-  if [ $RANDOM_DELAY_MAX -ge 1 ]; then
-    echo "已设置随机延迟为 $RANDOM_DELAY_MAX , 设置延迟任务中..."
-    sed -i "/node/sleep \$((RANDOM % \$RANDOM_DELAY_MAX)) && node/g" $mergedListFile
-  fi
-else
-  echo "未配置随即延迟对应的环境变量，故不设置延迟任务..."
-fi
+#echo "判断是否配置了随即延迟参数..."
+#if [ "$RANDOM_DELAY_MAX" ]; then
+#  if [ "$RANDOM_DELAY_MAX" -ge 1 ]; then
+#    echo "已设置随机延迟为 $RANDOM_DELAY_MAX , 设置延迟任务中..."
+#    sed -i "/node/sleep \$((RANDOM % \$RANDOM_DELAY_MAX)) && node/g" $mergedListFile
+#  fi
+#else
+#  echo "未配置随即延迟对应的环境变量，故不设置延迟任务..."
+#fi
 
 echo "增加 |ts 任务日志输出时间戳..."
 sed -i "/\( ts\| |ts\|| ts\)/!s/>>/\|ts >>/g" $mergedListFile
