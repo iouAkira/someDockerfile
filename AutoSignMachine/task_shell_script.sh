@@ -47,7 +47,7 @@ else
 fi
 
 if [ "\$2" ]; then
-  for acc in $(echo "\$2" | sed "s/,/ /g"); do
+  for acc in \$(echo "\$2" | sed "s/,/ /g"); do
     echo "正在为/\${acc}账户,执行\${JOBS}任务..."
     node /"\${acc}"/index.js unicom --tryrun --tasks "\$JOBS"
   done
