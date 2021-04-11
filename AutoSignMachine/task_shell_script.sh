@@ -79,7 +79,7 @@ if [ $ENABLE_UNICOM ]; then
         echo "$sub_dir"
         pwd=$(echo "$pwds" | cut -d ',' -f$i)
         appid="$(echo "$appids" | cut -d ',' -f$i)"
-        bookReadFlows="$(echo "$bookReadFlows" | cut -d ',' -f$i)"
+        bookReadFlow="$(echo "$bookReadFlows" | cut -d ',' -f$i)"
         #echo $appid
         echo "UNICOM_USERNAME = '$username'" >/"$sub_dir"/config/.env
         echo "UNICOM_PASSWORD = '$pwd'" >>/"$sub_dir"/config/.env
@@ -87,7 +87,7 @@ if [ $ENABLE_UNICOM ]; then
         echo "ASYNC_TASKS = true" >>/"$sub_dir"/config/.env
         i=$(expr $i + 1)
         echo "*/30 7-22 * * * sleep \$((RANDOM % 10)); node /$sub_dir/index.js unicom >> /logs/unicom${username:7:4}.log 2>&1 &" >>${mergedListFile}
-        if [[ -n "${bookReadFlows}" && "${bookReadFlows}" == "true" ]]; then
+        if [[ -n "${bookReadFlow}" && "${bookReadFlow}" == "true" ]]; then
           echo "17 10,16 * * * sleep \$((RANDOM % 120)); node /$sub_dir/index.js unicom --tryrun --tasks dailyBookRead10doDraw >> /logs/book_read${username:7:4}.log 2>&1 &" >>${mergedListFile}
         fi
       done
