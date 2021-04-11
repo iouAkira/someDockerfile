@@ -61,6 +61,7 @@ if [ $ENABLE_UNICOM ]; then
       echo "联通配置了UNICOM_SUBDIR_MODE参数，所以使用每个账户自动创建单独目录及配置来执行任务"
       pwds=$(cat ~/.AutoSignMachine/.env | grep UNICOM_PASSWORD | sed -n "s/.*'\(.*\)'.*/\1/p")
       appids=$(cat ~/.AutoSignMachine/.env | grep UNICOM_APPID | sed -n "s/.*'\(.*\)'.*/\1/p")
+      bookReadFlows=$(cat ~/.AutoSignMachine/.env | grep ENABLE_BOOK_READ | sed -n "s/.*'\(.*\)'.*/\1/p")
       i=1
       for username in $(cat ~/.AutoSignMachine/.env | grep UNICOM_USERNAME | sed -n "s/.*'\(.*\)'.*/\1/p" | sed "s/,/ /g"); do
         sub_dir="asm${username:7:4}"
@@ -78,6 +79,7 @@ if [ $ENABLE_UNICOM ]; then
         echo "$sub_dir"
         pwd=$(echo $pwds | cut -d ',' -f$i)
         appid="$(echo $appids | cut -d ',' -f$i)"
+        bookReadFlows="$(echo $appids | cut -d ',' -f$i)"
         #echo $appid
         echo "UNICOM_USERNAME = '$username'" >/"$sub_dir"/config/.env
         echo "UNICOM_PASSWORD = '$pwd'" >>/"$sub_dir"/config/.env
@@ -85,6 +87,9 @@ if [ $ENABLE_UNICOM ]; then
         echo "ASYNC_TASKS = true" >>/"$sub_dir"/config/.env
         i=$(expr $i + 1)
         echo "*/30 7-22 * * * sleep \$((RANDOM % 10)); node /$sub_dir/index.js unicom >> /logs/unicom${username:7:4}.log 2>&1 &" >>${mergedListFile}
+        if [[ -n "${bookReadFlows}" && "${bookReadFlows}" == "true" ]]; then
+          echo "17 10,16 * * * sleep \$((RANDOM % 120)); node /$sub_dir/index.js unicom --tryrun --tasks dailyBookRead10doDraw >> /logs/book_read${username:7:4}.log 2>&1 &" >>${mergedListFile}
+        fi
       done
     elif [ $UNICOM_TRYRUN_MODE ]; then
       echo "联通配置了UNICOM_TRYRUN_NODE参数，所以定时任务以tryrun模式生成"
