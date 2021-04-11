@@ -42,14 +42,14 @@ if [ "\$1" ]; then
 else
   echo "执行SequentialTryRunJob.sh请正确传入参数。"
   echo "示例: 第一个参数为要执行的jobs，多个用,隔开，第二个参数为账户目录多个用,隔开，第二个参数不则自动取/根目录下的账户/asm****目录"
-  echo "sh SequentialTryRunJob.sh job1,job2 /asm7225"
+  echo "sh SequentialTryRunJob.sh job1,job2 /asm7225,/asm7123"
   exit 0
 fi
 
 if [ "\$2" ]; then
   for acc in \$(echo "\$2" | sed "s/,/ /g"); do
-    echo "正在为/\${acc}账户,执行\${JOBS}任务..."
-    node /"\${acc}"/index.js unicom --tryrun --tasks "\$JOBS"
+    echo "正在为\${acc}账户,执行\${JOBS}任务..."
+    node "\${acc}"/index.js unicom --tryrun --tasks "\$JOBS"
   done
 else
 
