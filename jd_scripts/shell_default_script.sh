@@ -36,7 +36,7 @@ echo "第1步定义定时任务合并处理用到的文件路径..."
 defaultListFile="/scripts/docker/$DEFAULT_LIST_FILE"
 echo "└──默认文件定时任务文件路径为 ${defaultListFile}"
 if [ "$CUSTOM_LIST_FILE" ]; then
-  customListFile="/scripts/docker/$CUSTOM_LIST_FILE"
+  customListFile="$CUSTOM_LIST_FILE"
   echo "└──自定义定时任务文件路径为 ${customListFile}"
 fi
 mergedListFile="/scripts/docker/merged_list_file.sh"
