@@ -37,8 +37,8 @@ echo "增加一个莫名其妙的脚本"
 #!/bin/sh
 set -e
 
-if [ "$1" ]; then
-  JOBS=$1
+if [ "\$1" ]; then
+  JOBS=\$1
 else
   echo "执行SequentialTryRunJob.sh请正确传入参数。"
   echo "示例: 第一个参数为要执行的jobs，多个用,隔开，第二个参数为账户目录多个用,隔开，第二个参数不则自动取/根目录下的账户/asm****目录"
@@ -46,21 +46,21 @@ else
   exit 0
 fi
 
-if [ "$2" ]; then
-  for acc in $(echo "$2" | sed "s/,/ /g"); do
-    echo "正在为/${acc}账户,执行${JOBS}任务..."
-    node /"${acc}"/index.js unicom --tryrun --tasks "$JOBS"
+if [ "\$2" ]; then
+  for acc in $(echo "\$2" | sed "s/,/ /g"); do
+    echo "正在为/\${acc}账户,执行\${JOBS}任务..."
+    node /"\${acc}"/index.js unicom --tryrun --tasks "\$JOBS"
   done
 else
 
-  for acc in $(ls / | grep asm | tr "\n" " "); do
-    echo "正在为/${acc}账户,执行${JOBS}任务..."
-    node /"${acc}"/index.js unicom --tryrun --tasks "$JOBS"
+  for acc in \$(ls / | grep asm | tr "\n" " "); do
+    echo "正在为/\${acc}账户,执行\${JOBS}任务..."
+    node /"\${acc}"/index.js unicom --tryrun --tasks "\$JOBS"
   done
 fi
 
 EOF
-) >/AutoSignMachine/otherRewardVideo.sh
+) >/AutoSignMachine/SequentialTryRunJob.sh
 
 mergedListFile="/AutoSignMachine/merged_list_file.sh"
 envFile="/root/.AutoSignMachine/.env"
