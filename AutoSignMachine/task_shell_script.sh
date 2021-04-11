@@ -77,9 +77,9 @@ if [ $ENABLE_UNICOM ]; then
         fi
 
         echo "$sub_dir"
-        pwd=$(echo $pwds | cut -d ',' -f$i)
-        appid="$(echo $appids | cut -d ',' -f$i)"
-        bookReadFlows="$(echo $appids | cut -d ',' -f$i)"
+        pwd=$(echo "$pwds" | cut -d ',' -f$i)
+        appid="$(echo "$appids" | cut -d ',' -f$i)"
+        bookReadFlows="$(echo "$bookReadFlows" | cut -d ',' -f$i)"
         #echo $appid
         echo "UNICOM_USERNAME = '$username'" >/"$sub_dir"/config/.env
         echo "UNICOM_PASSWORD = '$pwd'" >>/"$sub_dir"/config/.env
