@@ -119,7 +119,7 @@ if [ $ENABLE_UNICOM ]; then
         echo "ASYNC_TASKS = true" >>/"$sub_dir"/config/.env
         echo "*/30 7-22 * * * sleep \$((RANDOM % 10)); node /$sub_dir/index.js unicom >> /logs/unicom${username:7:4}.log 2>&1 &" >>${mergedListFile}
         if [[ -n "${bookReadFlow}" && "${bookReadFlow}" == "true" ]]; then
-          if [ i == 1 ]; then
+          if [ bookReadFlowAccs == "" ]; then
             bookReadFlowAccs="/${sub_dir}"
           else
             bookReadFlowAccs="${bookReadFlowAccs},/${sub_dir}"
