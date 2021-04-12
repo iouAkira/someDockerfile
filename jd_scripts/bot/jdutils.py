@@ -58,32 +58,64 @@ async def get_path_file(file_dir):
                     else:
                         btn_data_list.append(
                             ' '.join(line.split(">>")[0].split()[5:]).replace(".js", "").replace("|ts", ""))
+                    btn_cnt += 1
 
     return btn_cnt, btn_data_list
 
 
-async def gen_reply_markup_btn(interactive_cmd, scripts_file_path, row_btn_cnt, callback_data_prefix=""):
+async def gen_reply_markup_btn(interactive_cmd="",
+                               scripts_file_path="",
+                               row_btn_cnt=2,
+                               keyboard_type="inline"):
     """
     根据传入的指令/或者callback data生成不同的keyboard_markup
+    :param keyboard_type:
     :param interactive_cmd
     :param scripts_file_path
     :param row_btn_cnt
-    :param callback_data_prefix
     :return keyboard_markup
     """
-    keyboard_markup = types.InlineKeyboardMarkup(row_width=10)
-    button_cnt, button_data_list = await get_path_file(scripts_file_path)
-    button_data_list.sort()
-    for i in range(math.ceil(len(button_data_list) / row_btn_cnt)):
-        ret = button_data_list[0:row_btn_cnt]
-        row_btn = []
-        for ii in ret:
-            # logger.info(ii.split("/")[-1].split()[-1])
-            row_btn.append(
-                types.InlineKeyboardButton(text=ii.split("/")[-1].split()[-1], callback_data=f"{interactive_cmd} {ii}"))
-            button_data_list.remove(ii)
-        keyboard_markup.row(*row_btn)
-    return keyboard_markup
+
+    if keyboard_type == "reply":
+        keyboard_markup = types.ReplyKeyboardMarkup(row_width=10)
+        button_cnt, button_data_list = 0, []
+        try:
+            with open("/data/replyKeyboard.list", "wr") as keyboardf:
+                lines = keyboardf.readlines()
+                for line in lines:
+                    if line.startswith("#") \
+                            or line.strip() == "":
+                        pass
+                    else:
+                        button_data_list.append(line)
+                        button_cnt += 1
+
+            for i in range(math.ceil(len(button_data_list) / row_btn_cnt)):
+                ret = button_data_list[0:row_btn_cnt]
+                row_btn = []
+                for ii in ret:
+                    row_btn.append(
+                        types.InlineKeyboardButton(text=ii.split("^")[0], callback_data=f"{ii.split('^')[0]}"))
+                    button_data_list.remove(ii)
+                keyboard_markup.row(*row_btn)
+        except Exception as e:
+            keyboard_markup.add(types.InlineKeyboardButton(text="获取出错，请检查你的配置文件", callback_data="error"))
+        return keyboard_markup
+    else:
+        keyboard_markup = types.InlineKeyboardMarkup(row_width=10)
+        button_cnt, button_data_list = await get_path_file(scripts_file_path)
+        button_data_list.sort()
+        for i in range(math.ceil(len(button_data_list) / row_btn_cnt)):
+            ret = button_data_list[0:row_btn_cnt]
+            row_btn = []
+            for ii in ret:
+                # logger.info(ii.split("/")[-1].split()[-1])
+                row_btn.append(
+                    types.InlineKeyboardButton(text=ii.split("/")[-1].split()[-1],
+                                               callback_data=f"{interactive_cmd} {ii}"))
+                button_data_list.remove(ii)
+            keyboard_markup.row(*row_btn)
+        return keyboard_markup
 
 
 async def exec_script(command="", log_dir="/scripts/logs"):
