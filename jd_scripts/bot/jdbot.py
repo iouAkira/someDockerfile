@@ -64,7 +64,6 @@ async def help_handler(message: types.Message):
     if _EXT in _gen_code_cmd_list:
         gen_cmd_list.remove(_EXT)
     reply_keyboard = await jdutils.gen_reply_markup_btn(row_btn_cnt=4, keyboard_type="reply")
-
     await bot.send_message(chat_id=message.from_user.id,
                            reply_markup=reply_keyboard,
                            text="`限制自己使用的交互拓展机器人`\n" +

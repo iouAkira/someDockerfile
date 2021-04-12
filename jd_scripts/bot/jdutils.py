@@ -94,13 +94,12 @@ async def gen_reply_markup_btn(interactive_cmd="",
                 ret = button_data_list[0:row_btn_cnt]
                 row_btn = []
                 for ii in ret:
-                    row_btn.append(
-                        types.InlineKeyboardButton(text=ii.split("^")[0], callback_data=f"{ii.split('^')[0]}"))
+                    row_btn.append(types.KeyboardButton(ii))
                     button_data_list.remove(ii)
                 keyboard_markup.row(*row_btn)
         except Exception as e:
             logger.error(e)
-            keyboard_markup.add(types.InlineKeyboardButton(text="获取出错，请检查你的配置文件", callback_data="error"))
+            keyboard_markup.add(types.KeyboardButton(text="获取出错，请检查你的配置文件"))
         return keyboard_markup
     else:
         keyboard_markup = types.InlineKeyboardMarkup(row_width=10)
