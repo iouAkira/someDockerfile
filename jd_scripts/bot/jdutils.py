@@ -80,7 +80,7 @@ async def gen_reply_markup_btn(interactive_cmd="",
         keyboard_markup = types.ReplyKeyboardMarkup(row_width=10)
         button_cnt, button_data_list = 0, []
         try:
-            with open("/data/replyKeyboard.list", "wr") as keyboardf:
+            with open("/data/replyKeyboard.list", "r") as keyboardf:
                 lines = keyboardf.readlines()
                 for line in lines:
                     if line.startswith("#") \
@@ -99,6 +99,7 @@ async def gen_reply_markup_btn(interactive_cmd="",
                     button_data_list.remove(ii)
                 keyboard_markup.row(*row_btn)
         except Exception as e:
+            logger.error(e)
             keyboard_markup.add(types.InlineKeyboardButton(text="获取出错，请检查你的配置文件", callback_data="error"))
         return keyboard_markup
     else:

@@ -197,6 +197,7 @@ async def query_callback_filter(query: types.CallbackQuery):
 
 @dp.callback_query_handler(query_callback_filter)
 async def inline_kb_answer_callback_handler(query: types.CallbackQuery, callback_type: str, data: str):
+    logger.info(query)
     await query.answer(query.data)
     if callback_type == "cancel":
         await query.message.edit_text(
