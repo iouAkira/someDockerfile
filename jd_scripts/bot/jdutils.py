@@ -77,7 +77,7 @@ async def gen_reply_markup_btn(interactive_cmd="",
     """
 
     if keyboard_type == "reply":
-        keyboard_markup = types.ReplyKeyboardMarkup(row_width=10)
+        keyboard_markup = types.ReplyKeyboardMarkup(row_width=10, resize_keyboard=True, one_time_keyboard=False)
         button_cnt, button_data_list = 0, []
         try:
             with open("/data/replyKeyboard.list", "r") as keyboardf:
