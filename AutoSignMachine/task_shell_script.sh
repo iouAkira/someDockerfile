@@ -171,10 +171,23 @@ else
 fi
 
 if [ -z "${otherRewardVideo}" ]; then
-  echo "$((RANDOM % 30)) 1,10,19,22 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyOtherRewardVideo >> /logs/otherRewardVideo.sh.log 2>&1 &" >>$mergedListFile
+  #为所有账户执行 dailyOtherRewardVideo 大水任务，执行方式单次单账户执行（耗时长，易出错）
+  echo "$((RANDOM % 30)) 1,10 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyOtherRewardVideo >> /logs/otherRewardVideo.log 2>&1 &" >>$mergedListFile
 else
-  echo "${otherRewardVideo} sh /AutoSignMachine/SequentialTryRunJob.sh dailyOtherRewardVideo >> /logs/otherRewardVideo.sh.log 2>&1 &" >>$mergedListFile
+  echo "${otherRewardVideo} sh /AutoSignMachine/SequentialTryRunJob.sh dailyOtherRewardVideo >> /logs/otherRewardVideo.log 2>&1 &" >>$mergedListFile
 fi
+
+#为所有账户执行所有任务，执行方式单次单账户单任务执行 all 里面排除了jflottery，dailyOtherRewardVideo，playiosgame，dailygameIntegral，dailyBookRead10doDraw
+#20点的时候查缺补漏
+echo "01 20 * * * sh /AutoSignMachine/SequentialTryRunJob.sh all >> /logs/otherRewardVideo.log 2>&1 &" >>$mergedListFile
+#为所有账户执行 jflottery 看脸任务，执行方式单次单账户执行（玄学时间点）
+echo "29 6 * * * sh /AutoSignMachine/SequentialTryRunJob.sh jflottery >> /logs/jflottery.log 2>&1 &" >>$mergedListFile
+#为所有账户执行 playiosgame 任务，执行方式单次单账户执行（耗时长）
+echo "$((RANDOM % 30)) 7,12 * * * sh /AutoSignMachine/SequentialTryRunJob.sh playiosgame >> /logs/playiosgame.log 2>&1 &" >>$mergedListFile
+#为所有账户执行d ailygameIntegral 任务，执行方式单次单账户执行（耗时长）
+echo "$((RANDOM % 30)) 8,14 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailygameIntegral >> /logs/dailygameIntegral.log 2>&1 &" >>$mergedListFile
+#为所有账户执行 dailygameIntegral 任务，执行方式单次单账户执行（耗时长）
+echo "$((RANDOM % 30)) 15,19 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyBookRead10doDraw >> /logs/dailyBookRead10doDraw.log 2>&1 &" >>$mergedListFile
 
 echo "增加默认脚本更新任务..."
 echo "55 */1 * * * docker_entrypoint.sh >> /logs/default_task.log 2>&1" >>$mergedListFile
