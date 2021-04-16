@@ -184,10 +184,10 @@ echo "01 20 * * * sh /AutoSignMachine/SequentialTryRunJob.sh all >> /logs/otherR
 echo "29 6 * * * sh /AutoSignMachine/SequentialTryRunJob.sh jflottery >> /logs/jflottery.log 2>&1 &" >>$mergedListFile
 #为所有账户执行 playiosgame 任务，执行方式单次单账户执行（耗时长）
 echo "$((RANDOM % 30)) 7,12 * * * sh /AutoSignMachine/SequentialTryRunJob.sh playiosgame >> /logs/playiosgame.log 2>&1 &" >>$mergedListFile
-#为所有账户执行d ailygameIntegral 任务，执行方式单次单账户执行（耗时长）
-echo "$((RANDOM % 30)) 8,14 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailygameIntegral >> /logs/dailygameIntegral.log 2>&1 &" >>$mergedListFile
 #为所有账户执行 dailygameIntegral 任务，执行方式单次单账户执行（耗时长）
-echo "$((RANDOM % 30)) 15,19 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyBookRead10doDraw >> /logs/dailyBookRead10doDraw.log 2>&1 &" >>$mergedListFile
+echo "$((RANDOM % 30)) 8,14 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailygameIntegral >> /logs/dailygameIntegral.log 2>&1 &" >>$mergedListFile
+#为所有账户执行 dailyBookRead10doDraw 任务，执行方式单次单账户执行（耗时长，看需要在自定shell里面加开启）
+#echo "$((RANDOM % 30)) 15,19 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyBookRead10doDraw >> /logs/dailyBookRead10doDraw.log 2>&1 &" >>$mergedListFile
 
 echo "增加默认脚本更新任务..."
 echo "55 */1 * * * docker_entrypoint.sh >> /logs/default_task.log 2>&1" >>$mergedListFile
