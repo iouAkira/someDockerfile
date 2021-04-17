@@ -179,13 +179,13 @@ fi
 
 #为所有账户执行所有任务，执行方式单次单账户单任务执行 all 里面排除了jflottery，dailyOtherRewardVideo，playiosgame，dailygameIntegral，dailyBookRead10doDraw
 #20点的时候查缺补漏
-echo "01 20 * * * sh /AutoSignMachine/SequentialTryRunJob.sh all >> /logs/otherRewardVideo.log 2>&1 &" >>$mergedListFile
+echo "01 20 * * * sh /AutoSignMachine/SequentialTryRunJob.sh all >> /logs/all.log 2>&1 &" >>$mergedListFile
 #为所有账户执行 jflottery 看脸任务，执行方式单次单账户执行（玄学时间点）
 echo "29 6 * * * sh /AutoSignMachine/SequentialTryRunJob.sh jflottery >> /logs/jflottery.log 2>&1 &" >>$mergedListFile
 #为所有账户执行 playiosgame 任务，执行方式单次单账户执行（耗时长）
 echo "$((RANDOM % 30)) 7,12 * * * sh /AutoSignMachine/SequentialTryRunJob.sh playiosgame >> /logs/playiosgame.log 2>&1 &" >>$mergedListFile
 #为所有账户执行 dailygameIntegral 任务，执行方式单次单账户执行（耗时长）
-echo "$((RANDOM % 30)) 8,14 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailygameIntegral >> /logs/dailygameIntegral.log 2>&1 &" >>$mergedListFile
+echo "$((RANDOM % 30)) 9,14 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailygameIntegral >> /logs/dailygameIntegral.log 2>&1 &" >>$mergedListFile
 #为所有账户执行 dailyBookRead10doDraw 任务，执行方式单次单账户执行（耗时长，看需要在自定shell里面加开启）
 #echo "$((RANDOM % 30)) 15,19 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyBookRead10doDraw >> /logs/dailyBookRead10doDraw.log 2>&1 &" >>$mergedListFile
 
