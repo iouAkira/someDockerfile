@@ -196,6 +196,9 @@ echo "默认任务里面不执行dailyBookRead10doDraw"
 for taskFile in $(ls ~/.AutoSignMachine/ | grep taskFile_unicom_1 | tr "\n" " ");do
 	echo "${taskFile}"
   sed -i "s/dailyBookRead10doDraw\",\"taskState\":0/dailyBookRead10doDraw\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
+  sed -i "s/dailyOtherRewardVideo\",\"taskState\":0/dailyOtherRewardVideo\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
+  sed -i "s/playiosgame\",\"taskState\":0/playiosgame\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
+  sed -i "s/dailygameIntegral\",\"taskState\":0/dailygameIntegral\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
 done
 
 echo "判断是否配置自定义shell执行脚本..."
