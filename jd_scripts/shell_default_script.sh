@@ -142,12 +142,13 @@ echo "最后加载最新的附加功能定时任务文件..."
 echo "└──替换任务列表的node指令为spnode"
 sed -i "s/ node / spnode /g" $mergedListFile
 sed -i "/jd_carnivalcity/s/>>/>/g" $mergedListFile
+echo "添加一些可以并发启动的脚本"
+sed -i "/\(jd_joy_reward.js\|jd_blueCoin.js\)/s/spnode/spnode conc/g" $mergedListFile
 crontab $mergedListFile
 
 # echo "第11步打包脚本文件到/scripts/logs/scripts.tar.gz"
 # apk add tar
 # tar -zcvf /scripts/logs/scripts.tar.gz --exclude=scripts/node_modules --exclude=scripts/logs/*.log  --exclude=scripts/logs/*.gz /scripts
-#!/bin/sh
 
 echo "附加额外特殊任务处理jd_crazy_joy_coin。。。"
 if [ ! "$CRZAY_JOY_COIN_ENABLE" ]; then
