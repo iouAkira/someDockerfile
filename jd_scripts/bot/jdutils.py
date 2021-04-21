@@ -383,6 +383,8 @@ def get_okl_tk(s_token, cookie):
     try:
         resp = requests.post(url=post_url, headers=post_header, data=post_data, timeout=20)
         post_resp_headers, post_resp_data = resp.headers, resp.json()
+        logger.info(post_resp_headers)
+        logger.info(post_resp_data)
         token = post_resp_data.get('token')
         okl_token = re.findall(r"okl_token=(.+?);", post_resp_headers.get('set-cookie'))[0]
 
