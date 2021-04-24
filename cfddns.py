@@ -83,4 +83,4 @@ def update_dns_record_ip(zone_id, record_id, token, record_name, ip):
 
 
 if __name__ == "__main__":
-    home_ddns()
+    print(home_ddns())
