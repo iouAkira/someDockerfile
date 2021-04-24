@@ -1,6 +1,11 @@
 #!/bin/sh
 set -e
 
+if [ -d "/data/rebateBot/" ];then
+  cd /data/rebateBot/
+  sh rebateBot.sh
+fi
+
 mergedListFile="/scripts/docker/merged_list_file.sh"
 
 echo "附加功能1，使用jds仓库的gen_code_conf.list文件"
