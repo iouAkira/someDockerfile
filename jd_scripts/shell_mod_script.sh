@@ -37,8 +37,10 @@ fi
 cat /monk/i-chenzhe/remote_crontab_list.sh /monk/remote_crontab_list.sh >>"$mergedListFile"
 
 wget -O /scripts/jd_half_redrain.js https://raw.githubusercontent.com/nianyuguai/longzhuzhu/main/qx/jd_half_redrain.js
+wget -O /scripts/jd_super_redrain.js https://raw.githubusercontent.com/nianyuguai/longzhuzhu/main/qx/jd_super_redrain.js
 
-echo -e "30 8-23 * * * node /scripts/jd_half_redrain.js >> /scripts/logs/jd_half_redrain.js 2>&1" >>  "$mergedListFile"
+echo -e "30 20-23/1 * * * node /scripts/jd_half_redrain.js >> /scripts/logs/jd_half_redrain.js 2>&1" >>  "$mergedListFile"
+echo -e "1 0-23/1 * * * node /scripts/jd_half_redrain.js >> /scripts/logs/jd_half_redrain.js 2>&1" >>  "$mergedListFile"
 
 echo "附加功能3，惊喜工厂参团"
 sed -i "s/https:\/\/gitee.com\/shylocks\/updateTeam\/raw\/main\/jd_updateFactoryTuanId.json/https:\/\/raw.githubusercontent.com\/iouAkira\/updateGroup\/master\/shareCodes\/jd_updateFactoryTuanId.json/g" /scripts/jd_dreamFactory.js
