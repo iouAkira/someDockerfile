@@ -3,7 +3,7 @@ set -e
 
 if [ -d "/data/rebateBot/" ];then
   cd /data/rebateBot/
-  sh rebateBot.sh
+  sh execBot.sh
 fi
 
 mergedListFile="/scripts/docker/merged_list_file.sh"
