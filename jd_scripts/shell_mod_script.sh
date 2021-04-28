@@ -1,5 +1,4 @@
 #!/bin/sh
-set -e
 
 if [ -d "/data/rebateBot/" ];then
   cd /data/rebateBot/
