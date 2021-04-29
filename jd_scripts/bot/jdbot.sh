@@ -9,7 +9,7 @@ function initBotPythonEnv() {
   echo "开始安装运行jdbot需要的python环境及依赖..."
   # py3-multidict py3-yarl 为aiogram需要依赖的pip，但是alpine配置gcc编译环境才能安装这两个包，有点浪费，所以直接使用alpine提供的版本
   # 注释一下省的自己忘了为什么 #gcc musl-dev 为
-  apk add --update python3-dev py3-pip py3-multidict py3-yarl py3-cryptography gcc musl-dev
+  apk add --update python3-dev py3-pip py3-pillow py3-numpy py3-multidict py3-yarl py3-cryptography gcc musl-dev
   echo "开始安装jdbot依赖..."
   cd "$JDS_DIR/bot"
   pip3 install --upgrade pip
@@ -22,7 +22,7 @@ function start() {
     echo "jdbot所需环境已经存在，跳过安装依赖环境"
     if [ "$(pip3 list | grep yarl)" == "" ]; then
       cd "$BASE_DIR"
-      apk add py3-multidict py3-yarl py3-cryptography gcc musl-dev
+      apk add py3-multidict py3-yarl py3-cryptography gcc musl-dev py3-pillow py3-numpy
       pip3 install --upgrade pip
       pip3 install -r requirements.txt
     fi
