@@ -28,8 +28,8 @@ RUN set -ex \
     && export VERSION=$(git describe --tags) \
     && (cd && go get github.com/rakyll/statik) \
     && statik -src=assets/build/ -include=*.html,*.js,*.json,*.css,*.png,*.svg,*.ico -f \
-    && go install -ldflags "-X 'github.com/cloudreve/Cloudreve/v3/pkg/conf.BackendVersion=${VERSION}' \
-    -X 'github.com/cloudreve/Cloudreve/v3/pkg/conf.LastCommit=${COMMIT_SHA}'\
+    && go install -ldflags "-X 'Cloudreve/pkg/conf.BackendVersion=${VERSION}' \
+    -X 'Cloudreve/pkg/conf.LastCommit=${COMMIT_SHA}'\
     -w -s"
 
 FROM alpine
@@ -37,7 +37,7 @@ LABEL AUTHOR="iouAkira <ZS5ha2ltb3RvLmFraXJhQGdtYWlsLmNvbQ==>"
 
 ENV LANG C.UTF-8
 
-COPY --from=be-builder /go/bin/cloudreve /cloudreve/cloudreve
+COPY --from=builder /go/bin/cloudreve /cloudreve/cloudreve
 
 RUN set -ex \
     && apk update && apk upgrade\
