@@ -16,6 +16,9 @@ fi
 if [ -f "/scripts/logs/pull.lock" ]; then
   echo "存在更新锁定文件，跳过git pull操作..."
 else
+  if [ -f "/data/id_rsa" ]; then
+      cp -rf /data/id_rsa /root/.ssh/id_rsa
+  fi
   echo "设定远程仓库地址..."
   cd /scripts
   git remote set-url origin "$REPO_URL"
