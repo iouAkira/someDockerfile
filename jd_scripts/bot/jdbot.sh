@@ -20,9 +20,9 @@ function initBotPythonEnv() {
 function start() {
   if type python3 >/dev/null 2>&1; then
     echo "jdbot所需环境已经存在，跳过安装依赖环境"
-    if [ "$(pip3 list | grep yarl)" == "" ]; then
+    if [[ "$(pip3 list | grep numpy)" == "" || "$(pip3 list | grep pillow)" == "" ]]; then
       cd "$BASE_DIR"
-      apk add py3-multidict py3-yarl py3-cryptography gcc musl-dev py3-pillow py3-numpy
+      apk add --update python3-dev py3-pip py3-pillow py3-numpy py3-multidict py3-yarl py3-cryptography gcc musl-dev
       pip3 install --upgrade pip
       pip3 install -r requirements.txt
     fi
