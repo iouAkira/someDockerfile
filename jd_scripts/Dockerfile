@@ -11,20 +11,11 @@ ENV DEFAULT_LIST_FILE=crontab_list.sh \
 
 RUN set -ex \
     && apk update && apk upgrade\
-    && apk add --no-cache tzdata git openssh-client \
+    && apk add --no-cache tzdata git \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && echo "Asia/Shanghai" > /etc/timezone \
-    && mkdir -p /root/.ssh
-
-COPY ./jd_scripts/id_rsa /root/.ssh/id_rsa
+    && echo "Asia/Shanghai" > /etc/timezone
 
 RUN set -ex \
-    && chmod 600 /root/.ssh/id_rsa \
-    && ssh-keyscan gitee.com > /root/.ssh/known_hosts \
-    && git clone ${REPO_URL} /scripts \
-    && mkdir -p /scripts/logs \
-    && cd /scripts \
-    && git checkout master \
     && mkdir /jds \
     && cd  /jds \
     && git init \
@@ -34,7 +25,13 @@ RUN set -ex \
     && git pull origin master
 
 RUN cp /jds/jd_scripts/docker_entrypoint.sh /usr/local/bin \
-    && chmod +x /usr/local/bin/docker_entrypoint.sh
+    && cp /jds/jd_scripts/repoSync /usr/local/bin \
+    && chmod +x /usr/local/bin/docker_entrypoint.sh \
+    && chmod +x /usr/local/bin/repoSync
+
+RUN set -ex \
+    && repoSync \
+    && mkdir -p /scripts/logs 
 
 WORKDIR /scripts
 
