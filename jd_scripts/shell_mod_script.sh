@@ -23,6 +23,7 @@ fi
 
 if [ -n "$(ls /monk/car/*_*.js)" ]; then
     cp -f /monk/car/*_*.js /scripts
+    cd /monk/car/
     for scriptFile in $(ls /monk/car/*_*.js | tr "\n" " "); do
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
             cp $scriptFile /scripts
@@ -38,6 +39,7 @@ fi
 
 if [ -n "$(ls /monk/i-chenzhe/*_*.js)" ]; then
     cp -f /monk/i-chenzhe/*_*.js /scripts
+    cd /monk/i-chenzhe/
     for scriptFile in $(ls /monk/i-chenzhe/*_*.js | tr "\n" " "); do
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
             cp $scriptFile /scripts
@@ -52,6 +54,7 @@ if [ -n "$(ls /monk/i-chenzhe/*_*.js)" ]; then
 fi
 if [ -n "$(ls /monk/member/*_*.js)" ]; then
     cp -f /monk/member/*_*.js /scripts
+    cd /monk/member/
     for scriptFile in $(ls /monk/member/*_*.js | tr "\n" " "); do
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
             cp $scriptFile /scripts
@@ -66,6 +69,7 @@ if [ -n "$(ls /monk/member/*_*.js)" ]; then
 fi
 if [ -n "$(ls /monk/normal/*_*.js)" ]; then
     cp -f /monk/normal/*_*.js /scripts
+    cd /monk/normal/
     for scriptFile in $(ls /monk/normal/*_*.js | tr "\n" " "); do
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
             cp $scriptFile /scripts
