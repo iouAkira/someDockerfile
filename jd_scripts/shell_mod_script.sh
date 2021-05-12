@@ -28,7 +28,7 @@ if [ -n "$(ls /monk/car/*_*.js)" ]; then
             cp $scriptFile /scripts
             if [ ! -n "$(cat $mergedListFile | grep "/$scriptFile")" ]; then
                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                node /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+                spnode /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
             fi
             echo "#$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
             echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
@@ -43,7 +43,7 @@ if [ -n "$(ls /monk/i-chenzhe/*_*.js)" ]; then
             cp $scriptFile /scripts
             if [ ! -n "$(cat $mergedListFile | grep "/$scriptFile")" ]; then
                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                node /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+                spnode /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
             fi
             echo "#$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
             echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
@@ -57,7 +57,7 @@ if [ -n "$(ls /monk/member/*_*.js)" ]; then
             cp $scriptFile /scripts
             if [ ! -n "$(cat $mergedListFile | grep "/$scriptFile")" ]; then
                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                node /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+                spnode /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
             fi
             echo "#$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
             echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
@@ -71,7 +71,7 @@ if [ -n "$(ls /monk/normal/*_*.js)" ]; then
             cp $scriptFile /scripts
             if [ ! -n "$(cat $mergedListFile | grep "/$scriptFile")" ]; then
                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                node /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+                spnode /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
             fi
             echo "#$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
             echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
@@ -84,8 +84,8 @@ fi
 wget -O /scripts/jd_half_redrain.js https://raw.githubusercontent.com/nianyuguai/longzhuzhu/main/qx/jd_half_redrain.js
 wget -O /scripts/jd_super_redrain.js https://raw.githubusercontent.com/nianyuguai/longzhuzhu/main/qx/jd_super_redrain.js
 
-echo -e "30 20-23/1 * * * node /scripts/jd_half_redrain.js >> /scripts/logs/jd_half_redrain.js 2>&1" >>"$mergedListFile"
-echo -e "1 0-23/1 * * * node /scripts/jd_half_redrain.js >> /scripts/logs/jd_half_redrain.js 2>&1" >>"$mergedListFile"
+echo -e "30 20-23/1 * * * spnode /scripts/jd_half_redrain.js >> /scripts/logs/jd_half_redrain.js 2>&1" >>"$mergedListFile"
+echo -e "1 0-23/1 * * * spnode /scripts/jd_half_redrain.js >> /scripts/logs/jd_half_redrain.js 2>&1" >>"$mergedListFile"
 
 echo "附加功能3，惊喜工厂参团"
 sed -i "s/https:\/\/gitee.com\/shylocks\/updateTeam\/raw\/main\/jd_updateFactoryTuanId.json/https:\/\/raw.githubusercontent.com\/iouAkira\/updateGroup\/master\/shareCodes\/jd_updateFactoryTuanId.json/g" /scripts/jd_dreamFactory.js
