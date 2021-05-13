@@ -14,8 +14,8 @@ RUN set -ex \
     && git clone git@github.com:iouAkira/GolangCode.git /GolangCode \
     && cd /GolangCode/repoSync \
     && go build repoSync.go \
-    && cd /GolangCode/ddbot \
-    && go build ddbot.go \
+    && cd /GolangCode/ddBot \
+    && go build ddBot.go \
     && apk del .build-deps
 
 FROM alpine
