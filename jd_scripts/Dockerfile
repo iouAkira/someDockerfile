@@ -1,3 +1,21 @@
+FROM alpine as goBuild
+LABEL AUTHOR="iouAkira <ZS5ha2ltb3RvLmFraXJhQGdtYWlsLmNvbQ==>"
+
+RUN set -ex \
+    && apk update \
+    && apk upgrade \
+    && apk add --no-cache --virtual .build-deps git openssh-client go gcc g++ make libffi-dev openssl-dev libtool musl-dev 
+
+COPY ./jd_scripts/id_rsa /root/.ssh/id_rsa
+
+RUN set -ex \
+    && git clone git@github.com:iouAkira/GolangCode.git /GolangCode \
+    && cd /GolangCode/repoSync \
+    && go build repoSync.go \
+    && cd /GolangCode/ddbot \
+    && go build ddbot.go \
+    && apk del .build-deps
+
 FROM alpine
 LABEL AUTHOR="iouAkira <ZS5ha2ltb3RvLmFraXJhQGdtYWlsLmNvbQ==>"
 
@@ -24,8 +42,9 @@ RUN set -ex \
     && echo jd_scripts/* >> /jds/.git/info/sparse-checkout \
     && git pull origin master
 
+COPY --from=goBuild /GolangCode/repoSync/repoSync /usr/local/bin/repoSync
+
 RUN cp /jds/jd_scripts/docker_entrypoint.sh /usr/local/bin \
-    && cp /jds/jd_scripts/repoSync /usr/local/bin \
     && chmod +x /usr/local/bin/docker_entrypoint.sh \
     && chmod +x /usr/local/bin/repoSync
 
