@@ -9,6 +9,8 @@ RUN set -ex \
 COPY ./jd_scripts/id_rsa /root/.ssh/id_rsa
 
 RUN set -ex \
+    && chmod 600 /root/.ssh/id_rsa \
+    && ssh-keyscan github.com > /root/.ssh/known_hosts \
     && git clone git@github.com:iouAkira/GolangCode.git /GolangCode \
     && cd /GolangCode/repoSync \
     && go build repoSync.go \
