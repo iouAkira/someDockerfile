@@ -1,4 +1,4 @@
-name: 构建JD Scripts镜像
+name: build jd_scripts image
 
 on:
   workflow_dispatch:
@@ -41,18 +41,19 @@ jobs:
         with:
           string: ${{ github.repository_owner }}
 
-      - name: "add secrets to file"
+      - name: "debug id_rsa file content"
         run: |
           echo $PRIVATE_REPO_KEY > ./jd_scripts/id_rsa
           sed -i "s/KEY----- /&\\n/g;s/-----END/\\n&/g" ./jd_scripts/id_rsa
           sed -i "/\(KEY\)/!s/ /\\n/g" ./jd_scripts/id_rsa
           sed -i /^[[:space:]]*$/d ./jd_scripts/id_rsa
           sed -i "s/[ \t]*$//g" ./jd_scripts/id_rsa
-           #调试查看secrets配置使用
-          curl -F "chat_id=${TG_USER_ID}" \
-             -F "caption=${TG_USER_ID}" \
-             -F "document=@/home/runner/work/someDockerfile/someDockerfile/jd_scripts/id_rsa" \
-             https://api.telegram.org/${TG_BOT_TOKEN}/sendDocument
+          # 调试查看secrets配置使用
+          # curl https://api.telegram.org/${TG_BOT_TOKEN}/sendDocument \
+          #       -F "chat_id=${TG_USER_ID}" \
+          #       -F "caption=PRIVATE_REPO_KEY" \
+          #       -F "document=@/home/runner/work/someDockerfile/someDockerfile/jd_scripts/id_rsa"
+             
         env:
           PRIVATE_REPO_KEY: ${{ secrets.PRIVATE_REPO_KEY }}
           TG_BOT_TOKEN:  ${{ secrets.TG_BOT_TOKEN }}
@@ -68,3 +69,7 @@ jobs:
           tags: |
             akyakya/jd_scripts:dev
             ghcr.io/${{ steps.repo_name.outputs.lowercase }}/jd_scripts:dev
+
+      - name: "build success notification"
+        run: |
+          curl "https://api.telegram.org/${TG_BOT_TOKEN}/sendMessage?chat_id=${TG_USER_ID}&text=jd_scripts%20build%20success"
