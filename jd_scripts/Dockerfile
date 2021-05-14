@@ -45,10 +45,12 @@ RUN set -ex \
     && git pull origin master
 
 COPY --from=goBuild /GolangCode/repoSync/repoSync /usr/local/bin/repoSync
+COPY --from=goBuild /GolangCode/repoSync/ddBot /usr/local/bin/ddBot
 
 RUN cp /jds/jd_scripts/docker_entrypoint.sh /usr/local/bin \
     && chmod +x /usr/local/bin/docker_entrypoint.sh \
-    && chmod +x /usr/local/bin/repoSync
+    && chmod +x /usr/local/bin/repoSync \
+    && chmod +x /usr/local/bin/ddBot
 
 RUN set -ex \
     && repoSync \

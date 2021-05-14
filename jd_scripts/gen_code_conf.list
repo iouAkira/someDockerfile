@@ -1,12 +1,4 @@
-#格式为
-#互助类型-机器人ID-提交代码(根据bot作者配置得来)-活动脚本日志文件名-活动代码(根据bot作者配置得来)-查找互助码取字符串
-#长期活动示例
-#long-@TuringLabbot-jd_sgmh.log-sgmh-暂无
-#临时活动示例
-#temp-@TuringLabbot-jd_sgmh.log-sgmh-暂无
-#每天变化活动示例
-#daily-@TuringLabbot-jd_818.log-818-暂无
-
+#==========================================期活动==========================================#
 #种豆得豆
 long-@TuringLabbot-/submit_activity_codes-jd_plantBean.log-bean-种豆得豆好友互助码】
 #京东农场
@@ -17,17 +9,24 @@ long-@TuringLabbot-/submit_activity_codes-jd_pet.log-pet-东东萌宠好友互�
 long-@TuringLabbot-/submit_activity_codes-jd_jdfactory.log-ddfactory-东东工厂好友互助码】
 #京喜工厂
 long-@TuringLabbot-/submit_activity_codes-jd_dreamFactory.log-jxfactory-京喜工厂好友互助码】
-#临时活动
-temp-@TuringLabbot-/submit_activity_codes-jd_sgmh.log-sgmh-您的好友助力码为:
-#临时活动
-temp-@TuringLabbot-/submit_activity_codes-jd_cfd.log-jxcfd-主】你的互助码: 
-temp-@TuringLabbot-/submit_activity_codes-jd_global.log-jdglobal-好友助力码为 
-temp-@TuringLabbot-/submit_activity_codes-jd_city.log-city-好友助力码：
-temp-@TuringLabbot-/submit_activity_codes-jd_carnivalcity.log-carnivalcity-狂欢城好友互助码】
-temp-@TuringLabbot-/submit_activity_codes-jd_health.log-health-健康社区好友互助码】
 #分红狗活动
 long-@LvanLamCommitCodeBot-/jdcrazyjoy-jd_crazy_joy.log-@N-crazyJoy任务好友互助码】
 #签到领现金
 long-@LvanLamCommitCodeBot-/jdcash-jd_cash.log-@N-您的助力码为
 #京东赚赚
 long-@LvanLamCommitCodeBot-/jdzz-jd_jdzz.log-@N-京东赚赚好友互助码】
+
+#==========================================短期活动==========================================#
+#闪购盲盒
+temp-@TuringLabbot-/submit_activity_codes-jd_sgmh.log-sgmh-您的好友助力码为:
+#京喜财富岛
+temp-@TuringLabbot-/submit_activity_codes-jd_cfd.log-jxcfd-主】你的互助码: 
+#京东国际
+temp-@TuringLabbot-/submit_activity_codes-jd_global.log-jdglobal-好友助力码为 
+#京东健康
+temp-@TuringLabbot-/submit_activity_codes-jd_health.log-health-健康社区好友互助码】
+
+
+#========================================每日提交活动========================================#
+#每日活动
+daily-@TuringLabbot-/submit_activity_codes-jd_health.log-health-健康社区好友互助码】

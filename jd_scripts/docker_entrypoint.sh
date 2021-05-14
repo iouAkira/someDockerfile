@@ -38,11 +38,9 @@ sh /jds/jd_scripts/shell_default_script.sh "$run_cmd"
 echo "--------------------------------------------------默认定时任务执行完成---------------------------------------------------"
 
 if [ "$run_cmd" ]; then
-
-  if [ "$run_cmd" == 'jdbot' ]; then
-    # 启动jdbot安装依赖等操作操作放到后台，不耽阻塞定crontab启动工作
-    echo "后台启动jdbot程序..."
-    sh "$BOT_DIR/jdbot.sh" >>"$LOGS_DIR/jdbot_start.log" 2>&1 &
+  if [ "$run_cmd" == 'ddbot' ]; then
+    echo "后台启动ddBot程序..."
+    sh "$BOT_DIR/ddbot.sh" >>"$LOGS_DIR/ddbot.log" 2>&1 &
   fi
   echo "启动crontab定时任务主进程..."
   crond -f
