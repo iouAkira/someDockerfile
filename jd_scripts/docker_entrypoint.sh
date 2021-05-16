@@ -38,9 +38,9 @@ sh /jds/jd_scripts/shell_default_script.sh "$run_cmd"
 echo "--------------------------------------------------默认定时任务执行完成---------------------------------------------------"
 
 if [ "$run_cmd" ]; then
-  if [ "$run_cmd" == 'ddbot' ]; then
+  if [[ -n "$TG_BOT_TOKEN" && -n "$TG_USER_ID" && -z "$DISABLE_BOT_COMMAND" && -z "$TG_API_HOST" && -f /usr/local/bin/ddBot ]]; then
     echo "后台启动ddBot程序..."
-    sh "$BOT_DIR/ddbot.sh" >>"$LOGS_DIR/ddbot.log" 2>&1 &
+    ddBot >>"$LOGS_DIR/ddbot.log" 2>&1 &
   fi
   echo "启动crontab定时任务主进程..."
   crond -f
