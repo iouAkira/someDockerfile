@@ -1,7 +1,7 @@
 ### 使用说明须知
 - 该版本bot功能虽然提供了cookie扫码自动写入生效并测试的功能，但是代码 __`不开源`__、__`不开源`__、__`不开源`__， __请慎重__、 __请慎重__、 __请慎重__，而且有判断如果是奸商牟利的并无法使用该功能
 - 配置参考
-```
+```sh
 dd_scripts
 ├── data
 │   ├── cookies.list
@@ -13,7 +13,7 @@ dd_scripts
     └── xxxxx.log
 ```
 - docker-compose.yml
-```
+```yml
 jd_scripts:
   image: akyakya/jd_scripts:dev
   container_name: jd
@@ -54,5 +54,4 @@ jd_scripts:
     - FACTORAY_WANTPRODUCT_NAME=红米note9
     - JD_DEBUG=true
     - CUSTOM_LIST_MERGE_TYPE=append
-  command: ["jdbot"]
 ```
