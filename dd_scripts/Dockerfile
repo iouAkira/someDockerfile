@@ -6,7 +6,7 @@ RUN set -ex \
     && apk upgrade \
     && apk add --no-cache --virtual .build-deps git openssh-client go gcc g++ make libffi-dev openssl-dev libtool musl-dev 
 
-COPY ./jd_scripts/id_rsa /root/.ssh/id_rsa
+COPY ./dd_scripts/id_rsa /root/.ssh/id_rsa
 
 RUN set -ex \
     && chmod 600 /root/.ssh/id_rsa \
@@ -39,13 +39,13 @@ RUN set -ex \
     && git init \
     && git remote add -f origin https://github.com/iouAkira/someDockerfile.git \
     && git config core.sparsecheckout true \
-    && echo jd_scripts/* >> /jds/.git/info/sparse-checkout \
+    && echo dd_scripts/* >> /jds/.git/info/sparse-checkout \
     && git pull origin master
 
 COPY --from=goBuild /GolangCode/reposync/repoSync /usr/local/bin/repoSync
 COPY --from=goBuild /GolangCode/ddbot/ddBot /usr/local/bin/ddBot
 
-RUN cp /jds/jd_scripts/docker_entrypoint.sh /usr/local/bin \
+RUN cp /jds/dd_scripts/docker_entrypoint.sh /usr/local/bin \
     && chmod +x /usr/local/bin/docker_entrypoint.sh \
     && chmod +x /usr/local/bin/repoSync \
     && chmod +x /usr/local/bin/ddBot

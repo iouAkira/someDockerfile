@@ -34,7 +34,7 @@ cd /jds
 git pull origin master --rebase
 
 echo "------------------------------------------------执行定时任务任务shell脚本------------------------------------------------"
-sh /jds/jd_scripts/shell_default_script.sh "$run_cmd"
+sh /jds/dd_scripts/shell_default_script.sh "$run_cmd"
 echo "--------------------------------------------------默认定时任务执行完成---------------------------------------------------"
 
 if [ "$run_cmd" ]; then

@@ -136,7 +136,7 @@ crontab -l >/scripts/befor_cronlist.sh
 crontab $mergedListFile
 
 echo "第10步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
-cat /jds/jd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
+cat /jds/dd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
 
 echo "最后加载最新的附加功能定时任务文件..."
 echo "└──替换任务列表的node指令为spnode"
