@@ -25,7 +25,6 @@ ENV DEFAULT_LIST_FILE=crontab_list.sh \
     CUSTOM_LIST_MERGE_TYPE=append \
     COOKIE_LIST=/data/cookies.list \
     GEN_CODE_LIST=/data/gen_code_conf.list \
-    REPO_URL=git@gitee.com:lxk0301/jd_scripts.git \
     LOGS_DIR=/scripts/logs
 
 RUN set -ex \
@@ -43,7 +42,7 @@ RUN set -ex \
     && echo jd_scripts/* >> /jds/.git/info/sparse-checkout \
     && git pull origin master
 
-COPY --from=goBuild /GolangCode/repoSync/repoSync /usr/local/bin/repoSync
+COPY --from=goBuild /GolangCode/reposync/repoSync /usr/local/bin/repoSync
 COPY --from=goBuild /GolangCode/ddbot/ddBot /usr/local/bin/ddBot
 
 RUN cp /jds/jd_scripts/docker_entrypoint.sh /usr/local/bin \
