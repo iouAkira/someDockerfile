@@ -28,7 +28,7 @@ jd_scripts:
     - COOKIE_LIST=/data/cookies.list
     - GEN_CODE_LIST=/data/gen_code_conf.list
     - CUSTOM_LIST_FILE=/data/my_crontab_list.sh
-    - CUSTOM_SHELL_FILE=/jds/jd_scripts/shell_mod_script.sh
+    - CUSTOM_SHELL_FILE=/jds/dd_scripts/shell_mod_script.sh
     #以上为相关数据文件配置
     - TG_BOT_TOKEN=14*******************Q2Y
     - TG_USER_ID=1*********6
