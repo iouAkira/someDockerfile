@@ -4,13 +4,13 @@
 ```sh
 dd_scripts
 ├── data
+│   ├── logs
+│   │   └── xxxxx.log
 │   ├── cookies.list
 │   ├── gen_code_conf.list
 │   ├── my_crontab_list.sh
 │   └── replyKeyboard.list
-├── docker-compose.yml
-└── logs
-    └── xxxxx.log
+└── docker-compose.yml
 ```
 - docker-compose.yml
 ```yml
@@ -19,7 +19,6 @@ jd_scripts:
   container_name: jd
   restart: always
   volumes:
-    - ./logs:/scripts/logs
     - ./data:/data
   tty: true
   extra_hosts:
