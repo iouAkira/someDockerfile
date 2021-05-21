@@ -50,12 +50,12 @@ jobs:
           #       -F "caption=JS_PRIVATE_REPO_KEY" \
           #       -F "document=@/home/runner/work/someDockerfile/someDockerfile/dd_scripts/js_id_rsa"
 
-          apt install -y git openssh-client
-          cp -rf /home/runner/work/someDockerfile/someDockerfile/dd_scripts/js_id_rsa /root/.ssh/id_rsa
-          chmod 600 /root/.ssh/id_rsa
-          ssh-keyscan gitee.com > /root/.ssh/known_hosts
-          git clone git@gitee.com:lxk0301/jd_scripts.git /scripts
-          tar -zcvf scripts.tar.gz /scripts/
+          sudo apt-get install -y git openssh-client
+          sudo cp -rf /home/runner/work/someDockerfile/someDockerfile/dd_scripts/js_id_rsa /root/.ssh/id_rsa
+          sudo chmod 600 /root/.ssh/id_rsa
+          sudo ssh-keyscan gitee.com > /root/.ssh/known_hosts
+          sudo git clone git@gitee.com:lxk0301/jd_scripts.git /scripts
+          sudo tar -zcvf scripts.tar.gz /scripts/
 
         env:
           GO_PRIVATE_REPO_KEY: ${{ secrets.GO_PRIVATE_REPO_KEY }}
