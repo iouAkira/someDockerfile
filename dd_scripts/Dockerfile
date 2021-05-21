@@ -12,10 +12,9 @@ RUN set -ex \
     && chmod 600 /root/.ssh/id_rsa \
     && ssh-keyscan github.com > /root/.ssh/known_hosts \
     && git clone git@github.com:iouAkira/GolangCode.git /GolangCode \
+    && go version \
     && cd /GolangCode/reposync \
     && go build repoSync.go \
-    && go version \
-    && go run repoSync.go \
     && cd /GolangCode/ddbot \
     && go build ddBot.go \
     && apk del .build-deps
