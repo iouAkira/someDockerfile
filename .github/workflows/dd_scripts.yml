@@ -80,3 +80,4 @@ jobs:
           push: true
           tags: |
             akyakya/jd_scripts
+            akyakya/jd_scripts:$(date +"%Y%m%d%H")
