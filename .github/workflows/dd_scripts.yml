@@ -51,6 +51,7 @@ jobs:
           #       -F "document=@/home/runner/work/someDockerfile/someDockerfile/dd_scripts/js_id_rsa"
           
           chmod 600 ./dd_scripts/js_id_rsa
+          ssh-agent bash
           ssh-add ./dd_scripts/js_id_rsa
           ssh-keyscan gitee.com > ~/root/.ssh/known_hosts
           git clone git@gitee.com:lxk0301/jd_scripts.git ./scripts
