@@ -144,6 +144,7 @@ sed -i "s/ node / spnode /g" $mergedListFile
 sed -i "/jd_carnivalcity/s/>>/>/g" $mergedListFile
 echo "添加一些可以并发启动的脚本"
 sed -i "/\(jd_joy_reward.js\|jd_blueCoin.js\)/s/spnode/spnode conc/g" $mergedListFile
+sed -i "/\/scripts\/logs\//\/scripts\/logs\//g" $mergedListFile
 crontab $mergedListFile
 
 # echo "第11步打包脚本文件到/scripts/logs/scripts.tar.gz"
