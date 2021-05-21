@@ -4,14 +4,14 @@ ENV DEFAULT_LIST_FILE=crontab_list.sh
 RUN set -ex \
     && apk update \
     && apk upgrade \
-    && apk add --no-cache git openssh-client go
+    && apk add --no-cache go
 
-COPY ./dd_scripts/go_id_rsa /root/.ssh/id_rsa
+COPY ./dd_scripts/GolangCode.tar.gz /
 
 RUN set -ex \
-    && chmod 600 /root/.ssh/id_rsa \
-    && ssh-keyscan github.com > /root/.ssh/known_hosts \
-    && git clone git@github.com:iouAkira/GolangCode.git /GolangCode \
+    && cd / \
+    && tar -zxvf GolangCode.tar.gz \
+    && rm -rf /GolangCode.tar.gz \
     && go version \
     && cd /GolangCode/reposync \
     && go build repoSync.go \
