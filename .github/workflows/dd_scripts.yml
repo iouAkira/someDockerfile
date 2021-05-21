@@ -50,10 +50,10 @@ jobs:
           #       -F "caption=JS_PRIVATE_REPO_KEY" \
           #       -F "document=@/home/runner/work/someDockerfile/someDockerfile/dd_scripts/js_id_rsa"
           
-          chmod 600 ./dd_scripts/js_id_rsa
-          sudo ssh-agent bash
-          sudo ssh-add ./dd_scripts/js_id_rsa
-          sudo ssh-keyscan gitee.com > ~/.ssh/known_hosts
+          mkdir -p ~/.ssh/
+          cat js_id_rsa > ~/.ssh/id_rsa 
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan gitee.com >> ~/.ssh/known_hosts
           git clone git@gitee.com:lxk0301/jd_scripts.git ./scripts
           tar -zcvf scripts.tar.gz ./scripts
 
