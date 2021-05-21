@@ -14,9 +14,9 @@ dd_scripts
 ```
 - docker-compose.yml
 ```yml
-jd_scripts:
-  image: akyakya/jd_scripts:dev
-  container_name: jd
+dd_scripts:
+  image: akyakya/jd_scripts
+  container_name: dd
   restart: always
   volumes:
     - ./data:/data
