@@ -31,7 +31,7 @@ ENV REPO_URL=git@gitee.com:lxk0301/jd_scripts.git\
 
 RUN set -ex \
     && apk update && apk upgrade\
-    && apk add --no-cache tzdata git \
+    && apk add --no-cache tzdata git openssh-client\
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone
 
