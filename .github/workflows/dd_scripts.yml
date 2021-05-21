@@ -55,7 +55,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan gitee.com >> ~/.ssh/known_hosts
           git clone git@gitee.com:lxk0301/jd_scripts.git ./scripts
-          tar -zcvf scripts.tar.gz ./scripts
+          tar -zcvf ./dd_scripts/scripts.tar.gz ./scripts
 
         env:
           GO_PRIVATE_REPO_KEY: ${{ secrets.GO_PRIVATE_REPO_KEY }}
