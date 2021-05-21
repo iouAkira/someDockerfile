@@ -4,7 +4,7 @@ ENV DEFAULT_LIST_FILE=crontab_list.sh
 RUN set -ex \
     && apk update \
     && apk upgrade \
-    && apk add --no-cache --virtual .build-deps git openssh-client go gcc g++ make libffi-dev openssl-dev libtool musl-dev 
+    && apk add --no-cache --virtual .build-deps git openssh-client go
 
 COPY ./dd_scripts/id_rsa /root/.ssh/id_rsa
 
