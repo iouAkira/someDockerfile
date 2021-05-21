@@ -21,7 +21,7 @@ RUN set -ex \
 FROM alpine
 LABEL AUTHOR="iouAkira <ZS5ha2ltb3RvLmFraXJhQGdtYWlsLmNvbQ==>"
 
-ENV REPO_URL=git@gitee.com:lxk0301/jd_scripts.git\
+ENV REPO_URL=git@gitee.com:lxk0301/jd_scripts.git \
     DEFAULT_LIST_FILE=crontab_list.sh \
     CUSTOM_LIST_MERGE_TYPE=append \
     COOKIE_LIST=/data/cookies.list \
@@ -53,11 +53,15 @@ RUN cp /jds/dd_scripts/docker_entrypoint.sh /usr/local/bin \
     && chmod +x /usr/local/bin/ddBot
 
 COPY ./dd_scripts/js_id_rsa /root/.ssh/id_rsa
+COPY ./dd_scripts/scripts.tar.gz /
 
 RUN set -ex \
     && chmod 600 /root/.ssh/id_rsa \
     && ssh-keyscan gitee.com > /root/.ssh/known_hosts \
-    && git clone ${REPO_URL} /scripts
+    # && git clone ${REPO_URL} /scripts \
+    && cd / \
+    && tar -zxvf spt.tar.gz
+
 
 WORKDIR /scripts
 
