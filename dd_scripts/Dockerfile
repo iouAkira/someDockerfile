@@ -4,7 +4,7 @@ ENV DEFAULT_LIST_FILE=crontab_list.sh
 RUN set -ex \
     && apk update \
     && apk upgrade \
-    && apk add --no-cache --virtual .build-deps git openssh-client go
+    && apk add --no-cache git openssh-client go
 
 COPY ./dd_scripts/id_rsa /root/.ssh/id_rsa
 
@@ -16,8 +16,7 @@ RUN set -ex \
     && cd /GolangCode/reposync \
     && go build repoSync.go \
     && cd /GolangCode/ddbot \
-    && go build ddBot.go \
-    && apk del .build-deps
+    && go build ddBot.go
 
 FROM alpine
 LABEL AUTHOR="iouAkira <ZS5ha2ltb3RvLmFraXJhQGdtYWlsLmNvbQ==>"
