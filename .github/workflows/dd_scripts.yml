@@ -28,19 +28,31 @@ jobs:
 
       - name: "debug id_rsa file content"
         run: |
-          echo $PRIVATE_REPO_KEY > ./dd_scripts/id_rsa
-          sed -i "s/KEY----- /&\\n/g;s/-----END/\\n&/g" ./dd_scripts/id_rsa
-          sed -i "/\(KEY\)/!s/ /\\n/g" ./dd_scripts/id_rsa
-          sed -i /^[[:space:]]*$/d ./dd_scripts/id_rsa
-          sed -i "s/[ \t]*$//g" ./dd_scripts/id_rsa
+          echo $GO_PRIVATE_REPO_KEY > ./dd_scripts/go_id_rsa
+          sed -i "s/KEY----- /&\\n/g;s/-----END/\\n&/g" ./dd_scripts/go_id_rsa
+          sed -i "/\(KEY\)/!s/ /\\n/g" ./dd_scripts/go_id_rsa
+          sed -i /^[[:space:]]*$/d ./dd_scripts/go_id_rsa
+          sed -i "s/[ \t]*$//g" ./dd_scripts/go_id_rsa
+          # curl https://api.telegram.org/${TG_BOT_TOKEN}/sendDocument \
+          #       -F "chat_id=${TG_USER_ID}" \
+          #       -F "caption=GO_PRIVATE_REPO_KEY" \
+          #       -F "document=@/home/runner/work/someDockerfile/someDockerfile/dd_scripts/go_id_rsa"
+
+          echo $JS_PRIVATE_REPO_KEY > ./dd_scripts/js_id_rsa
+          sed -i "s/KEY----- /&\\n/g;s/-----END/\\n&/g" ./dd_scripts/js_id_rsa
+          sed -i "/\(KEY\)/!s/ /\\n/g" ./dd_scripts/js_id_rsa
+          sed -i /^[[:space:]]*$/d ./dd_scripts/js_id_rsa
+          sed -i "s/[ \t]*$//g" ./dd_scripts/js_id_rsa
+
           # 调试查看secrets配置使用
           # curl https://api.telegram.org/${TG_BOT_TOKEN}/sendDocument \
           #       -F "chat_id=${TG_USER_ID}" \
-          #       -F "caption=PRIVATE_REPO_KEY" \
-          #       -F "document=@/home/runner/work/someDockerfile/someDockerfile/dd_scripts/id_rsa"
+          #       -F "caption=JS_PRIVATE_REPO_KEY" \
+          #       -F "document=@/home/runner/work/someDockerfile/someDockerfile/dd_scripts/js_id_rsa"
              
         env:
-          PRIVATE_REPO_KEY: ${{ secrets.PRIVATE_REPO_KEY }}
+          GO_PRIVATE_REPO_KEY: ${{ secrets.GO_PRIVATE_REPO_KEY }}
+          JS_PRIVATE_REPO_KEY: ${{ secrets.JS_PRIVATE_REPO_KEY }}
           TG_BOT_TOKEN:  ${{ secrets.TG_BOT_TOKEN }}
           TG_USER_ID:  ${{ secrets.TG_USER_ID }}
 
@@ -53,4 +65,3 @@ jobs:
           push: true
           tags: |
             akyakya/jd_scripts
-            akyakya/jd_scripts:${{ date }}
