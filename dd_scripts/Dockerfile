@@ -1,6 +1,6 @@
 FROM alpine as goBuild
 LABEL AUTHOR="iouAkira <ZS5ha2ltb3RvLmFraXJhQGdtYWlsLmNvbQ==>"
-
+ENV DEFAULT_LIST_FILE=crontab_list.sh
 RUN set -ex \
     && apk update \
     && apk upgrade \
@@ -14,6 +14,8 @@ RUN set -ex \
     && git clone git@github.com:iouAkira/GolangCode.git /GolangCode \
     && cd /GolangCode/reposync \
     && go build repoSync.go \
+    && go version \
+    && go run repoSync.go \
     && cd /GolangCode/ddbot \
     && go build ddBot.go \
     && apk del .build-deps
