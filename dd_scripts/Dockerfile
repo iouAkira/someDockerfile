@@ -60,7 +60,8 @@ RUN set -ex \
     && ssh-keyscan gitee.com > /root/.ssh/known_hosts \
     # && git clone ${REPO_URL} /scripts \
     && cd / \
-    && tar -zxvf spt.tar.gz
+    && tar -zxvf scripts.tar.gz \
+    && rm -rf /scripts.tar.gz
 
 
 WORKDIR /scripts

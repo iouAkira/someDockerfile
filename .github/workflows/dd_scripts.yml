@@ -26,9 +26,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: clone and zip jd_scripts repo
-          
-
       - name: "gen id_rsa file ,clone and zip jd_scripts repo"
         run: |
           echo $GO_PRIVATE_REPO_KEY > ./dd_scripts/go_id_rsa
