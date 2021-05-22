@@ -73,6 +73,7 @@ if [ -n "$(ls /monk/normal/*_*.js)" ]; then
     for scriptFile in $(ls *_*.js | tr "\n" " "); do
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
             cp $scriptFile /scripts
+            echo "$1"
             if [[ ! -n "$( crontab -l | grep $scriptFile )" && ! -n $1 ]]; then
                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
                 spnode /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
