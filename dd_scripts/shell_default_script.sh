@@ -103,7 +103,7 @@ else
       echo "└──自定义shell脚本为docker挂载脚本文件，但是指定挂载文件${CUSTOM_SHELL_FILE}不存在，跳过执行。"
     else
       echo "┌───────────────────────docker挂载的自定shell脚本，开始执行。───────────────────────┐"
-      sh "$CUSTOM_SHELL_FILE" | sed 's/^/    ─> &/g'
+      sh "$CUSTOM_SHELL_FILE" $1 | sed 's/^/    ─> &/g'
       echo "└───────────────────────docker挂载的自定shell脚本，执行结束。───────────────────────┘"
     fi
   fi
