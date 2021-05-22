@@ -29,7 +29,7 @@ if [ -n "$(ls /monk/car/*_*.js)" ]; then
             cp $scriptFile /scripts
             if [ ! -n "$( crontab -l | grep $scriptFile )" ]; then
                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                spnode /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+                spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
             fi
             echo "#monk-coder仓库任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
             echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
@@ -45,7 +45,7 @@ if [ -n "$(ls /monk/i-chenzhe/*_*.js)" ]; then
             cp $scriptFile /scripts
             if [[ ! -n "$( crontab -l | grep $scriptFile )" && -z $1 ]]; then
                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                spnode /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+                spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
             fi
             echo "#monk-coder仓库任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
             echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
@@ -60,7 +60,7 @@ if [ -n "$(ls /monk/member/*_*.js)" ]; then
             cp $scriptFile /scripts
             if [[ ! -n "$( crontab -l | grep $scriptFile )" && -z $1 ]]; then
                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                spnode /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+                spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
             fi
             echo "#monk-coder仓库任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
             echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
@@ -75,7 +75,7 @@ if [ -n "$(ls /monk/normal/*_*.js)" ]; then
             cp $scriptFile /scripts
             if [[ ! -n "$( crontab -l | grep $scriptFile )" && -z $1 ]]; then
                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                spnode /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+                spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
             fi
             echo "#monk-coder仓库任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
             echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
@@ -100,7 +100,7 @@ if [ -n "$(ls /longzhuzhu/qx/*_*.js)" ]; then
             cp $scriptFile /scripts
             if [[ -z "$( crontab -l | grep $scriptFile )" && -z $1 ]]; then
                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                spnode /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+                spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
             fi
             echo "#longzhuzhu仓库任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
             echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
