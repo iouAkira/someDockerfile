@@ -7,7 +7,7 @@ dd_scripts
 │   ├── logs
 │   │   └── xxxxx.log
 │   ├── cookies.list
-│   ├── gen_code_conf.list
+│   ├── genCodeConf.list
 │   ├── my_crontab_list.sh
 │   └── replyKeyboard.list
 └── docker-compose.yml
