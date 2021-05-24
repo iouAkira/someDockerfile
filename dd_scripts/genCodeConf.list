@@ -1,7 +1,18 @@
+#闪购盲盒       sgmh
+#东东农场       farm
+#东东工厂       ddfactory
+#京喜工厂       jxfactory
+#手机狂欢城      carnivalcity
+#京喜财富岛      jxcfd
+#种豆得豆       bean
+#健康社区       health
+#东东萌宠       pet
+#城城分现金      city
+
 #==========================================期活动==========================================#
 #种豆得豆
 long-@TuringLabbot-/submit_activity_codes-jd_plantBean.log-bean-种豆得豆好友互助码】
-#京东农场
+#东东农场
 long-@TuringLabbot-/submit_activity_codes-jd_fruit.log-farm-东东农场好友互助码】
 #京东萌宠
 long-@TuringLabbot-/submit_activity_codes-jd_pet.log-pet-东东萌宠好友互助码】
@@ -9,24 +20,25 @@ long-@TuringLabbot-/submit_activity_codes-jd_pet.log-pet-东东萌宠好友互�
 long-@TuringLabbot-/submit_activity_codes-jd_jdfactory.log-ddfactory-东东工厂好友互助码】
 #京喜工厂
 long-@TuringLabbot-/submit_activity_codes-jd_dreamFactory.log-jxfactory-京喜工厂好友互助码】
+#京喜财富岛
+long-@TuringLabbot-/submit_activity_codes-jd_cfd.log-jxcfd-京喜财富岛好友互助码】
+#京东健康
+long-@TuringLabbot-/submit_activity_codes-jd_health.log-health-健康社区好友互助码】
+
 #分红狗活动
-long-@LvanLamCommitCodeBot-/jdcrazyjoy-jd_crazy_joy.log-@N-crazyJoy任务好友互助码】
+#long-@LvanLamCommitCodeBot-/jdcrazyjoy-jd_crazy_joy.log-@N-crazyJoy任务好友互助码】
 #签到领现金
-long-@LvanLamCommitCodeBot-/jdcash-jd_cash.log-@N-您的助力码为
+#long-@LvanLamCommitCodeBot-/jdcash-jd_cash.log-@N-您的助力码为
 #京东赚赚
-long-@LvanLamCommitCodeBot-/jdzz-jd_jdzz.log-@N-京东赚赚好友互助码】
+#long-@LvanLamCommitCodeBot-/jdzz-jd_jdzz.log-@N-京东赚赚好友互助码】
 
 #==========================================短期活动==========================================#
 #闪购盲盒
 temp-@TuringLabbot-/submit_activity_codes-jd_sgmh.log-sgmh-购盲盒好友互助码】
-#京喜财富岛
-temp-@TuringLabbot-/submit_activity_codes-jd_cfd.log-jxcfd-主】你的互助码: 
-#京东国际
-temp-@TuringLabbot-/submit_activity_codes-jd_global.log-jdglobal-好友助力码为 
-#京东健康
-temp-@TuringLabbot-/submit_activity_codes-jd_health.log-health-健康社区好友互助码】
+#城城分现金
+temp-@TuringLabbot-/submit_activity_codes-jd_city.log-city-好友助力码：
 
 
 #========================================每日提交活动========================================#
-#每日活动
-daily-@TuringLabbot-/submit_activity_codes-jd_health.log-health-健康社区好友互助码】
+#手机狂欢城
+daily-@TuringLabbot-/submit_activity_codes-jd_carnivalcity.log-carnivalcity-手机狂欢城好友互助码】
