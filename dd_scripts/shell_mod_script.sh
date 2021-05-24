@@ -8,7 +8,7 @@ fi
 mergedListFile="/scripts/docker/merged_list_file.sh"
 
 echo "附加功能1，使用jds仓库的gen_code_conf.list文件"
-cp /jds/dd_scripts/gen_code_conf.list "$GEN_CODE_LIST"
+cp /jds/dd_scripts/genCodeConf.list "$GEN_CODE_LIST"
 
 echo "附加功能2，拉取@monk-coder的dust仓库的代码，并增加相关任务"
 if [ ! -d "/monk/" ]; then
