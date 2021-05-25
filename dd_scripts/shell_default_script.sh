@@ -103,7 +103,7 @@ else
       echo "└──自定义shell脚本为docker挂载脚本文件，但是指定挂载文件${CUSTOM_SHELL_FILE}不存在，跳过执行。"
     else
       echo "┌───────────────────────docker挂载的自定shell脚本，开始执行。───────────────────────┐"
-      sh "$CUSTOM_SHELL_FILE" | sed 's/^/    ─> &/g'
+      sh "$CUSTOM_SHELL_FILE" $1 | sed 's/^/    ─> &/g'
       echo "└───────────────────────docker挂载的自定shell脚本，执行结束。───────────────────────┘"
     fi
   fi
@@ -143,9 +143,10 @@ cat /jds/dd_scripts/shell_spnode.sh >/usr/local/bin/spnode.sh
 echo "最后加载最新的附加功能定时任务文件..."
 echo "└──替换任务列表的node指令为spnode"
 sed -i "s/ node / spnode /g" $mergedListFile
-sed -i "/jd_carnivalcity/s/>>/>/g" $mergedListFile
+#sed -i "/jd_carnivalcity/s/>>/>/g" $mergedListFile
 echo "添加一些可以并发启动的脚本"
-sed -i "/\(jd_joy_reward.js\|jd_blueCoin.js\)/s/spnode/spnode conc/g" $mergedListFile
+sed -i "/\(jd_joy_reward.js\|jd_carnivalcity.js\|jd_blueCoin.js\)/s/spnode/spnode conc/g" $mergedListFile
+sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
 crontab $mergedListFile
 
 # echo "第11步打包脚本文件到/scripts/logs/scripts.tar.gz"
@@ -156,15 +157,15 @@ echo "附加额外特殊任务处理jd_crazy_joy_coin。。。"
 if [ ! "$CRZAY_JOY_COIN_ENABLE" ]; then
   echo "└──默认启用jd_crazy_joy_coin杀掉jd_crazy_joy_coin任务，并重启"
   eval $(ps -ef | grep "jd_crazy" | grep -v "grep" | awk '{print "kill "$1}')
-  echo '' >/scripts/logs/jd_crazy_joy_coin.log
-  spnode /scripts/jd_crazy_joy_coin.js | ts >>/scripts/logs/jd_crazy_joy_coin.log 2>&1 &
+  echo '' >/data/logs/jd_crazy_joy_coin.log
+  spnode /scripts/jd_crazy_joy_coin.js | ts >>/data/logs/jd_crazy_joy_coin.log 2>&1 &
   echo "└──默认jd_crazy_joy_coin重启完成"
 else
   if [ "$CRZAY_JOY_COIN_ENABLE" = "Y" ]; then
     echo "└──配置启用jd_crazy_joy_coin，杀掉jd_crazy_joy_coin任务，并重启"
     eval $(ps -ef | grep "jd_crazy" | grep -v "grep" | awk '{print "kill "$1}')
-    echo '' >/scripts/logs/jd_crazy_joy_coin.log
-    spnode /scripts/jd_crazy_joy_coin.js | ts >>/scripts/logs/jd_crazy_joy_coin.log 2>&1 &
+    echo '' >/data/logs/jd_crazy_joy_coin.log
+    spnode /scripts/jd_crazy_joy_coin.js | ts >>/data/logs/jd_crazy_joy_coin.log 2>&1 &
     echo "└──配置jd_crazy_joy_coin重启完成"
   else
     eval $(ps -ef | grep "jd_crazy" | grep -v "grep" | awk '{print "kill "$1}')

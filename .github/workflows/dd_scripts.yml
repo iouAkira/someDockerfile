@@ -71,6 +71,10 @@ jobs:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_USER_ID: ${{ secrets.TG_USER_ID }}
 
+      - name: Get current date tag
+        id: Tags
+        run: echo "::set-output name=dtTag::$(date +"%Y%m%d%H")"
+
       - name: 构建并推送到Dockerhub镜像仓库
         uses: docker/build-push-action@v2
         with:
@@ -80,3 +84,4 @@ jobs:
           push: true
           tags: |
             akyakya/jd_scripts
+            akyakya/jd_scripts:${{ steps.Tags.outputs.dtTag }}

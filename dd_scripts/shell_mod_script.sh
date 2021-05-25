@@ -8,7 +8,7 @@ fi
 mergedListFile="/scripts/docker/merged_list_file.sh"
 
 echo "附加功能1，使用jds仓库的gen_code_conf.list文件"
-cp /jds/dd_scripts/gen_code_conf.list "$GEN_CODE_LIST"
+cp /jds/dd_scripts/genCodeConf.list "$GEN_CODE_LIST"
 
 echo "附加功能2，拉取@monk-coder的dust仓库的代码，并增加相关任务"
 if [ ! -d "/monk/" ]; then
@@ -25,11 +25,11 @@ if [ -n "$(ls /monk/car/*_*.js)" ]; then
     cp -f /monk/car/*_*.js /scripts
     cd /monk/car/
     for scriptFile in $(ls *_*.js | tr "\n" " "); do
-        if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
+        if [[ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" && -z $1 ]]; then
             cp $scriptFile /scripts
             if [ ! -n "$( crontab -l | grep $scriptFile )" ]; then
                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                spnode /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+                spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
             fi
             echo "#monk-coder仓库任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
             echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
@@ -43,9 +43,9 @@ if [ -n "$(ls /monk/i-chenzhe/*_*.js)" ]; then
     for scriptFile in $(ls *_*.js | tr "\n" " "); do
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
             cp $scriptFile /scripts
-            if [ ! -n "$( crontab -l | grep $scriptFile )" ]; then
+            if [[ ! -n "$( crontab -l | grep $scriptFile )" && -z $1 ]]; then
                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                spnode /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+                spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
             fi
             echo "#monk-coder仓库任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
             echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
@@ -58,9 +58,9 @@ if [ -n "$(ls /monk/member/*_*.js)" ]; then
     for scriptFile in $(ls *_*.js | tr "\n" " "); do
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
             cp $scriptFile /scripts
-            if [ ! -n "$( crontab -l | grep $scriptFile )" ]; then
+            if [[ ! -n "$( crontab -l | grep $scriptFile )" && -z $1 ]]; then
                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                spnode /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+                spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
             fi
             echo "#monk-coder仓库任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
             echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
@@ -73,9 +73,9 @@ if [ -n "$(ls /monk/normal/*_*.js)" ]; then
     for scriptFile in $(ls *_*.js | tr "\n" " "); do
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
             cp $scriptFile /scripts
-            if [ ! -n "$( crontab -l | grep $scriptFile )" ]; then
+            if [[ ! -n "$( crontab -l | grep $scriptFile )" && -z $1 ]]; then
                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                spnode /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+                spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
             fi
             echo "#monk-coder仓库任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
             echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
@@ -98,19 +98,12 @@ if [ -n "$(ls /longzhuzhu/qx/*_*.js)" ]; then
     for scriptFile in $(ls *_*.js | tr "\n" " "); do
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
             cp $scriptFile /scripts
-            if [ ! -n "$( crontab -l | grep $scriptFile )" ]; then
+            if [[ -z "$( crontab -l | grep $scriptFile )" && -z $1 ]]; then
                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                spnode /scripts/$scriptFile | ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+                spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
             fi
             echo "#longzhuzhu仓库任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
             echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
         fi
     done
 fi
-
-echo "附加功能3，惊喜工厂参团"
-sed -i "s/https:\/\/gitee.com\/shylocks\/updateTeam\/raw\/main\/jd_updateFactoryTuanId.json/https:\/\/raw.githubusercontent.com\/iouAkira\/updateGroup\/master\/shareCodes\/jd_updateFactoryTuanId.json/g" /scripts/jd_dreamFactory.js
-sed -i "s/https:\/\/raw.githubusercontent.com\/LXK9301\/updateTeam\/master\/jd_updateFactoryTuanId.json/https:\/\/raw.githubusercontent.com\/iouAkira\/updateGroup\/master\/shareCodes\/jd_updateFactoryTuanId.json/g" /scripts/jd_dreamFactory.js
-sed -i "s/https:\/\/gitee.com\/lxk0301\/updateTeam\/raw\/master\/shareCodes\/jd_updateFactoryTuanId.json/https:\/\/raw.githubusercontent.com\/iouAkira\/updateGroup\/master\/shareCodes\/jd_updateFactoryTuanId.json/g" /scripts/jd_dreamFactory.js
-sed -i "s/\(.*\/\/.*joinLeaderTuan.*\)/   await joinLeaderTuan();/g" /scripts/jd_dreamFactory.js
-sed -i "s/6S9y4sJUfA2vPQP6TLdVIQ==/MUdRsCXI13_DDYMcnD8v7g==/g" /scripts/jd_dreamFactory.js

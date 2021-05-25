@@ -29,18 +29,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.CR_PAT }}
-
-      - id: repo_name
-        uses: ASzc/change-string-case-action@v1
-        with:
-          string: ${{ github.repository_owner }}
-
+      - name: Get current date tag
+        id: Tags
+        run: echo "::set-output name=dtTag::$(date +"%Y%m%d%H")"
+        
       - name: 构建并推送到Dockerhub和ghcr.io镜像仓库
         uses: docker/build-push-action@v2
         with:
@@ -50,4 +42,4 @@ jobs:
           push: true
           tags: |
             akyakya/efb-v2:latest
-            ghcr.io/${{ steps.repo_name.outputs.lowercase }}/efb-v2:latest
+            akyakya/efb-v2:${{ steps.Tags.outputs.dtTag }}
