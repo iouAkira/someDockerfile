@@ -103,7 +103,7 @@ if [ -n "$(ls /longzhuzhu/qx/*_*.js)" ]; then
                 spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
             fi
             echo "#longzhuzhu仓库任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
-            echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
+            echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode conc /scripts/$scriptFile |ts >>/scripts/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
         fi
     done
 fi
