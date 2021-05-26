@@ -25,7 +25,7 @@ ENV REPO_URL=git@gitee.com:lxk0301/jd_scripts.git \
     DEFAULT_LIST_FILE=crontab_list.sh \
     CUSTOM_LIST_MERGE_TYPE=append \
     COOKIE_LIST=/data/cookies.list \
-    GEN_CODE_LIST=/data/gen_code_conf.list \
+    GEN_CODE_LIST=/data/genCodeConf.list \
     ID_RSA_PATH=/data/js_id_rsa \
     LOGS_DIR=/data/logs
 

@@ -1,35 +1,17 @@
 #!/bin/sh
 set -e
 
-echo "增加一个命令组合spnode ，使用该命令spnode jd_xxxx.js 执行js脚本会读取${COOKIE_LIST}里面的jd cookie账号来执行脚本"
-(
-  cat <<EOF
-#!/bin/sh
-set -e
-
-first=\$1
-cmd=\$*
-#echo \${cmd/\$1/}
-if [ \$1 == "conc" ]; then
-    for job in \$(cat \$COOKIE_LIST | grep -v "#" | paste -s -d ' '); do
-        { export JD_COOKIE=\$job && node \${cmd/\$1/}
-        }&
-    done
-elif [ -n "\$(echo \$first | sed -n "/^[0-9]\+\$/p")" ]; then
-    #echo "\$(echo \$first | sed -n "/^[0-9]\+\$/p")"
-    { export JD_COOKIE=\$(sed -n "\${first}p" \$COOKIE_LIST) && node \${cmd/\$1/}
-    }&
-elif [ -n "\$(cat \$COOKIE_LIST  | grep "pt_pin=\$first")" ];then
-    #echo "\$(cat \$COOKIE_LIST  | grep "pt_pin=\$first")"
-    { export JD_COOKIE=\$(cat \$COOKIE_LIST | grep "pt_pin=\$first") && node \${cmd/\$1/}
-    }&
-else
-    { export JD_COOKIE=\$(cat \$COOKIE_LIST | grep -v "#" | paste -s -d '&') && node \$*
-    }&
+if [ -d "/data" ]; then
+  if [ -f "/data/env.sh" ]; then
+    echo "检查道环境变量配置文件 /data/env.sh 存在，使用该文件内环境变量。"
+    source "/data/env.sh"
+  fi
 fi
-EOF
-) >/usr/local/bin/spnode
 
+echo "将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
+cat /jds/dd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
+echo "将仓库的shell_spnode.sh脚本更新至系统/usr/local/bin/spnode内..."
+cat /jds/dd_scripts/shell_spnode.sh >/usr/local/bin/spnode
 chmod +x /usr/local/bin/spnode
 
 echo "第1步定义定时任务合并处理用到的文件路径..."
@@ -134,11 +116,6 @@ fi
 echo "第9步加载最新的定时任务文件..."
 crontab -l >/scripts/befor_cronlist.sh
 crontab $mergedListFile
-
-echo "第10步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
-cat /jds/dd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
-echo "第11步将仓库的shell_spnode.sh脚本更新至系统/usr/local/bin/spnode内..."
-cat /jds/dd_scripts/shell_spnode.sh >/usr/local/bin/spnode
 
 echo "最后加载最新的附加功能定时任务文件..."
 echo "└──替换任务列表的node指令为spnode"
