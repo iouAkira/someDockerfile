@@ -1,6 +1,10 @@
 #!/bin/sh
 set -e
 
+if [ -f /data/env.sh ];then
+    source /data/env.sh
+fi
+
 first=$1
 cmd=$*
 #echo ${cmd/$1/}
