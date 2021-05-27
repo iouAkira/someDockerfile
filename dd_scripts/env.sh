@@ -15,8 +15,6 @@ export CUSTOM_LIST_FILE="/data/my_crontab_list.sh"
 export CUSTOM_SHELL_FILE="/jds/dd_scripts/shell_mod_script.sh"
 #以上为相关数据文件配置
 export JD_IMMORTAL_LATLON="{\"lat\":31.13,\"lng\":121.31}"
-#随机延迟配置该配置,在spnode之外所以不能实时生效
-export RANDOM_DELAY_MAX=20
 #取消订阅配置
 export UN_SUBSCRIBES="100&100&iPhone12&Apple京东自营旗舰店"
 #jd_bean_sign.js脚本运行后推送签到结果简洁版通知，默认推送全部签到结果，填true表示推送简洁通知
