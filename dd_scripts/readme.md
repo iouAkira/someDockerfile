@@ -28,4 +28,6 @@ dd_scripts:
   environment:
     - TG_BOT_TOKEN=14*******************Q2Y
     - TG_USER_ID=1*********6
+    #随机延迟配置该配置,在spnode之外所以不能实时生效
+    - RANDOM_DELAY_MAX=20
 ```
