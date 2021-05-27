@@ -24,7 +24,7 @@ fi
 if [ -n "$(ls /monk/car/*_*.js)" ]; then
     cp -f /monk/car/*_*.js /scripts
     cd /monk/car/
-    for scriptFile in $(ls *_*.js | tr "\n" " "); do
+    for scriptFile in $(ls *_*.js |grep -v monk_shop_add_to_car | tr "\n" " "); do
         if [[ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" && -z $1 ]]; then
             cp $scriptFile /scripts
             if [ ! -n "$( crontab -l | grep $scriptFile )" ]; then
