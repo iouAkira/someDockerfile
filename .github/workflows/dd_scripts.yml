@@ -73,7 +73,7 @@ jobs:
 
       - name: Get current date tag
         id: Tags
-        run: echo "::set-output name=dtTag::$(date +"%Y%m%d%H")"
+        run: echo "::set-output name=dtTag::$(date +"%Y%m%d")"
 
       - name: 构建并推送到Dockerhub镜像仓库
         uses: docker/build-push-action@v2
