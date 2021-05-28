@@ -7,7 +7,7 @@
 /glc 扫码获取Cookie 
 /cmd 执行任何想要执行的命令 例：/cmd ls -l 
 /ak 添加/更新快捷回复键盘 例：/ak 键盘显示===/cmd echo 'show reply keyboard' 
-/dk 删除快捷回复见 例：/dk 键盘显示 
+/dk 删除快捷回复键盘 例：/dk 键盘显示 
 /dl 通过链接下载文件 例：/dl https://raw.githubusercontent.com/iouAkira/someDockerfile/master/dd_scripts/shell_mod_script.sh
 ```
 - 配置参考
