@@ -41,3 +41,17 @@ export BUY_JOY_LEVEL="27"
 export FACTORAY_WANTPRODUCT_NAME="红米note9"
 export JD_DEBUG="true"
 export CUSTOM_LIST_MERGE_TYPE="append"
+
+##互助码环境变量配置，想偷懒自用shell去githubAction.md文档哪查找循环,此处作为示例
+#东东农场 FRUITSHARECODES
+if [ -z $FRUITSHARECODES ]; then
+    shareCodes=""
+    for line in $(cat /data/logs/sharecodeCollection.log | grep 东东农场 | sed s/[[:space:]]//g); do
+        if [[ -z "${shareCodes}" || "${shareCodes}" == "" ]]; then
+            shareCodes=$(cat /data/logs/sharecodeCollection.log | grep 东东农场 | sed s/[[:space:]]//g | grep -v "${line}" | sed -n "s/.*互助码】\(.*\)$/\1/p" | tr -s "\n" "@" | sed "s/@$//")
+        else
+            shareCodes=${shareCodes}"&"$(cat /data/logs/sharecodeCollection.log | grep 东东农场 | sed s/[[:space:]]//g | grep -v "${line}" | sed -n "s/.*互助码】\(.*\)$/\1/p" | tr -s "\n" "@" | sed "s/@$//")
+        fi
+    done
+    export FRUITSHARECODES="$shareCodes"
+fi
