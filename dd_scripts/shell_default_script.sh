@@ -126,6 +126,15 @@ sed -i "/\(jd_joy_reward.js\|jd_carnivalcity.js\|jd_xtg.js\|jd_blueCoin.js\)/s/s
 sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
 crontab $mergedListFile
 
+echo "替换auto_help查找导出互助码日志的路径"
+sed -i "s/\/scripts\/logs/\/data\/logs/g" /scripts/docker/auto_help.sh
+
+# echo "清除非当日产生的日志" 
+# for dd_log in $(ls /data/logs/ | grep jd_*); do
+#     dt=$(date | awk '{print $2" "$3}')
+#     sed -i "/^${dt}.*/!d" "/data/logs/${dd_log}"
+# done
+
 # echo "第11步打包脚本文件到/scripts/logs/scripts.tar.gz"
 # apk add tar
 # tar -zcvf /scripts/logs/scripts.tar.gz --exclude=scripts/node_modules --exclude=scripts/logs/*.log  --exclude=scripts/logs/*.gz /scripts
