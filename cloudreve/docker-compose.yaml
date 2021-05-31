@@ -1,0 +1,8 @@
+cloudreve:
+  image: akyakya/cloudreve
+  container_name: cloudreve
+  restart: always
+  privileged: true
+  volumes:
+    - ./data:/data
+  command: ["-c ", "/data/conf.ini"]

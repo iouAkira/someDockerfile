@@ -2,3 +2,4 @@
 package-lock.json
 logs
 .vscode
+.DS_Store

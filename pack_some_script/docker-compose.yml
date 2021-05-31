@@ -1,0 +1,94 @@
+my_script:
+  image: akyakya/pack_some_script:latest
+  container_name: my_script
+  restart: always
+  tty: true
+  volumes:
+    - ./logs:/logs
+    # - ./my_crontab_list.sh:/pss/my_crontab_list.sh #挂载自定义任务文件
+  environment:
+    #20201219增加自定义任务配置
+    #使用自定义定任务之后，上面volumes挂载之后这里配置对应的文件名
+    # - CUSTOM_LIST_FILE=my_crontab_list.sh #自定任务文件名
+    # - CUSTOM_LIST_MERGE_TYPE=append #默认值append自定文件的使用方式append追加默认之后，overwrite覆盖默认任务
+    # 注意环境变量填写值的时候一律不需要引号（""或者''）下面这些只是事例，根据自己的需求增加删除
+    # 公用通知相关环境变量
+    # server酱服务
+    - PUSH_KEY=
+    # bark服务
+    - BARK_PUSH=
+    # bark服务通知声音
+    - BARK_SOUND=
+    # tg通知bot token
+    - TG_BOT_TOKEN=
+    # tg通知用户id
+    - TG_USER_ID=
+    # 钉钉通知bot token
+    - DD_BOT_TOKEN=
+    - DD_BOT_SECRET=
+    # 喜马拉雅极速版相关，原作者使用\n换行传入多个cookie，脚本里面没有处理环境变量转译，改为用|来连接多个cookies
+    - XMLY_ACCUMULATE_TIME=1 #设置为1开启刷时长，0为关闭刷时长
+    - XMLY_NOTIFY_TIME=18 #喜马拉雅通知时间，要填写2位，例如8点就写08，默认为19
+    - XMLY_SPEED_COOKIE=cookie1
+                        | cookie2
+                        | cookie2
+    # 企鹅阅读相关
+    # 多账号 cookies连接符号，不配置默认为|，自己有能力调整排错的可以尝试自定义,因为汽车之家body里面呢包含| ,使用汽车之家建议改为|&|，否则会汽车之家任务无法执行
+    - COOKIES_SPLIT=|&|
+    - QQREAD_NOTIFY_TIME=19  #企鹅阅读通知时间，默认为19
+    #上面COOKIES_SPLIT配置的什么下面用什么连接多个qqreadbodyVal
+    - QQREAD_BODY=qqreadbodyVal1
+                   |qqreadbodyVal2
+                   |qqreadbodyVal3
+    #上面COOKIES_SPLIT配置的什么下面用什么连接多个qqreadtimeurlVal
+    - QQREAD_TIMEURL=qqreadtimeurlVal1
+                    |qqreadtimeurlVal2
+                    |qqreadtimeurlVal3
+    #上面COOKIES_SPLIT配置的什么下面用什么连接多个qqreadtimeheaderVal
+    - QQREAD_TIMEHD=qqreadtimeheaderVal1
+                   |qqreadtimeheaderVal2
+                   |qqreadtimeheaderVal3docke
+    # 汽车之家需要抓包配置的环境变量
+    # 汽车之家极速版配置比较多，注意不好少配漏配错配
+    - QCZJ_GetUserInfoURL=GetUserInfoURL1
+                    |&|GetUserInfoURL2
+                    |&|GetUserInfoURL3
+    - QCZJ_GetUserInfoHEADER=GetUserInfoHEADER1
+                    |&|GetUserInfoHEADER2
+                    |&|GetUserInfoHEADER3
+    - QCZJ_coinBODY=coinBODY1
+                    |&|coinBODY2
+                    |&|coinBODY3
+    - QCZJ_taskBODY=taskBODY1
+                    |&|taskBODY2
+                    |&|taskBODY3
+    - QCZJ_activityBODY=activityBODY1
+                    |&|activityBODY2
+                    |&|activityBODY3
+    - QCZJ_GoldcoinBODY=GoldcoinBODY1
+                    |&|GoldcoinBODY2
+                    |&|GoldcoinBODY3
+    - QCZJ_videoBODY=videoBODY1
+                    |&|videoBODY2
+                    |&|videoBODY3
+    - QCZJ_WelfarevideoBODY=WelfarevideoBODY1
+                    |&|WelfarevideoBODY2
+                    |&|WelfarevideoBODY3
+    - QCZJ_WelfareBODY=WelfareBODY1
+                    |&|WelfareBODY2
+                    |&|WelfareBODY3
+    - QCZJ_addCoinBODY=addCoinBODY1
+                    |&|addCoinBODY2
+                    |&|addCoinBODY3
+    - QCZJ_addCoin2BODY=addCoin2BODY1
+                    |&|addCoin2BODY2
+                    |&|addCoin2BODY3
+    - QCZJ_reportAssBODY=reportAssBODY1
+                    |&|reportAssBODY2
+                    |&|reportAssBODY3
+    - QCZJ_reportAssHEADER=reportAssHEADER1
+                    |&|reportAssHEADER2
+                    |&|reportAssHEADER3
+    - QCZJ_cointowalletBODY=cointowalletBODY1
+                    |&|cointowalletBODY2
+                    |&|cointowalletBODY3

@@ -1,0 +1,8 @@
+gclone:
+  image: akyakya/gclone-tg-bot
+  container_name: gclone
+  restart: always
+  privileged: true
+  volumes:
+    - ./:/root/.config/rclone/
+  command: ["admin_id","bot_token"] #admin_id:使用这个bot的tg用户id,bot_token:你的bot的token

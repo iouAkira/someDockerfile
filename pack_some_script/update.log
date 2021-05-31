@@ -1,0 +1,33 @@
+v0.0.7
+更新时间:2020-12-21
+- 增加汽车之家极速脚本相关任务配置说明详情查看dockerhub(https://hub.docker.com/r/akyakya/pack_some_script)仓库readme
+- 如果需要使用汽车之家任务多账户分隔符需要调整具体看说明
+汽车之家极速版相关cookie body获取参考原作者仓库说明
+第一步 添加  hostname=mobile.app.autohome.com.cn,pay.autohome.com.cn,openapi.autohome.com.cn,
+- 建议docker push akyakya/pack_some_script更新镜像和参考最新readme配置docker-compose.yml后，执行docker-compose up -d
+
+v0.0.5
+更新时间:2020-12-07
+- 增加了自动更新通知脚本
+- 企鹅越小小程序更新说明，docker-compose.yml的 QQREAD_HEADER 环境变量需要换成 QQREAD_BODY，Readme已经更新说明
+BODY的获取rewrite参考作者原仓库
+https://github.com/ziye12/JavaScript/blob/master/Task/qqreads.js#L41
+- 建议docker push akyakya/pack_some_script更新镜像和docker-compose.yml里面的三个企鹅阅读的变量重新抓包获取最新的，执行docker-compose up -d
+
+v0.0.4
+更新时间:2020-12-05
+- 修正喜马拉雅发送通知功能，增减发送通知环境变量参数
+- 增加镜像更新通知功能
+
+v0.0.3
+更新时间:2020-12-02
+- 修正喜马拉雅极速版是刷时长 XMLY_ACCUMULATE_TIME 环境变量不生效的bug
+
+v0.0.2
+更新时间:2020-12-02
+- 原作者仓库已经支持多账户，更新使用原作者仓库脚本
+
+v0.0.1
+更新时间:2020-12-01
+- 打包喜马拉雅极速版python脚本和企业阅读nodejs多账号版本
+/。/
