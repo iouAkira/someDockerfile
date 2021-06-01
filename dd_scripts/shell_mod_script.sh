@@ -131,10 +131,10 @@ else
 fi
 cd /data/curtinlv/OpenCard
 OpenCardCookies=$(cat /data/cookies.list  | grep -v "jd_WUUpyT\|jd_SgGoap\|620311248_" |tr "\n" "&" | sed "s/&$//")
-sed "/JD_COOKIE =/s/= \(.*\)/= '$OpenCardCookies'/g" /data/curtinlv/OpenCard/OpenCardConfig.ini
-sed "/openCardBean =/s/= \(.*\)/= 20/g" /data/curtinlv/OpenCard/OpenCardConfig.ini
-sed "/TG_BOT_TOKEN =/s/= \(.*\)/= $TG_BOT_TOKEN/g" /data/curtinlv/OpenCard/OpenCardConfig.ini
-sed "/TG_USER_ID =/s/= \(.*\)/= $TG_USER_ID/g" /data/curtinlv/OpenCard/OpenCardConfig.ini
+sed -i "/JD_COOKIE =/s/= \(.*\)/= '$OpenCardCookies'/g" /data/curtinlv/OpenCard/OpenCardConfig.ini
+sed -i "/openCardBean =/s/= \(.*\)/= 20/g" /data/curtinlv/OpenCard/OpenCardConfig.ini
+sed -i "/TG_BOT_TOKEN =/s/= \(.*\)/= $TG_BOT_TOKEN/g" /data/curtinlv/OpenCard/OpenCardConfig.ini
+sed -i "/TG_USER_ID =/s/= \(.*\)/= $TG_USER_ID/g" /data/curtinlv/OpenCard/OpenCardConfig.ini
 
 echo "#curtinlv的会员开卡仓库任务 " >>$mergedListFile
 echo "0 8 * * * cd /data/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
