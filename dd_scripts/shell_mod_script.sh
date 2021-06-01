@@ -108,8 +108,8 @@ if [ -n "$(ls /longzhuzhu/qx/*_*.js)" ]; then
     done
 fi
 
-echo "附加功能3，拉取@curtinlv的 JD-Script仓库的代码，并增加相关任务"
-if [ ! -d "/curtinlv/" ]; then
+echo "附加功能4，拉取@curtinlv的 JD-Script仓库的代码，并增加相关任务"
+if [ ! -d "/data/curtinlv/" ]; then
     echo "未检查到@curtinlv的会员开卡仓库脚本，初始化下载相关脚本..."
     git clone https://github.com/curtinlv/JD-Script.git /data/curtinlv
 else
