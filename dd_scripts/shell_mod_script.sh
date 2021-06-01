@@ -138,4 +138,4 @@ sed -i "/TG_USER_ID =/s/= \(.*\)/= $TG_USER_ID/g" /data/curtinlv/OpenCard/OpenCa
 
 echo "#curtinlv的会员开卡仓库任务 " >>$mergedListFile
 echo "0 8 * * * cd /data/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
-echo "0 8 * * * cd /data/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
+echo "15 15 * * * cd /data/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
