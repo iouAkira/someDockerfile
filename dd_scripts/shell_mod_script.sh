@@ -83,15 +83,15 @@ if [ -n "$(ls /monk/normal/*_*.js)" ]; then
     done
 fi
 
-echo "附加功能3，拉取@nianyuguai的longzhuzhu仓库的代码，并增加相关任务"
-if [ ! -d "/longzhuzhu/" ]; then
-    echo "未检查到longzhuzhu仓库脚本，初始化下载相关脚本..."
-    git clone https://github.com/nianyuguai/longzhuzhu.git /longzhuzhu
-else
-    echo "更新@nianyuguai的longzhuzhu脚本相关文件..."
-    git -C /longzhuzhu reset --hard
-    git -C /longzhuzhu pull --rebase
-fi
+# echo "附加功能3，拉取@nianyuguai的longzhuzhu仓库的代码，并增加相关任务"
+# if [ ! -d "/longzhuzhu/" ]; then
+#     echo "未检查到longzhuzhu仓库脚本，初始化下载相关脚本..."
+#     git clone https://github.com/nianyuguai/longzhuzhu.git /longzhuzhu
+# else
+#     echo "更新@nianyuguai的longzhuzhu脚本相关文件..."
+#     git -C /longzhuzhu reset --hard
+#     git -C /longzhuzhu pull --rebase
+# fi
 if [ -n "$(ls /longzhuzhu/qx/*_*.js)" ]; then
     cp -f /longzhuzhu/qx/*_*.js /scripts
     cd /longzhuzhu/qx/
