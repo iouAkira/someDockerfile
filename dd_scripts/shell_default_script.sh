@@ -123,6 +123,7 @@ sed -i "s/ node / spnode /g" $mergedListFile
 #sed -i "/jd_carnivalcity/s/>>/>/g" $mergedListFile
 echo "添加一些可以并发启动的脚本"
 sed -i "/\(jd_joy_reward.js\|jd_carnivalcity.js\|jd_xtg.js\|jd_blueCoin.js\)/s/spnode/spnode conc/g" $mergedListFile
+sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.com\/api/g" $(grep "share.turinglabs.net" -rl /scripts/)
 sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
 crontab $mergedListFile
 
