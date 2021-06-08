@@ -141,5 +141,6 @@ echo "0 8 * * * cd /data/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data
 echo "15 15 * * * cd /data/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
 
 echo "#curtinlv的关注有礼任务 " >>$mergedListFile
+cat /data/cookies.list > /data/curtinlv/getFollowGifts/JDCookies.txt
 echo "15 8 * * * cd /data/curtinlv/getFollowGifts && python3 jd_getFollowGift.py |ts >>/data/logs/jd_getFollowGift.log 2>&1 &" >>$mergedListFile
 echo "30 15 * * * cd /data/curtinlv/getFollowGifts && python3 jd_getFollowGift.py |ts >>/data/logs/jd_getFollowGift.log 2>&1 &" >>$mergedListFile
