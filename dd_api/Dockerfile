@@ -17,12 +17,12 @@ RUN set -ex \
     && cd /GolangCode/ddapi \
     && CGO_ENABLED=1 go build -o ddapi api.go
 
-FROM alpine
+FROM alpine:latest
 LABEL AUTHOR="iouAkira <ZS5ha2ltb3RvLmFraXJhQGdtYWlsLmNvbQ==>"
 
 RUN set -ex \
     && apk update && apk upgrade \
-    && apk add --no-cache tzdata #\
+    && apk add --no-cache tzdata
     #&& ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     #&& echo "Asia/Shanghai" > /etc/timezone
 
