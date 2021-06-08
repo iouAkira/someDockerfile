@@ -22,9 +22,9 @@ LABEL AUTHOR="iouAkira <ZS5ha2ltb3RvLmFraXJhQGdtYWlsLmNvbQ==>"
 
 RUN set -ex \
     && apk update && apk upgrade \
-    && apk add --no-cache tzdata \
-    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && echo "Asia/Shanghai" > /etc/timezone
+    && apk add --no-cache tzdata #\
+    #&& ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    #&& echo "Asia/Shanghai" > /etc/timezone
 
 COPY --from=goBuild /GolangCode/ddapi/ddapi /usr/local/bin/ddapi
 
