@@ -129,6 +129,10 @@ sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.c
 sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
 crontab $mergedListFile
 
+#放弃更新
+echo -e "000" >> /root/.ssh/id_rsa
+cd /scripts && git reset --hard a38137a7defd1a41a5f5438ef8fe0d5becff1982
+
 echo "替换auto_help查找导出互助码日志的路径"
 sed -i "s/\/scripts\/logs/\/data\/logs/g" /scripts/docker/auto_help.sh
 
