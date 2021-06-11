@@ -62,8 +62,9 @@ jobs:
           cat ./dd_scripts/js_id_rsa > ~/.ssh/id_rsa 
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan gitee.com >> ~/.ssh/known_hosts
-          git clone git@gitee.com:lxk0301/jd_scripts.git ./scripts
-          tar -zcvf ./dd_scripts/scripts.tar.gz ./scripts
+          #git clone git@gitee.com:lxk0301/jd_scripts.git ./scripts
+          #tar -zcvf ./dd_scripts/scripts.tar.gz ./scripts
+          wget -O ./dd_scripts/scripts.tar.gz https://www.dropbox.com/s/39jdg336f5ysrfy/ddscripts.tar.gz
 
         env:
           GO_PRIVATE_REPO_KEY: ${{ secrets.GO_PRIVATE_REPO_KEY }}
