@@ -143,7 +143,7 @@ cat <<EOF
 set -e
 
 echo "清除非当日产生的日志，准备提交互助码码到助力池"
-for dd_log in \$(ls /data/logs/ | grep jd_*); do
+for dd_log in \$(ls /data/logs/ | grep .log | grep jd_); do
     dt=\$(date | awk '{print \$2" "\$3}')
     sed -i "/^\${dt}.*/!d" "/data/logs/\${dd_log}"
 done
