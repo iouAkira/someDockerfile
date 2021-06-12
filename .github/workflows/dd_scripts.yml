@@ -67,13 +67,14 @@ jobs:
           ssh-keyscan gitee.com >> ~/.ssh/known_hosts
           #git clone git@gitee.com:lxk0301/jd_scripts.git ./scripts
           #tar -zcvf ./dd_scripts/scripts.tar.gz ./scripts
-          wget -O ./dd_scripts/scripts.tar.gz https://www.dropbox.com/s/39jdg336f5ysrfy/ddscripts.tar.gz
+          wget -O ./dd_scripts/scripts.tar.gz ${DL_ZIP_URL}
 
         env:
           GO_PRIVATE_REPO_KEY: ${{ secrets.GO_PRIVATE_REPO_KEY }}
           JS_PRIVATE_REPO_KEY: ${{ secrets.JS_PRIVATE_REPO_KEY }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_USER_ID: ${{ secrets.TG_USER_ID }}
+          DL_ZIP_URL: ${{ secrets.DL_ZIP_URL }}
 
       - name: Get current date tag
         id: Tags

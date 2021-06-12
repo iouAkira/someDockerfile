@@ -27,7 +27,8 @@ ENV REPO_URL=git@gitee.com:lxk0301/jd_scripts.git \
     COOKIE_LIST=/data/cookies.list \
     GEN_CODE_LIST=/data/genCodeConf.list \
     ID_RSA_PATH=/data/js_id_rsa \
-    LOGS_DIR=/data/logs
+    LOGS_DIR=/data/logs \
+    DDBOT_VER=0.5
 
 RUN set -ex \
     && apk update && apk upgrade\
