@@ -136,11 +136,24 @@ crontab $mergedListFile
 echo "替换auto_help查找导出互助码日志的路径"
 sed -i "s/\/scripts\/logs/\/data\/logs/g" /scripts/docker/auto_help.sh
 
-# echo "清除非当日产生的日志" 
-# for dd_log in $(ls /data/logs/ | grep jd_*); do
-#     dt=$(date | awk '{print $2" "$3}')
-#     sed -i "/^${dt}.*/!d" "/data/logs/${dd_log}"
-# done
+echo "增加清理日志，提交互助码到助力池脚本。（测试中）"
+(
+cat <<EOF
+#!/bin/sh
+set -e
+
+echo "清除非当日产生的日志，准备提交互助码码到助力池"
+for dd_log in \$(ls /data/logs/ | grep jd_*); do
+    dt=\$(date | awk '{print \$2" "\$3}')
+    sed -i "/^\${dt}.*/!d" "/data/logs/\${dd_log}"
+done
+if [ ${DDBOT_VER} = "0.5" ];then
+    ddtbot -u commitShareCode
+else
+    echo "请更新至最新版docker镜像才能自动上传助力码到助力池"
+fi
+EOF
+) > /scripts/submitShareCode.sh
 
 # echo "第11步打包脚本文件到/scripts/logs/scripts.tar.gz"
 # apk add tar
