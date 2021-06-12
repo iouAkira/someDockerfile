@@ -115,26 +115,10 @@ fi
 
 echo "第9步加载最新的定时任务文件..."
 crontab -l >/scripts/befor_cronlist.sh
-crontab $mergedListFile
 
 #放弃更新
 echo -e "000" >> /root/.ssh/id_rsa
 cd /scripts && git reset --hard a38137a7defd1a41a5f5438ef8fe0d5becff1982
-
-echo "最后加载最新的附加功能定时任务文件..."
-echo "└──替换任务列表的node指令为spnode"
-sed -i "s/ node / spnode /g" $mergedListFile
-#sed -i "/jd_carnivalcity/s/>>/>/g" $mergedListFile
-echo "添加一些可以并发启动的脚本"
-sed -i "/\(jd_joy_reward.js\|jd_carnivalcity.js\|jd_xtg.js\|jd_blueCoin.js\)/s/spnode/spnode conc/g" $mergedListFile
-#因为主助力池关闭了，所以替换助力池链接，该池仅限本docker执行，不影响本地助力，不改变原作者的助力方案
-#使用本docker，如果本地没有配置助力码环境的变量的会自动上传助力码到助力池，如果本地配置了则不上传。
-sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.com\/api/g" $(grep "share.turinglabs.net" -rl /scripts/)
-sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
-crontab $mergedListFile
-
-echo "替换auto_help查找导出互助码日志的路径"
-sed -i "s/\/scripts\/logs/\/data\/logs/g" /scripts/docker/auto_help.sh
 
 echo "增加清理日志，提交互助码到助力池脚本。（测试中）"
 (
@@ -154,6 +138,23 @@ else
 fi
 EOF
 ) > /scripts/submitShareCode.sh
+
+echo "最后加载最新的附加功能定时任务文件..."
+echo "└──替换任务列表的node指令为spnode"
+sed -i "s/ node / spnode /g" $mergedListFile
+#sed -i "/jd_carnivalcity/s/>>/>/g" $mergedListFile
+echo "添加一些可以并发启动的脚本"
+sed -i "/\(jd_joy_reward.js\|jd_carnivalcity.js\|jd_xtg.js\|jd_blueCoin.js\)/s/spnode/spnode conc/g" $mergedListFile
+#因为主助力池关闭了，所以替换助力池链接，该池仅限本docker执行，不影响本地助力，不改变原作者的助力方案
+#使用本docker，如果本地没有配置助力码环境的变量的会自动上传助力码到助力池，如果本地配置了则不上传。
+sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.com\/api/g" $(grep "share.turinglabs.net" -rl /scripts/)
+sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
+
+echo "32 23 * * 6 cd /scripts && sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
+crontab $mergedListFile
+
+echo "替换auto_help查找导出互助码日志的路径"
+sed -i "s/\/scripts\/logs/\/data\/logs/g" /scripts/docker/auto_help.sh
 
 # echo "第11步打包脚本文件到/scripts/logs/scripts.tar.gz"
 # apk add tar
