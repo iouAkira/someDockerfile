@@ -150,7 +150,7 @@ sed -i "/\(jd_joy_reward.js\|jd_carnivalcity.js\|jd_xtg.js\|jd_blueCoin.js\)/s/s
 sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.com\/api/g" $(grep "share.turinglabs.net" -rl /scripts/)
 sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
 
-echo "32 23 * * 6 cd /scripts && sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
+echo "32 23 * * 6 cd /scripts && sleep $((RANDOM % 300)); && sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
 crontab $mergedListFile
 
 echo "替换auto_help查找导出互助码日志的路径"
