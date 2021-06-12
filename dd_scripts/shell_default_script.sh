@@ -117,6 +117,10 @@ echo "第9步加载最新的定时任务文件..."
 crontab -l >/scripts/befor_cronlist.sh
 crontab $mergedListFile
 
+#放弃更新
+echo -e "000" >> /root/.ssh/id_rsa
+cd /scripts && git reset --hard a38137a7defd1a41a5f5438ef8fe0d5becff1982
+
 echo "最后加载最新的附加功能定时任务文件..."
 echo "└──替换任务列表的node指令为spnode"
 sed -i "s/ node / spnode /g" $mergedListFile
@@ -128,10 +132,6 @@ sed -i "/\(jd_joy_reward.js\|jd_carnivalcity.js\|jd_xtg.js\|jd_blueCoin.js\)/s/s
 sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.com\/api/g" $(grep "share.turinglabs.net" -rl /scripts/)
 sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
 crontab $mergedListFile
-
-#放弃更新
-echo -e "000" >> /root/.ssh/id_rsa
-cd /scripts && git reset --hard a38137a7defd1a41a5f5438ef8fe0d5becff1982
 
 echo "替换auto_help查找导出互助码日志的路径"
 sed -i "s/\/scripts\/logs/\/data\/logs/g" /scripts/docker/auto_help.sh
