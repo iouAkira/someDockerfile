@@ -148,7 +148,7 @@ for dd_log in \$(ls /data/logs/ | grep jd_*); do
     sed -i "/^\${dt}.*/!d" "/data/logs/\${dd_log}"
 done
 if [ ${DDBOT_VER} = "0.5" ];then
-    ddtbot -u commitShareCode
+    ddBot -u commitShareCode
 else
     echo "请更新至最新版docker镜像才能自动上传助力码到助力池"
 fi
