@@ -147,6 +147,7 @@ echo "添加一些可以并发启动的脚本"
 sed -i "/\(jd_joy_reward.js\|jd_carnivalcity.js\|jd_xtg.js\|jd_blueCoin.js\)/s/spnode/spnode conc/g" $mergedListFile
 #因为主助力池关闭了，所以替换助力池链接，该池仅限本docker执行，不影响本地助力，不改变原作者的助力方案
 #使用本docker，如果本地没有配置助力码环境的变量的会自动上传助力码到助力池，如果本地配置了则不上传。
+echo "https://t.me/ddMutualHelp 建了一个互助池的群，有问题可进该群。"
 sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.com\/api/g" $(grep "share.turinglabs.net" -rl /scripts/)
 sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
 
