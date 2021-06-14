@@ -6,6 +6,11 @@ if [ -d "/data" ]; then
     echo "检查道环境变量配置文件 /data/env.sh 存在，使用该文件内环境变量。"
     source "/data/env.sh"
   fi
+  if [ -d "/data/logs" ]; then
+    echo "/data/logs目录已存在，跳过创建。"
+  else
+    mkdir -p /data/logs
+  fi
 fi
 
 echo "将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
