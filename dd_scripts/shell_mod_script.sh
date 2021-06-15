@@ -11,19 +11,19 @@ echo "附加功能1，使用jds仓库的genCodeConf.list文件"
 cp /jds/dd_scripts/genCodeConf.list "$GEN_CODE_LIST"
 
 # echo "附加功能2，拉取@monk-coder的dust仓库的代码，并增加相关任务"
-# if [ ! -d "/monk/" ]; then
+# if [ ! -d "/data/cust_repo/monk/" ]; then
 #     echo "未检查到monk-coder仓库脚本，初始化下载相关脚本..."
-#     #   cp -rf /local_scripts/monk/ /monk
-#     git clone https://github.com/monk-coder/dust /monk
+#     #   cp -rf /local_scripts/data/cust_repo/monk/ /data/cust_repo/monk
+#     git clone https://github.com/data/cust_repo/monk-coder/dust /data/cust_repo/monk
 # else
 #     echo "更新monk-coder脚本相关文件..."
-#     git -C /monk reset --hard
-#     git -C /monk pull --rebase
+#     git -C /data/cust_repo/monk reset --hard
+#     git -C /data/cust_repo/monk pull --rebase
 # fi
 
-if [ -n "$(ls /monk/car/*_*.js)" ]; then
-    cp -f /monk/car/*_*.js /scripts
-    cd /monk/car/
+if [ -n "$(ls /data/cust_repo/monk/car/*_*.js)" ]; then
+    cp -f /data/cust_repo/monk/car/*_*.js /scripts
+    cd /data/cust_repo/monk/car/
     for scriptFile in $(ls *_*.js | grep -v monk_shop_add_to_car | tr "\n" " "); do
         if [[ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" && -z $1 ]]; then
             cp $scriptFile /scripts
@@ -37,9 +37,9 @@ if [ -n "$(ls /monk/car/*_*.js)" ]; then
     done
 fi
 
-if [ -n "$(ls /monk/i-chenzhe/*_*.js)" ]; then
-    cp -f /monk/i-chenzhe/*_*.js /scripts
-    cd /monk/i-chenzhe/
+if [ -n "$(ls /data/cust_repo/monk/i-chenzhe/*_*.js)" ]; then
+    cp -f /data/cust_repo/monk/i-chenzhe/*_*.js /scripts
+    cd /data/cust_repo/monk/i-chenzhe/
     for scriptFile in $(ls *_*.js | tr "\n" " "); do
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
             cp $scriptFile /scripts
@@ -52,9 +52,9 @@ if [ -n "$(ls /monk/i-chenzhe/*_*.js)" ]; then
         fi
     done
 fi
-if [ -n "$(ls /monk/member/*_*.js)" ]; then
-    cp -f /monk/member/*_*.js /scripts
-    cd /monk/member/
+if [ -n "$(ls /data/cust_repo/monk/member/*_*.js)" ]; then
+    cp -f /data/cust_repo/monk/member/*_*.js /scripts
+    cd /data/cust_repo/monk/member/
     for scriptFile in $(ls *_*.js | tr "\n" " "); do
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
             cp $scriptFile /scripts
@@ -67,9 +67,9 @@ if [ -n "$(ls /monk/member/*_*.js)" ]; then
         fi
     done
 fi
-if [ -n "$(ls /monk/normal/*_*.js)" ]; then
-    cp -f /monk/normal/*_*.js /scripts
-    cd /monk/normal/
+if [ -n "$(ls /data/cust_repo/monk/normal/*_*.js)" ]; then
+    cp -f /data/cust_repo/monk/normal/*_*.js /scripts
+    cd /data/cust_repo/monk/normal/
     for scriptFile in $(ls *_*.js | tr "\n" " "); do
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
             cp $scriptFile /scripts
@@ -84,17 +84,17 @@ if [ -n "$(ls /monk/normal/*_*.js)" ]; then
 fi
 
 # echo "附加功能3，拉取@nianyuguai的longzhuzhu仓库的代码，并增加相关任务"
-# if [ ! -d "/longzhuzhu/" ]; then
+# if [ ! -d "/data/cust_repo/longzhuzhu/" ]; then
 #     echo "未检查到longzhuzhu仓库脚本，初始化下载相关脚本..."
-#     git clone https://github.com/nianyuguai/longzhuzhu.git /longzhuzhu
+#     git clone https://github.com/nianyuguai/data/cust_repo/longzhuzhu.git /data/cust_repo/longzhuzhu
 # else
 #     echo "更新@nianyuguai的longzhuzhu脚本相关文件..."
-#     git -C /longzhuzhu reset --hard
-#     git -C /longzhuzhu pull --rebase
+#     git -C /data/cust_repo/longzhuzhu reset --hard
+#     git -C /data/cust_repo/longzhuzhu pull --rebase
 # fi
-if [ -n "$(ls /longzhuzhu/qx/*_*.js)" ]; then
-    cp -f /longzhuzhu/qx/*_*.js /scripts
-    cd /longzhuzhu/qx/
+if [ -n "$(ls /data/cust_repo/longzhuzhu/qx/*_*.js)" ]; then
+    cp -f /data/cust_repo/longzhuzhu/qx/*_*.js /scripts
+    cd /data/cust_repo/longzhuzhu/qx/
     for scriptFile in $(ls *_*.js | tr "\n" " "); do
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
             cp $scriptFile /scripts
@@ -109,13 +109,13 @@ if [ -n "$(ls /longzhuzhu/qx/*_*.js)" ]; then
 fi
 
 echo "附加功能4，拉取@curtinlv的 JD-Script仓库的代码，并增加相关任务"
-if [ ! -d "/data/curtinlv/" ]; then
+if [ ! -d "/data/cust_repo/curtinlv/" ]; then
     echo "未检查到@curtinlv的会员开卡仓库脚本，初始化下载相关脚本..."
-    git clone https://github.com/curtinlv/JD-Script.git /data/curtinlv
+    git clone https://github.com/curtinlv/JD-Script.git /data/cust_repo/curtinlv
 else
     echo "更新@curtinlv的会员开卡脚本相关文件..."
-    git -C /data/curtinlv reset --hard
-    git -C /data/curtinlv pull --rebase
+    git -C /data/cust_repo/curtinlv reset --hard
+    git -C /data/cust_repo/curtinlv pull --rebase
 fi
 
 
@@ -129,18 +129,19 @@ else
     apk add --update python3-dev py3-pip
     pip3 install requests
 fi
-cd /data/curtinlv/OpenCard
+
+cd /data/cust_repo/curtinlv/OpenCard
 OpenCardCookies=$(cat /data/cookies.list  | grep -v "jd_WUUpyT\|jd_SgGoap\|620311248_" |tr "\n" "&" | sed "s/&$//")
-sed -i "/JD_COOKIE =/s/= \(.*\)/= '$OpenCardCookies'/g" /data/curtinlv/OpenCard/OpenCardConfig.ini
-sed -i "/openCardBean =/s/= \(.*\)/= 20/g" /data/curtinlv/OpenCard/OpenCardConfig.ini
-sed -i "/TG_BOT_TOKEN =/s/= \(.*\)/= $TG_BOT_TOKEN/g" /data/curtinlv/OpenCard/OpenCardConfig.ini
-sed -i "/TG_USER_ID =/s/= \(.*\)/= $TG_USER_ID/g" /data/curtinlv/OpenCard/OpenCardConfig.ini
+sed -i "/JD_COOKIE =/s/= \(.*\)/= '$OpenCardCookies'/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
+sed -i "/openCardBean =/s/= \(.*\)/= 20/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
+sed -i "/TG_BOT_TOKEN =/s/= \(.*\)/= $TG_BOT_TOKEN/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
+sed -i "/TG_USER_ID =/s/= \(.*\)/= $TG_USER_ID/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
 
 echo "#curtinlv的会员开卡仓库任务 " >>$mergedListFile
-echo "0 8 * * * cd /data/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
-echo "15 15 * * * cd /data/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
+echo "0 8 * * * cd /data/cust_repo/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
+echo "15 15 * * * cd /data/cust_repo/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
 
 echo "#curtinlv的关注有礼任务 " >>$mergedListFile
-cat /data/cookies.list > /data/curtinlv/getFollowGifts/JDCookies.txt
-echo "15 8 * * * cd /data/curtinlv/getFollowGifts && python3 jd_getFollowGift.py |ts >>/data/logs/jd_getFollowGift.log 2>&1 &" >>$mergedListFile
-echo "30 15 * * * cd /data/curtinlv/getFollowGifts && python3 jd_getFollowGift.py |ts >>/data/logs/jd_getFollowGift.log 2>&1 &" >>$mergedListFile
+cat /data/cookies.list > /data/cust_repo/curtinlv/getFollowGifts/JDCookies.txt
+echo "15 8 * * * cd /data/cust_repo/curtinlv/getFollowGifts && python3 jd_getFollowGift.py |ts >>/data/logs/jd_getFollowGift.log 2>&1 &" >>$mergedListFile
+echo "30 15 * * * cd /data/cust_repo/curtinlv/getFollowGifts && python3 jd_getFollowGift.py |ts >>/data/logs/jd_getFollowGift.log 2>&1 &" >>$mergedListFile
