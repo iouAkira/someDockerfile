@@ -37,7 +37,7 @@ if [ -n "$(ls /data/cust_repo/monk/car/*_*.js)" ]; then
     done
 fi
 
-if [ -n "$(ls /data/cust_repo/monk/i-chenzhe/*_*.js)" ]; then
+if [ -n "$(ls /data/cust_repo/monk/i-chenzhe/*_*.js  | grep -v carnivalcity)" ]; then
     cp -f /data/cust_repo/monk/i-chenzhe/*_*.js /scripts
     cd /data/cust_repo/monk/i-chenzhe/
     for scriptFile in $(ls *_*.js | tr "\n" " "); do
