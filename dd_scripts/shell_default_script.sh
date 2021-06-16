@@ -124,6 +124,10 @@ crontab -l >/scripts/befor_cronlist.sh
 #放弃更新
 echo -e "000" >> /root/.ssh/id_rsa
 cd /scripts && git reset --hard a38137a7defd1a41a5f5438ef8fe0d5becff1982
+#自己魔改了企业微信拆分消息通知 暂时没有打包到镜像里面
+if [ -f "/data/sendNotify.js" ];then
+  cp /data/sendNotify.js /scripts
+fi
 
 echo "增加清理日志，提交互助码到助力池脚本。（测试中）"
 (
