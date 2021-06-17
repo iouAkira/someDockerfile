@@ -13,6 +13,10 @@ if [ -d "/data" ]; then
   fi
 fi
 
+#放弃更新
+echo -e "000" >> /root/.ssh/id_rsa
+cd /scripts && git reset --hard a38137a7defd1a41a5f5438ef8fe0d5becff1982
+
 echo "将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
 cat /jds/dd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
 echo "将仓库的shell_spnode.sh脚本更新至系统/usr/local/bin/spnode内..."
@@ -121,9 +125,6 @@ fi
 echo "第9步加载最新的定时任务文件..."
 crontab -l >/scripts/befor_cronlist.sh
 
-#放弃更新
-echo -e "000" >> /root/.ssh/id_rsa
-cd /scripts && git reset --hard a38137a7defd1a41a5f5438ef8fe0d5becff1982
 #自己魔改了企业微信拆分消息通知 暂时没有打包到镜像里面
 if [ -f "/data/sendNotify.js" ];then
   cp /data/sendNotify.js /scripts
