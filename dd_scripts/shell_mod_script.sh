@@ -37,7 +37,7 @@ if [ -n "$(ls /data/cust_repo/monk/car/*_*.js)" ]; then
     done
 fi
 
-if [ -n "$(ls /data/cust_repo/monk/i-chenzhe/*_*.js  | grep -v carnivalcity)" ]; then
+if [ -n "$(ls /data/cust_repo/monk/i-chenzhe/*_*.js | grep -v carnivalcity)" ]; then
     cp -f /data/cust_repo/monk/i-chenzhe/*_*.js /scripts
     cd /data/cust_repo/monk/i-chenzhe/
     for scriptFile in $(ls *_*.js | tr "\n" " "); do
@@ -108,6 +108,23 @@ if [ -n "$(ls /data/cust_repo/longzhuzhu/qx/*_*.js)" ]; then
     done
 fi
 
+#同步自定义脚本文件里面脚本任务
+if [ -n "$(ls /data/custom_scripts/*_*.js)" ]; then
+    cp -f /data/custom_scripts/*_*.js /scripts
+    cd /data/custom_scripts/
+    for scriptFile in $(ls *_*.js | tr "\n" " "); do
+        if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
+            cp $scriptFile /scripts
+            if [[ -z "$(crontab -l | grep $scriptFile)" && -z $1 ]]; then
+                echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
+                spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+            fi
+            echo "#custom_scripts保存文件任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
+            echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
+        fi
+    done
+fi
+
 echo "附加功能4，拉取@curtinlv的 JD-Script仓库的代码，并增加相关任务"
 if [ ! -d "/data/cust_repo/curtinlv/" ]; then
     echo "未检查到@curtinlv的会员开卡仓库脚本，初始化下载相关脚本..."
@@ -117,7 +134,6 @@ else
     git -C /data/cust_repo/curtinlv reset --hard
     git -C /data/cust_repo/curtinlv pull --rebase
 fi
-
 
 if type python3 >/dev/null 2>&1; then
     echo "会员开卡脚本需环境经存在，跳过安装依赖环境"
@@ -131,7 +147,7 @@ else
 fi
 
 cd /data/cust_repo/curtinlv/OpenCard
-OpenCardCookies=$(cat /data/cookies.list  | grep -v "jd_WUUpyT\|jd_SgGoap\|620311248_" |tr "\n" "&" | sed "s/&$//")
+OpenCardCookies=$(cat /data/cookies.list | grep -v "jd_WUUpyT\|jd_SgGoap\|620311248_" | tr "\n" "&" | sed "s/&$//")
 sed -i "/JD_COOKIE =/s/= \(.*\)/= '$OpenCardCookies'/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
 sed -i "/openCardBean =/s/= \(.*\)/= 20/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
 sed -i "/TG_BOT_TOKEN =/s/= \(.*\)/= $TG_BOT_TOKEN/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
@@ -142,6 +158,6 @@ echo "0 8 * * * cd /data/cust_repo/curtinlv/OpenCard && python3 jd_OpenCard.py |
 echo "15 15 * * * cd /data/cust_repo/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
 
 echo "#curtinlv的关注有礼任务 " >>$mergedListFile
-cat /data/cookies.list > /data/cust_repo/curtinlv/getFollowGifts/JDCookies.txt
+cat /data/cookies.list >/data/cust_repo/curtinlv/getFollowGifts/JDCookies.txt
 echo "15 8 * * * cd /data/cust_repo/curtinlv/getFollowGifts && python3 jd_getFollowGift.py |ts >>/data/logs/jd_getFollowGift.log 2>&1 &" >>$mergedListFile
 echo "30 15 * * * cd /data/cust_repo/curtinlv/getFollowGifts && python3 jd_getFollowGift.py |ts >>/data/logs/jd_getFollowGift.log 2>&1 &" >>$mergedListFile
