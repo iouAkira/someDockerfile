@@ -150,6 +150,7 @@ cd /data/cust_repo/curtinlv/OpenCard
 OpenCardCookies=$(cat /data/cookies.list | grep -v "jd_WUUpyT\|jd_SgGoap\|620311248_" | tr "\n" "&" | sed "s/&$//")
 sed -i "/JD_COOKIE =/s/= \(.*\)/= '$OpenCardCookies'/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
 sed -i "/openCardBean =/s/= \(.*\)/= 20/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
+sed -i "/memory =/s/= \(.*\)/= no/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
 sed -i "/TG_BOT_TOKEN =/s/= \(.*\)/= $TG_BOT_TOKEN/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
 sed -i "/TG_USER_ID =/s/= \(.*\)/= $TG_USER_ID/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
 
