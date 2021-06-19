@@ -162,6 +162,7 @@ sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.c
 sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
 
 echo "32 23 * * 6 cd /scripts && sleep $((RANDOM % 300)); && sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
+sed -i "/\(adolf_star\|jd_xtg\)/d" docker/merged_list_file.sh
 crontab $mergedListFile
 
 echo "替换auto_help查找导出互助码日志的路径"
