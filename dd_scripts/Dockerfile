@@ -21,12 +21,10 @@ RUN set -ex \
 FROM alpine
 LABEL AUTHOR="iouAkira <ZS5ha2ltb3RvLmFraXJhQGdtYWlsLmNvbQ==>"
 
-ENV REPO_URL=git@gitee.com:lxk0301/jd_scripts.git \
-    DEFAULT_LIST_FILE=crontab_list.sh \
+ENV DEFAULT_LIST_FILE=crontab_list.sh \
     CUSTOM_LIST_MERGE_TYPE=append \
     COOKIE_LIST=/data/cookies.list \
     GEN_CODE_LIST=/data/genCodeConf.list \
-    ID_RSA_PATH=/data/js_id_rsa \
     LOGS_DIR=/data/logs \
     DDBOT_VER=0.5
 
@@ -45,7 +43,6 @@ RUN set -ex \
     && echo dd_scripts/* >> /jds/.git/info/sparse-checkout \
     && git pull origin master
 
-COPY --from=goBuild /GolangCode/reposync/repoSync /usr/local/bin/repoSync
 COPY --from=goBuild /GolangCode/ddbot/ddBot /usr/local/bin/ddBot
 
 RUN cp /jds/dd_scripts/docker_entrypoint.sh /usr/local/bin \
@@ -59,11 +56,7 @@ COPY ./dd_scripts/scripts.tar.gz /
 RUN set -ex \
     && chmod 600 /root/.ssh/id_rsa \
     && ssh-keyscan gitee.com > /root/.ssh/known_hosts \
-    # && git clone ${REPO_URL} /scripts \
-    && cd / \
-    && tar -zxvf scripts.tar.gz \
-    && rm -rf /scripts.tar.gz
-
+    && ddBot -up syncRepo
 
 WORKDIR /scripts
 
