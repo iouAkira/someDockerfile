@@ -164,11 +164,6 @@ sed -i "/\(>&1 &\|> &1 &\)/!s/>&1/>\&1 \&/g" $mergedListFile
 echo "第8步对比合并加载最新的定时任务文件..."
 crontab -l >/scripts/befor_cronlist.sh
 
-#自己魔改了企业微信拆分消息通知 暂时没有打包到镜像里面
-if [ -f "/data/sendNotify.js" ]; then
-  cp /data/sendNotify.js /scripts
-fi
-
 echo "增加清理日志，提交互助码到助力池脚本。（测试中）"
 (
   cat <<EOF
