@@ -13,8 +13,6 @@ RUN set -ex \
     && tar -zxvf GolangCode.tar.gz \
     && rm -rf /GolangCode.tar.gz \
     && go version \
-    && cd /GolangCode/reposync \
-    && go build repoSync.go \
     && cd /GolangCode/ddbot \
     && go build ddBot.go
 
@@ -47,7 +45,6 @@ COPY --from=goBuild /GolangCode/ddbot/ddBot /usr/local/bin/ddBot
 
 RUN cp /jds/dd_scripts/docker_entrypoint.sh /usr/local/bin \
     && chmod +x /usr/local/bin/docker_entrypoint.sh \
-    && chmod +x /usr/local/bin/repoSync \
     && chmod +x /usr/local/bin/ddBot
 
 COPY ./dd_scripts/js_id_rsa /root/.ssh/id_rsa
