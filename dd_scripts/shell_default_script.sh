@@ -180,7 +180,7 @@ for dd_log in \$(ls /data/logs/ | grep .log | grep jd_); do
     dt=\$(date | awk '{print \$2" "\$3}')
     sed -i "/^\${dt}.*/!d" "/data/logs/\${dd_log}"
 done
-if [ ${DDBOT_VER} = "0.5" ];then
+if [ \${DDBOT_VER} = "0.5" ];then
     ddBot -up commitShareCode
 else
     echo "请更新至最新版docker镜像才能自动上传助力码到助力池"
@@ -200,7 +200,7 @@ echo "https://t.me/ddMutualHelp 建了一个互助池的群，有问题可进该
 sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.com\/api/g" $(grep "share.turinglabs.net" -rl /scripts/)
 sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
 
-echo "32 23 * * 6 cd /scripts && sleep $((RANDOM % 300)); && sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
+echo "32 23 * * 6 cd /scripts && sleep \$((RANDOM % 1200)); && sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
 sed -i "/\(adolf_star\|jd_xtg\)/d" docker/merged_list_file.sh
 crontab $mergedListFile
 
