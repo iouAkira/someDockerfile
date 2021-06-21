@@ -195,7 +195,7 @@ echo "https://t.me/ddMutualHelp 建了一个互助池的群，有问题可进该
 sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.com\/api/g" $(grep "share.turinglabs.net" -rl /scripts/)
 sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
 
-echo "32 0 * * 7 cd /scripts && sleep \$((RANDOM % 1200)); sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
+echo "32 23 * * 1 cd /scripts && sleep \$((RANDOM % 1200)); sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
 sed -i "/\(adolf_star\|jd_xtg\)/d" /scripts/docker/merged_list_file.sh
 crontab $mergedListFile
 
