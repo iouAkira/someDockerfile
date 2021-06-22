@@ -4,6 +4,8 @@
 function initNodeEnv() {
   echo "安装执行脚本需要的nodejs环境及依赖"
   apk add --update nodejs moreutils npm curl jq
+  echo "增加npm安装canvas需要的系统依赖"
+  apk add --update --no-cache make g++ jpeg-dev cairo-dev giflib-dev pango-dev
 }
 
 #获取配置的自定义参数,如果有为
@@ -78,6 +80,8 @@ cat /jds/dd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
 echo "将仓库的shell_spnode.sh脚本更新至系统/usr/local/bin/spnode内..."
 cat /jds/dd_scripts/shell_spnode.sh >/usr/local/bin/spnode
 chmod +x /usr/local/bin/spnode
+echo "将仓库的genCodeConf.list配置同步到到${GEN_CODE_LIST}..."
+cat /jds/genCodeConf.list > ${GEN_CODE_LIST}
 
 echo "第1步定义定时任务合并处理用到的文件路径..."
 defaultListFile="/scripts/docker/$DEFAULT_LIST_FILE"
@@ -196,7 +200,6 @@ sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.c
 sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
 
 echo "32 23 * * 1 cd /scripts && sleep \$((RANDOM % 1200)); sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
-sed -i "/\(adolf_star\|jd_xtg\)/d" /scripts/docker/merged_list_file.sh
 crontab $mergedListFile
 
 echo "替换auto_help查找导出互助码日志的路径"

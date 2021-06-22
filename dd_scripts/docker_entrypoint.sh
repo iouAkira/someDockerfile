@@ -1,6 +1,12 @@
 #!/bin/sh
 
 if [ "$1" ]; then
+  if [ "${APK_REPO}" ]; then
+    #清华源 mirrors.tuna.tsinghua.edu.cn
+    #阿里源 mirrors.aliyun.com
+    #中科大 mirrors.ustc.edu.cn
+    sed -i "s/dl-cdn.alpinelinux.org/${APK_REPO}/g" /etc/apk/repositories
+  fi
   run_cmd=$1
 fi
 #任务脚本shell仓库
