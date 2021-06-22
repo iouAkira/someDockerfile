@@ -135,7 +135,7 @@ else
     git -C /data/cust_repo/curtinlv pull --rebase
 fi
 
-if type python3 >/dev/null 2>&1; then
+if type pip3 >/dev/null 2>&1; then
     echo "会员开卡脚本需环境经存在，跳过安装依赖环境"
     if [[ "$(pip3 list | grep Telethon)" == "" || "$(pip3 list | grep APScheduler)" == "" ]]; then
         pip3 install requests
