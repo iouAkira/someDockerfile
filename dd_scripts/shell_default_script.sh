@@ -81,7 +81,7 @@ echo "将仓库的shell_spnode.sh脚本更新至系统/usr/local/bin/spnode内..
 cat /jds/dd_scripts/shell_spnode.sh >/usr/local/bin/spnode
 chmod +x /usr/local/bin/spnode
 echo "将仓库的genCodeConf.list配置同步到到${GEN_CODE_LIST}..."
-cat /jds/genCodeConf.list > ${GEN_CODE_LIST}
+cat /jds/dd_scripts/genCodeConf.list > ${GEN_CODE_LIST}
 
 echo "第1步定义定时任务合并处理用到的文件路径..."
 defaultListFile="/scripts/docker/$DEFAULT_LIST_FILE"
