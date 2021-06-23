@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ~/someDockerfile/dd_scripts/bot/ddBot-amd64 ddBot.go
+# CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o ~/someDockerfile/dd_scripts/bot/ddBot-arm64 ddBot.go
+# CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -o ~/someDockerfile/dd_scripts/bot/ddBot-arm ddBot.go
+
 ################################脚本仓库更新/初始化操作 start ################################
 
 ###为了使用env.sh里面配置的环境变量，放在最开始为了
@@ -14,6 +18,16 @@ if [ -d "/data" ]; then
     echo "/data/logs目录不存在，执行创建。"
     mkdir -p /data/logs
   fi
+fi
+
+###判断平台架构使用对应平台版本的ddBot
+echo "目前只构建三个平台（and64,arm64,arm）的ddBot，其他架构平台暂未发现使用者，如果有欢迎上报，并且只知道arch为x86_64(amd64)，aarch64(arm64)所以其他的就归到arm上"
+if [ "$(arch)" == "x86_64" ]; then
+  echo "amd64"
+elif [ "$(arch)" == "aarch64" ]; then
+  echo "arm64"
+else
+  echo "arm"
 fi
 
 ###初始化nodejs环境及依赖
