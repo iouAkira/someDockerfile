@@ -45,19 +45,19 @@ if [ ! -d /scripts/node_modules ]; then
     echo "npm首次启动安装依赖成功✅"
   fi
 else
-    echo "package.json有变化时这边会放开，才会执行npm install..."
-#   if [[ "${before_package_json}" != "$(cat /scripts/package.json)" ]]; then
-#     echo "package.json有更新，执行npm install..."
-#     npm install --loglevel error --prefix /scripts
-#     if [ $? -ne 0 ]; then
-#       echo "npackage.json有更新，执行安装依赖失败❌，跳过"
-#       exit 1
-#     else
-#       echo "npackage.json有更新，执行安装依赖成功✅"
-#     fi
-#   else
-#     echo "package.json无变化，跳过npm install..."
-#   fi
+#   echo "package.json有变化时这边会放开，才会执行npm install..."
+  if [[ "${before_package_json}" != "$(cat /scripts/package.json)" ]]; then
+    echo "package.json有更新，执行npm install..."
+    npm install --loglevel error --prefix /scripts
+    if [ $? -ne 0 ]; then
+      echo "npackage.json有更新，执行安装依赖失败❌，跳过"
+      exit 1
+    else
+      echo "npackage.json有更新，执行安装依赖成功✅"
+    fi
+  else
+    echo "package.json无变化，跳过npm install..."
+  fi
 fi
 
 if [ -d "/data" ]; then
