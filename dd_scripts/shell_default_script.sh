@@ -6,7 +6,7 @@ function initNodeEnv() {
   apk add --update nodejs moreutils npm curl jq
   echo "增加npm安装canvas需要的系统依赖"
   apk add --update --no-cache make g++ cairo-dev giflib-dev pango-dev
-  cd /scripts && npm install canvas --build-from-source
+#   cd /scripts && npm install canvas --build-from-source
 }
 
 #获取配置的自定义参数,如果有为
