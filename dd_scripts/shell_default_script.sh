@@ -1,65 +1,8 @@
 #!/bin/sh
 
 ################################脚本仓库更新/初始化操作 start ################################
-function initNodeEnv() {
-  echo "安装执行脚本需要的nodejs环境及依赖"
-  apk add --update nodejs moreutils npm curl jq
-  echo "增加npm安装canvas需要的系统依赖"
-  apk add --update --no-cache make g++ cairo-dev giflib-dev pango-dev
-#   cd /scripts && npm install canvas --build-from-source
-}
 
-#获取配置的自定义参数,如果有为
-if [ "$1" ]; then
-  initNodeEnv
-  if [ $? -ne 0 ]; then
-    echo "安装执行脚本需要的nodejs环境及依赖出错❌，exit，restart"
-    exit 1
-  else
-    echo "安装执行脚本需要的nodejs环境及依赖成功✅"
-  fi
-  run_cmd=$1
-fi
-
-[ -f /scripts/package.json ] && before_package_json=$(cat /scripts/package.json)
-
-if [ -d /scripts/otherRepo ]; then
-  echo "防止更新冲突，还原本地修改。。。"
-  git -C /scripts reset --hard
-  ddBot -up syncRepo
-fi
-
-if [ $? -ne 0 ]; then
-  echo "更新仓库代码出错❌，跳过"
-else
-  echo "更新仓库代码成功✅"
-fi
-
-if [ ! -d /scripts/node_modules ]; then
-  echo "容器首次启动，执行npm install..."
-  npm install --loglevel error --prefix /scripts
-  if [ $? -ne 0 ]; then
-    echo "npm首次启动安装依赖失败❌，exit，restart"
-    exit 1
-  else
-    echo "npm首次启动安装依赖成功✅"
-  fi
-else
-#   echo "package.json有变化时这边会放开，才会执行npm install..."
-  if [[ "${before_package_json}" != "$(cat /scripts/package.json)" ]]; then
-    echo "package.json有更新，执行npm install..."
-    npm install --loglevel error --prefix /scripts
-    if [ $? -ne 0 ]; then
-      echo "npackage.json有更新，执行安装依赖失败❌，跳过"
-      exit 1
-    else
-      echo "npackage.json有更新，执行安装依赖成功✅"
-    fi
-  else
-    echo "package.json无变化，跳过npm install..."
-  fi
-fi
-
+###为了使用env.sh里面配置的环境变量，放在最开始为了
 if [ -d "/data" ]; then
   if [ -f "/data/env.sh" ]; then
     echo "检查道环境变量配置文件 /data/env.sh 存在，使用该文件内环境变量。"
@@ -72,21 +15,93 @@ if [ -d "/data" ]; then
     mkdir -p /data/logs
   fi
 fi
-################################脚本仓库更新/初始化操作 end ################################
 
+###初始化nodejs环境及依赖
+function initNodeEnv() {
+  echo "安装执行脚本需要的nodejs环境及依赖"
+  apk add --update nodejs moreutils npm curl jq
+}
+
+#获取配置的自定义参数,如果有为一次启动需要安装nodejs环境及依赖
+if [ "$1" ]; then
+  initNodeEnv
+  if [ $? -ne 0 ]; then
+    echo "安装执行脚本需要的nodejs环境及依赖出错❌，exit，restart"
+    exit 1
+  else
+    echo "安装执行脚本需要的nodejs环境及依赖成功✅"
+  fi
+  run_cmd=$1
+fi
+
+###package.json更新前备份
+[ -f /scripts/package.json ] && before_package_json=$(cat /scripts/package.json)
+
+###仓库更新相关
+if [ -d /scripts/otherRepo ]; then
+  echo "防止更新冲突，还原本地修改。。。"
+  git -C /scripts reset --hard
+  ddBot -up syncRepo
+fi
+
+if [ $? -ne 0 ]; then
+  echo "更新仓库代码出错❌，跳过"
+else
+  echo "更新仓库代码成功✅"
+fi
+
+###npm依赖安装相关
+if [ ! -d /scripts/node_modules ]; then
+  echo "容器首次启动，执行npm install..."
+  npm install --loglevel error --prefix /scripts
+  if [ $? -ne 0 ]; then
+    echo "npm首次启动安装依赖失败❌，exit，restart"
+    exit 1
+  else
+    echo "npm首次启动安装依赖成功✅"
+  fi
+  if [ "$INSTALL_CANVAS" == "Y" ]; then
+    echo "增加npm安装canvas需要的系统依赖"
+    apk add --update --no-cache make g++ cairo-dev giflib-dev pango-dev
+    echo "npm install canvas"
+    cd /scripts && npm install canvas --build-from-source
+  fi
+else
+  if [ "${before_package_json}" != "$(cat /scripts/package.json)" ]; then
+    echo "package.json有更新，执行npm install..."
+    npm install --loglevel error --prefix /scripts
+    if [ $? -ne 0 ]; then
+      echo "npackage.json有更新，执行安装依赖失败❌，跳过"
+      exit 0
+    else
+      echo "npackage.json有更新，执行安装依赖成功✅"
+    fi
+    if [ "$INSTALL_CANVAS" == "Y" ]; then
+      echo "npm install canvas"
+      cd /scripts && npm install canvas --build-from-source
+    fi
+  else
+    echo "package.json无变化，跳过npm install..."
+  fi
+fi
+
+##兼容镜像未更新未使用整合仓库的
 if [ ! -d /scripts/otherRepo ]; then
   echo -e "000" >>/root/.ssh/id_rsa
   cd /scripts && git reset --hard a38137a7defd1a41a5f5438ef8fe0d5becff1982
 fi
+################################脚本仓库更新/初始化操作 end ################################
 
+###同步docker仓库里面更新的相关文件
 echo "将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
 cat /jds/dd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
 echo "将仓库的shell_spnode.sh脚本更新至系统/usr/local/bin/spnode内..."
 cat /jds/dd_scripts/shell_spnode.sh >/usr/local/bin/spnode
 chmod +x /usr/local/bin/spnode
 echo "将仓库的genCodeConf.list配置同步到到${GEN_CODE_LIST}..."
-cat /jds/dd_scripts/genCodeConf.list > ${GEN_CODE_LIST}
+cat /jds/dd_scripts/genCodeConf.list >${GEN_CODE_LIST}
 
+###定时任务相关处理
 echo "第1步定义定时任务合并处理用到的文件路径..."
 defaultListFile="/scripts/docker/$DEFAULT_LIST_FILE"
 echo "└──默认文件定时任务文件路径为 ${defaultListFile}"
