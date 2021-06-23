@@ -13,7 +13,7 @@ if [ "$1" ]; then
   initNodeEnv
   if [ $? -ne 0 ]; then
     echo "安装执行脚本需要的nodejs环境及依赖出错❌，exit，restart"
-    exit 1
+    exit 0
   else
     echo "安装执行脚本需要的nodejs环境及依赖成功✅"
   fi
