@@ -24,10 +24,13 @@ fi
 echo "目前只构建三个平台（and64,arm64,arm）的ddBot，其他架构平台暂未发现使用者，如果有欢迎上报，并且只知道arch为x86_64(amd64)，aarch64(arm64)所以其他的就归到arm上"
 if [ "$(arch)" == "x86_64" ]; then
   echo "amd64"
+  cp /jds/dd_scripts/bot/ddBot-amd64 /usr/local/bin/ddBot
 elif [ "$(arch)" == "aarch64" ]; then
   echo "arm64"
+  cp /jds/dd_scripts/bot/ddBot-arm64 /usr/local/bin/ddBot
 else
   echo "arm"
+  cp /jds/dd_scripts/bot/ddBot-arm /usr/local/bin/ddBot
 fi
 
 ###初始化nodejs环境及依赖
