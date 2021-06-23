@@ -23,6 +23,8 @@ fi
 [ -f /scripts/package.json ] && before_package_json=$(cat /scripts/package.json)
 
 if [ -d /scripts/otherRepo ]; then
+  echo "防止更新冲突，还原本地修改。。。"
+  git -C /scripts reset --hard
   ddBot -up syncRepo
 fi
 
