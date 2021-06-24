@@ -45,15 +45,16 @@ jobs:
     - name: Compile
       run: |
         cd ~/GolangCode/ddbot
-        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ~/someDockerfile/dd_scripts/bot/ddBot-amd64 ~/GolangCode/ddbot/ddBot.go
-        CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o ~/someDockerfile/dd_scripts/bot/ddBot-arm64 ~/GolangCode/ddbot/ddBot.go
-        CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -o ~/someDockerfile/dd_scripts/bot/ddBot-arm ~/GolangCode/ddbot/ddBot.go
+        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ddBot-amd64 ddBot.go
+        CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o ddBot-arm64 ddBot.go
+        CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -o ddBot-arm ddBot.go
         cd ~ 
         rm -rf ~/GolangCode
 
     - name: Commit files
       run: |
         ls -l
+        cp -rf ~/GolangCode/ddbot/ddBot-* ./dd_scripts/bot/
         git config --local user.email "e.akimoto.akira@gmail.com"
         git config --local user.name "Github-Action"
         git commit -m "Compile ddBot by github action" -a
