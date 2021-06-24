@@ -52,6 +52,9 @@ jobs:
         git config --local user.name "Github-Action"
         git commit -m "Compile ddBot by github action" -a
 
+      env:
+        GO_PRIVATE_REPO_KEY: ${{ secrets.GO_PRIVATE_REPO_KEY }}
+
 #     - name: Push changes
 #       uses: ad-m/github-push-action@master
 #       with:
