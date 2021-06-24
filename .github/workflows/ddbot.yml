@@ -44,9 +44,6 @@ jobs:
 
     - name: Compile
       run: |
-        pwd
-        cd ~/GolangCode/ddbot
-        ls -l
         CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ~/someDockerfile/dd_scripts/bot/ddBot-amd64 ~/GolangCode/ddbot/ddBot.go
         CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o ~/someDockerfile/dd_scripts/bot/ddBot-arm64 ~/GolangCode/ddbot/ddBot.go
         CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -o ~/someDockerfile/dd_scripts/bot/ddBot-arm ~/GolangCode/ddbot/ddBot.go
@@ -54,7 +51,6 @@ jobs:
 
     - name: Commit files
       run: |
-        cd ~/someDockerfile
         git config --local user.email "who@gmail.com"
         git config --local user.name "Github-Action"
         git commit -m "Compile ddBot by github action" -a
@@ -63,4 +59,4 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }}
+        branch: master
