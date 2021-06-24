@@ -57,15 +57,12 @@ jobs:
         
         export GOARCH=arm 
         go build -o ddBot-arm ddBot.go
-        
-        ls -l
-        cd ~ 
-        rm -rf ~/GolangCode
 
     - name: Commit files
       run: |
         ls -l
         cp -rf ~/GolangCode/ddbot/ddBot-* ./dd_scripts/bot/
+        rm -rf ~/GolangCode
         git config --local user.email "e.akimoto.akira@gmail.com"
         git config --local user.name "Github-Action"
         git commit -m "Compile ddBot by github action" -a
