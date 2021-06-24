@@ -53,7 +53,8 @@ jobs:
 
     - name: Commit files
       run: |
-        git config --local user.email "who@gmail.com"
+        ls -l
+        git config --local user.email "e.akimoto.akira@gmail.com"
         git config --local user.name "Github-Action"
         git commit -m "Compile ddBot by github action" -a
 
