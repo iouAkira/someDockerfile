@@ -83,15 +83,8 @@ if [ ! -d /scripts/node_modules/ ]; then
     echo "npm install canvas"
     cd /scripts && npm install canvas --build-from-source && sed -i "/canvas/d" /scripts/package.json
   fi
-else
-  if [ "${before_package_json}" != "$(cat /scripts/package.json)" ] ;then 
-      echo "test1"
-  fi 
-  if [ "${before_package_json}" != "$(cat /scripts/package.json)" ] ||  [ ! -d /scripts/node_modules/async ];then 
-      echo "test2"
-  fi 
-  
-  if [[ "${before_package_json}" != "$(cat /scripts/package.json)" || ! -d /scripts/node_modules/async ]]; then
+else  
+  if [ "${before_package_json}" != "$(cat /scripts/package.json)" ] ||  [ ! -d /scripts/node_modules/async ]; then
     echo "package.json或者node_modules 有变化，执行npm install..."
     npm install --loglevel error --prefix /scripts
     if [ $? -ne 0 ]; then
