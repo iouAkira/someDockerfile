@@ -68,7 +68,7 @@ else
 fi
 
 ###npm依赖安装相关
-if [ ! -d /scripts/node_modules ]; then
+if [ ! -d /scripts/node_modules/ ]; then
   echo "容器首次启动，执行npm install..."
   npm install --loglevel error --prefix /scripts
   if [ $? -ne 0 ]; then
@@ -84,7 +84,7 @@ if [ ! -d /scripts/node_modules ]; then
     cd /scripts && npm install canvas --build-from-source && sed -i "/canvas/d" /scripts/package.json
   fi
 else
-  if [ "${before_package_json}" != "$(cat /scripts/package.json)" ]; then
+  if [[ "${before_package_json}" != "$(cat /scripts/package.json)" || ! -d /scripts/node_modules/got ]]; then
     echo "package.json有更新，执行npm install..."
     npm install --loglevel error --prefix /scripts
     if [ $? -ne 0 ]; then
