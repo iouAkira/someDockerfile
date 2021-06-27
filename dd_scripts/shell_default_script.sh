@@ -102,6 +102,13 @@ else
   fi
 fi
 
+if [ "$INSTALL_CANVAS" == "Y" ] && [ ! -d /scripts/node_modules/canvas ]; then
+    echo "增加npm安装canvas需要的系统依赖"
+    apk add --update --no-cache make g++ cairo-dev giflib-dev pango-dev
+    echo "npm install canvas"
+    cd /scripts && npm install canvas --build-from-source && sed -i "/canvas/d" /scripts/package.json
+fi
+
 ##兼容镜像未更新未使用整合仓库的
 if [ ! -d /scripts/otherRepo ]; then
   echo -e "000" >>/root/.ssh/id_rsa
