@@ -24,13 +24,49 @@ fi
 echo "目前只构建三个平台（and64,arm64,arm）的ddBot，其他架构平台暂未发现使用者，如果有欢迎上报，并且只知道arch为x86_64(amd64)，aarch64(arm64)所以其他的就归到arm上"
 if [ "$(arch)" == "x86_64" ]; then
   echo "amd64"
-  cp /jds/dd_scripts/bot/ddBot-amd64 /usr/local/bin/ddBot
+  cmp -s /jds/dd_scripts/bot/ddBot-amd64 /usr/local/bin/ddBot
+
+  if [ $? -gt 0 ]; then
+    cp /jds/dd_scripts/bot/ddBot-amd64 /usr/local/bin/ddBot
+
+    ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}'
+    if [ $? -gt 0 ]; then
+      echo "停止ddBot......"
+      kill -9 $(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}')
+      echo "ddBot有更新，停止ddBot，并重新启动......"
+      ddBot >>"$LOGS_DIR/dd_bot.log" 2>&1 &
+    fi
+  fi
 elif [ "$(arch)" == "aarch64" ]; then
   echo "arm64"
-  cp /jds/dd_scripts/bot/ddBot-arm64 /usr/local/bin/ddBot
+  cmp -s /jds/dd_scripts/bot/ddBot-arm64 /usr/local/bin/ddBot
+
+  if [ $? -gt 0 ]; then
+    cp /jds/dd_scripts/bot/ddBot-arm64 /usr/local/bin/ddBot
+
+    ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}'
+    if [ $? -gt 0 ]; then
+      echo "ddBot有更新，停止ddBot，并重新启动......"
+      kill -9 $(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}')
+      echo "启动ddBot......"
+      ddBot >>"$LOGS_DIR/dd_bot.log" 2>&1 &
+    fi
+  fi
 else
   echo "arm"
-  cp /jds/dd_scripts/bot/ddBot-arm /usr/local/bin/ddBot
+  cmp -s /jds/dd_scripts/bot/ddBot-arm /usr/local/bin/ddBot
+
+  if [ $? -gt 0 ]; then
+    cp /jds/dd_scripts/bot/ddBot-arm /usr/local/bin/ddBot
+
+    ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}'
+    if [ $? -gt 0 ]; then
+      echo "ddBot有更新，停止ddBot，并重新启动......"
+      kill -9 $(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}')
+      echo "启动ddBot......"
+      ddBot >>"$LOGS_DIR/dd_bot.log" 2>&1 &
+    fi
+  fi
 fi
 
 ###初始化nodejs环境及依赖
@@ -83,8 +119,8 @@ if [ ! -d /scripts/node_modules/ ]; then
     echo "npm install canvas"
     cd /scripts && npm install canvas --build-from-source && sed -i "/canvas/d" /scripts/package.json
   fi
-else  
-  if [ "${before_package_json}" != "$(cat /scripts/package.json)" ] ||  [ ! -d /scripts/node_modules/async ]; then
+else
+  if [ "${before_package_json}" != "$(cat /scripts/package.json)" ] || [ ! -d /scripts/node_modules/async ]; then
     echo "package.json或者node_modules 有变化，执行npm install..."
     npm install --loglevel error --prefix /scripts
     if [ $? -ne 0 ]; then
@@ -103,10 +139,10 @@ else
 fi
 
 if [ "$INSTALL_CANVAS" == "Y" ] && [ ! -d /scripts/node_modules/canvas ]; then
-    echo "增加npm安装canvas需要的系统依赖"
-    apk add --update --no-cache make g++ cairo-dev giflib-dev pango-dev
-    echo "npm install canvas"
-    cd /scripts && npm install canvas --build-from-source && sed -i "/canvas/d" /scripts/package.json
+  echo "增加npm安装canvas需要的系统依赖"
+  apk add --update --no-cache make g++ cairo-dev giflib-dev pango-dev
+  echo "npm install canvas"
+  cd /scripts && npm install canvas --build-from-source && sed -i "/canvas/d" /scripts/package.json
 fi
 
 ##兼容镜像未更新未使用整合仓库的
