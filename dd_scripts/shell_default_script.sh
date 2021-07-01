@@ -115,7 +115,7 @@ if [ ! -d /scripts/node_modules/ ]; then
   fi
   if [ "$INSTALL_CANVAS" == "Y" ]; then
     echo "增加npm安装canvas需要的系统依赖"
-    apk add --update --no-cache make g++ cairo-dev giflib-dev pango-dev
+    apk add --update --no-cache build-base g++ cairo-dev giflib-dev pango-dev
     echo "npm install canvas"
     cd /scripts && npm install canvas --build-from-source && sed -i "/canvas/d" /scripts/package.json
   fi
@@ -140,7 +140,7 @@ fi
 
 if [ "$INSTALL_CANVAS" == "Y" ] && [ ! -d /scripts/node_modules/canvas ]; then
   echo "增加npm安装canvas需要的系统依赖"
-  apk add --update --no-cache make g++ cairo-dev giflib-dev pango-dev
+  apk add --update --no-cache build-base g++ cairo-dev giflib-dev pango-dev
   echo "npm install canvas"
   cd /scripts && npm install canvas --build-from-source && sed -i "/canvas/d" /scripts/package.json
 fi
