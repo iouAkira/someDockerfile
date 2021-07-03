@@ -147,7 +147,22 @@ else
 fi
 
 cd /data/cust_repo/curtinlv/OpenCard
-OpenCardCookies=$(cat /data/cookies.list | grep -v "jd_WUUpyT\|jd_SgGoap\|620311248_" | tr "\n" "&" | sed "s/&$//")
+rn=1
+for ck in $(cat /data/cookies.list | grep -v "#\|--" | tr "\n" " "); do
+    if [ $rn == 1 ]; then
+        echo "账号$rn【$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")】$ck" >/data/cust_repo/curtinlv/JDCookies.txt
+        sed -i "/qjd_zlzh =/s/= \(.*\)/= ['$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_qjd.py
+        sed -i "/zlzh =/s/= \(.*\)/= ['$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_zjd.py
+    else
+        if [ $rn == 4 ]; then
+            sed -i "/qjd_zlzh =/s/]/'$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_qjd.py
+            sed -i "/zlzh =/s/]/'$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_zjd.py
+        fi
+        echo "账号$rn【$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")】$ck" >>/data/cust_repo/curtinlv/JDCookies.txt
+    fi
+    rn=$(expr $rn + 1)
+done
+OpenCardCookies=$(cat /data/cookies.list | grep -v "#\|jd_WUUpyT\|jd_SgGoap\|620311248_" | tr "\n" "&" | sed "s/&$//")
 sed -i "/JD_COOKIE =/s/= \(.*\)/= '$OpenCardCookies'/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
 sed -i "/openCardBean =/s/= \(.*\)/= 20/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
 sed -i "/memory =/s/= \(.*\)/= no/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
@@ -155,10 +170,8 @@ sed -i "/TG_BOT_TOKEN =/s/= \(.*\)/= $TG_BOT_TOKEN/g" /data/cust_repo/curtinlv/O
 sed -i "/TG_USER_ID =/s/= \(.*\)/= $TG_USER_ID/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
 
 echo "#curtinlv的会员开卡仓库任务 " >>$mergedListFile
-echo "0 8 * * * cd /data/cust_repo/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
-echo "15 15 * * * cd /data/cust_repo/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
+echo "2 8,15 * * * cd /data/cust_repo/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
 
 echo "#curtinlv的关注有礼任务 " >>$mergedListFile
 cat /data/cookies.list >/data/cust_repo/curtinlv/getFollowGifts/JDCookies.txt
-echo "15 8 * * * cd /data/cust_repo/curtinlv/getFollowGifts && python3 jd_getFollowGift.py |ts >>/data/logs/jd_getFollowGift.log 2>&1 &" >>$mergedListFile
-echo "30 15 * * * cd /data/cust_repo/curtinlv/getFollowGifts && python3 jd_getFollowGift.py |ts >>/data/logs/jd_getFollowGift.log 2>&1 &" >>$mergedListFile
+echo "15 8,15 * * * cd /data/cust_repo/curtinlv/getFollowGifts && python3 jd_getFollowGift.py |ts >>/data/logs/jd_getFollowGift.log 2>&1 &" >>$mergedListFile
