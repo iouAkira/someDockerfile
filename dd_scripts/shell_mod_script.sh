@@ -174,7 +174,7 @@ echo "#curtinlv的赚京豆 " >>$mergedListFile
 echo "05 0,7,23 * * * cd /data/cust_repo/curtinlv && python3 jd_zjd.py |ts >>/data/logs/jd_zjd.log 2>&1 &" >>$mergedListFile
 
 echo "#curtinlv的全民抢京豆 " >>$mergedListFile
-echo "15 0,7,23 * * * cd /data/cust_repo/curtinlv && python3 jd_qjd.py |ts >>/data/logs/jd_qjd.log 2>&1 &" >>$mergedListFile
+echo "15 0 * * * cd /data/cust_repo/curtinlv && python3 jd_qjd.py |ts >>/data/logs/jd_qjd.log 2>&1 &" >>$mergedListFile
 
 echo "#curtinlv的会员开卡仓库任务 " >>$mergedListFile
 echo "2 8,15 * * * cd /data/cust_repo/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
