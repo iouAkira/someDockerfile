@@ -32,7 +32,7 @@ if [ "$(arch)" == "x86_64" ]; then
     ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}'
     if [ $? -gt 0 ]; then
       echo "停止ddBot......"
-      kill -9 $(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}')
+      eval $(ps -ef | grep -w "ddBot" | grep -v "grep" | awk '{print "kill "$1}')
       echo "ddBot有更新，停止ddBot，并重新启动......"
       ddBot >>"$LOGS_DIR/dd_bot.log" 2>&1 &
     fi
