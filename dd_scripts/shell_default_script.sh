@@ -289,21 +289,13 @@ sed -i "s/\/scripts\/logs/\/data\/logs/g" /scripts/docker/auto_help.sh
 # tar -zcvf /scripts/logs/scripts.tar.gz --exclude=scripts/node_modules --exclude=scripts/logs/*.log  --exclude=scripts/logs/*.gz /scripts
 
 echo "附加额外特殊任务处理jd_crazy_joy_coin。。。"
-if [ ! "$CRZAY_JOY_COIN_ENABLE" ]; then
-  echo "└──默认启用jd_crazy_joy_coin杀掉jd_crazy_joy_coin任务，并重启"
+if [ "$ENABLE_CRZAY_JOY_HOLD" ]; then
+  echo "配置了启用jd_crazy_joy_coin挂机任务，默认重启"
   eval $(ps -ef | grep "jd_crazy" | grep -v "grep" | awk '{print "kill "$1}')
   echo '' >/data/logs/jd_crazy_joy_coin.log
   spnode /scripts/jd_crazy_joy_coin.js | ts >>/data/logs/jd_crazy_joy_coin.log 2>&1 &
-  echo "└──默认jd_crazy_joy_coin重启完成"
+  echo "jd_crazy_joy_coin重启完成"
 else
-  if [ "$CRZAY_JOY_COIN_ENABLE" = "Y" ]; then
-    echo "└──配置启用jd_crazy_joy_coin，杀掉jd_crazy_joy_coin任务，并重启"
+    echo "未启用jd_crazy_joy_coin挂机任务，不处理"
     eval $(ps -ef | grep "jd_crazy" | grep -v "grep" | awk '{print "kill "$1}')
-    echo '' >/data/logs/jd_crazy_joy_coin.log
-    spnode /scripts/jd_crazy_joy_coin.js | ts >>/data/logs/jd_crazy_joy_coin.log 2>&1 &
-    echo "└──配置jd_crazy_joy_coin重启完成"
-  else
-    eval $(ps -ef | grep "jd_crazy" | grep -v "grep" | awk '{print "kill "$1}')
-    echo "└──已配置不启用jd_crazy_joy_coin任务，不处理"
-  fi
 fi
