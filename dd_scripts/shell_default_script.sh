@@ -33,7 +33,7 @@ if [ "$(arch)" == "x86_64" ]; then
     if [ "$ddP" != "" ];then
       echo "停止ddBot......"
       eval $(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print "kill "$1}')
-      echo "ddBot有更新，停止ddBot，并重新启动......"
+      echo "启动ddBot......"
       ddBot >>"$LOGS_DIR/dd_bot.log" 2>&1 &
     fi
   fi
@@ -41,13 +41,13 @@ elif [ "$(arch)" == "aarch64" ]; then
   echo "arm64"
   cmp -s /jds/dd_scripts/bot/ddBot-arm64 /usr/local/bin/ddBot
 
-  if [ $? -gt 0 ]; then
+  if [ $? != 0 ]; then
     cp /jds/dd_scripts/bot/ddBot-arm64 /usr/local/bin/ddBot
 
-    ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}'
-    if [ $? -gt 0 ]; then
-      echo "ddBot有更新，停止ddBot，并重新启动......"
-      kill -9 $(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}')
+    ddP=$(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}')
+    if [ "$ddP" != "" ];then
+      echo "停止ddBot......"
+      eval $(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print "kill "$1}')
       echo "启动ddBot......"
       ddBot >>"$LOGS_DIR/dd_bot.log" 2>&1 &
     fi
@@ -56,14 +56,13 @@ else
   echo "arm"
   cmp -s /jds/dd_scripts/bot/ddBot-arm /usr/local/bin/ddBot
 
-  if [ $? -gt 0 ]; then
-    echo "ddBot有更新，覆盖新版ddBot至/usr/local/bin"
+  if [ $? != 0 ]; then
     cp /jds/dd_scripts/bot/ddBot-arm /usr/local/bin/ddBot
 
-    ps -ef | grep "ddBot" | grep -v "grep\|]" | awk '{print $1}'
-    if [ $? -gt 0 ]; then
-      echo "ddBot有更新，停止ddBot，并重新启动......"
-      eval $(ps -ef | grep "ddBot" | grep -v "grep\|]" | awk '{print "kill "$1}')
+    ddP=$(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}')
+    if [ "$ddP" != "" ];then
+      echo "停止ddBot......"
+      eval $(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print "kill "$1}')
       echo "启动ddBot......"
       ddBot >>"$LOGS_DIR/dd_bot.log" 2>&1 &
     fi
