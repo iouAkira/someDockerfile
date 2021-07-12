@@ -25,8 +25,8 @@ echo "目前只构建三个平台（and64,arm64,arm）的ddBot，其他架构平
 if [ "$(arch)" == "x86_64" ]; then
   echo "amd64"
   cmp -s /jds/dd_scripts/bot/ddBot-amd64 /usr/local/bin/ddBot
-
-  if [ $? != 0 ]; then
+  
+  if [ $? -ne 0 ] ;then
     cp /jds/dd_scripts/bot/ddBot-amd64 /usr/local/bin/ddBot
 
     ddP=$(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}')
@@ -40,8 +40,8 @@ if [ "$(arch)" == "x86_64" ]; then
 elif [ "$(arch)" == "aarch64" ]; then
   echo "arm64"
   cmp -s /jds/dd_scripts/bot/ddBot-arm64 /usr/local/bin/ddBot
-
-  if [ $? != 0 ]; then
+  
+  if [ $? -ne 0 ] ;then
     cp /jds/dd_scripts/bot/ddBot-arm64 /usr/local/bin/ddBot
 
     ddP=$(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}')
@@ -54,9 +54,9 @@ elif [ "$(arch)" == "aarch64" ]; then
   fi
 else
   echo "arm"
-  cmp -s /jds/dd_scripts/bot/ddBot-arm /usr/local/bin/ddBot
-
-  if [ $? != 0 ]; then
+  cmp -s /jds/dd_scripts/bot/ddBot-arm64 /usr/local/bin/ddBot
+  
+  if [ $? -ne 0 ] ;then
     cp /jds/dd_scripts/bot/ddBot-arm /usr/local/bin/ddBot
 
     ddP=$(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}')
