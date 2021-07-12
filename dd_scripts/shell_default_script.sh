@@ -26,13 +26,13 @@ if [ "$(arch)" == "x86_64" ]; then
   echo "amd64"
   cmp -s /jds/dd_scripts/bot/ddBot-amd64 /usr/local/bin/ddBot
 
-  if [ $? -gt 0 ]; then
+  if [ $? != 0 ]; then
     cp /jds/dd_scripts/bot/ddBot-amd64 /usr/local/bin/ddBot
 
-    ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}'
-    if [ $? -gt 0 ]; then
+    ddP=$(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}')
+    if [ "$ddP" != "" ];then
       echo "停止ddBot......"
-      eval $(ps -ef | grep -w "ddBot" | grep -v "grep" | awk '{print "kill "$1}')
+      eval $(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print "kill "$1}')
       echo "ddBot有更新，停止ddBot，并重新启动......"
       ddBot >>"$LOGS_DIR/dd_bot.log" 2>&1 &
     fi
