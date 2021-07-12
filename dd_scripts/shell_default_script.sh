@@ -57,12 +57,13 @@ else
   cmp -s /jds/dd_scripts/bot/ddBot-arm /usr/local/bin/ddBot
 
   if [ $? -gt 0 ]; then
+    echo "ddBot有更新，覆盖新版ddBot至/usr/local/bin"
     cp /jds/dd_scripts/bot/ddBot-arm /usr/local/bin/ddBot
 
-    ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}'
+    ps -ef | grep "ddBot" | grep -v "grep\|]" | awk '{print $1}'
     if [ $? -gt 0 ]; then
       echo "ddBot有更新，停止ddBot，并重新启动......"
-      kill -9 $(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}')
+      eval $(ps -ef | grep "ddBot" | grep -v "grep\|]" | awk '{print "kill "$1}')
       echo "启动ddBot......"
       ddBot >>"$LOGS_DIR/dd_bot.log" 2>&1 &
     fi
