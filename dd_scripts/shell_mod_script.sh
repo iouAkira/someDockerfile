@@ -181,7 +181,7 @@ echo "11 0 * * * cd /data/cust_repo/curtinlv && python3 jd_cashHelp.py |ts >>/da
 echo "#curtinlv东东超市兑换" >>$mergedListFile
 sed -i "/coinToBeans =/s/''/'京豆包'/g" /data/cust_repo/curtinlv/jd_blueCoin.py
 sed -i "/blueCoin_Cc = /s/False/True/g" /data/cust_repo/curtinlv/jd_blueCoin.py
-echo "59 23 * * * cd /data/cust_repo/curtinlv && python3 jd_blueCoin.py |ts >>/data/logs/jd_blueCoin.log 2>&1 &" >>$mergedListFile
+echo "59 23 * * * cd /data/cust_repo/curtinlv && python3 jd_blueCoin.py |ts >>/data/logs/jd_blueCoinPy.log 2>&1 &" >>$mergedListFile
 
 echo "#curtinlv的会员开卡仓库任务 " >>$mergedListFile
 echo "2 8,15 * * * cd /data/cust_repo/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
