@@ -262,6 +262,21 @@ sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.c
 sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
 
 echo "32 23 * * 1 cd /scripts && sleep \$((RANDOM % 1200)); sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
+
+#根据EXCLUDE_CRON配置的关键字剔除相关任务 EXCLUDE_CRON="cfd,joy"
+if [ $EXCLUDE_CRON ]; then
+    for kw in $(echo $EXCLUDE_CRON | tr "," " "); do
+        matchCron=$(cat ${mergedListFile} | grep "$kw")
+        if [ -z "$matchCron" ]; then
+            echo "关键词 ${kw} 未匹配到任务"
+        else
+            echo "根据关键词 ${kw} 剔除的任务..."
+            echo "$matchCron"
+            sed -i '/'"${kw}"'/d' ${mergedListFile}
+        fi
+        # 
+    done
+fi
 crontab $mergedListFile
 
 echo "替换auto_help查找导出互助码日志的路径"
