@@ -149,20 +149,22 @@ fi
 cd /data/cust_repo/curtinlv/OpenCard
 rn=1
 for ck in $(cat /data/cookies.list | grep -v "//" | tr "# " "" | tr "\n" " "); do
-    if [ $rn == 1 ]; then
-        echo "账号$rn【$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")】$ck" >/data/cust_repo/curtinlv/JDCookies.txt
-        sed -i "/qjd_zlzh =/s/= \(.*\)/= ['$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_qjd.py
-        sed -i "/zlzh =/s/= \(.*\)/= ['$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_zjd.py
-        sed -i "/cash_zlzh =/s/= \(.*\)/= ['$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_cashHelp.py
-    else
-        if [ $rn == 4 ] || [ $rn == 3 ]; then
-            sed -i "/qjd_zlzh =/s/]/'$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_qjd.py
-            sed -i "/zlzh =/s/]/'$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_zjd.py
-            sed -i "/cash_zlzh =/s/]/'$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_cashHelp.py
+    if [ ${#ck} -gt 10 ];then
+        if [ $rn == 1 ]; then
+            echo "账号$rn【$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")】$ck" >/data/cust_repo/curtinlv/JDCookies.txt
+            sed -i "/qjd_zlzh =/s/= \(.*\)/= ['$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_qjd.py
+            sed -i "/zlzh =/s/= \(.*\)/= ['$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_zjd.py
+            sed -i "/cash_zlzh =/s/= \(.*\)/= ['$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_cashHelp.py
+        else
+            if [ $rn == 4 ] || [ $rn == 3 ]; then
+                sed -i "/qjd_zlzh =/s/]/'$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_qjd.py
+                sed -i "/zlzh =/s/]/'$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_zjd.py
+                sed -i "/cash_zlzh =/s/]/'$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_cashHelp.py
+            fi
+            echo "账号$rn【$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")】$ck" >>/data/cust_repo/curtinlv/JDCookies.txt
         fi
-        echo "账号$rn【$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")】$ck" >>/data/cust_repo/curtinlv/JDCookies.txt
+        rn=$(expr $rn + 1)
     fi
-    rn=$(expr $rn + 1)
 done
 OpenCardCookies=$(cat /data/cookies.list | grep -v "#\|jd_WUUpyT\|jd_SgGoap\|620311248_" | tr "\n" "&" | sed "s/&$//")
 sed -i "/JD_COOKIE =/s/= \(.*\)/= '$OpenCardCookies'/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
