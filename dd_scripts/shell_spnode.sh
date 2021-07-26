@@ -30,6 +30,7 @@ elif [ -n "$(echo $first | sed -n "/[0-9]p/p")" ]; then
             export JD_COOKIE=$(cat $COOKIE_LIST | grep -v "#\|^$" | sed -n "${startl},999p" | paste -s -d '&') && node ${job} | tee -a "${LOGS_DIR}/${job}.log"
         done
     elif [[ "$2" =~ "smiek_jd_zdjr" ]]; then
+        startl=$(echo ${first} | sed -n "s/\(.*\)p/\1/p")
         {
             export JD_COOKIE=$(cat $COOKIE_LIST | sed "s/\(#pt_key\|# pt_key\)/pt_key/" | grep -v "#\|^$" | sed -n "${startl},999p" | paste -s -d '&') && node ${cmd/$1/}
         } &
