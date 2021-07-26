@@ -148,7 +148,7 @@ fi
 
 cd /data/cust_repo/curtinlv/OpenCard
 rn=1
-for ck in $(cat /data/cookies.list | grep -v "//" | tr "# " "" | tr "\n" " "); do
+for ck in $(cat /data/cookies.list | grep -v "//" | tr "\n" " "); do
     if [ ${#ck} -gt 10 ];then
         if [ $rn == 1 ]; then
             echo "账号$rn【$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")】$ck" >/data/cust_repo/curtinlv/JDCookies.txt
