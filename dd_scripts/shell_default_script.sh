@@ -239,6 +239,7 @@ set -e
 echo "清除非当日产生的日志，准备提交互助码码到助力池"
 for dd_log in \$(ls /data/logs/ | grep .log | grep jd_); do
     dt=\$(date | awk '{print \$2" "\$3}')
+    pre_dt=\$(date -d "@\$((\$(date +%s) - 86400))" | awk '{print \$2" "\$3}')
     sed -i "/^\${dt}.*/!d" "/data/logs/\${dd_log}"
 done
 if [ \${DDBOT_VER} = "0.5" ];then
