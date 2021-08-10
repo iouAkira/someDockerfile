@@ -237,10 +237,14 @@ echo "增加清理日志，提交互助码到助力池脚本。（测试中）"
 set -e
 
 echo "清除非当日产生的日志，准备提交互助码码到助力池"
-for dd_log in \$(ls /data/logs/ | grep .log | grep jd_); do
-    dt=\$(date | awk '{print \$2" "\$3}')
-    pre_dt=\$(date -d "@\$((\$(date +%s) - 86400))" | awk '{print \$2" "\$3}')
-    sed -i "/^\${dt}.*/!d" "/data/logs/\${dd_log}"
+curr_dt=\$(date | awk '{print \$2" "\$3}')
+pre_dt=\$(date -d "@\$((\$(date +%s) - 86400))" | awk '{print \$2" "\$3}')
+for dd_log in \$(ls /data/logs/ | grep .log); do
+    if [ "\${dd_log}" == "gua_carnivalcity.log" ];then
+        sed -i "/^\${curr_dt}.*/!d" "/data/logs/\${dd_log}"
+    else
+        sed -i "/^\${pre_dt}.*/!d" "/data/logs/\${dd_log}"
+    fi
 done
 if [ \${DDBOT_VER} = "0.5" ];then
     ddBot -up commitShareCode
@@ -262,7 +266,7 @@ echo "https://t.me/ddMutualHelp 建了一个互助池的群，有问题可进该
 sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.com\/api/g" $(grep "share.turinglabs.net" -rl /scripts/*.js)
 sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
 
-echo "06 23 * * * cd /scripts && sleep \$((RANDOM % 1200)); sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
+echo "01 1 * * * cd /scripts && sleep \$((RANDOM % 600)); sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
 
 #根据EXCLUDE_CRON配置的关键字剔除相关任务 EXCLUDE_CRON="cfd,joy"
 if [ $EXCLUDE_CRON ]; then
