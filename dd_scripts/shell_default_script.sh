@@ -241,9 +241,11 @@ curr_dt=\$(date | awk '{print \$2" "\$3}')
 pre_dt=\$(date -d "@\$((\$(date +%s) - 86400))" | awk '{print \$2" "\$3}')
 for dd_log in \$(ls /data/logs/ | grep .log); do
     if [ "\${dd_log}" == "gua_carnivalcity.log" ];then
-        sed -i "/^\${curr_dt}.*/!d" "/data/logs/\${dd_log}"
+          echo "测试1\${dd_log}"
+#         sed -i "/^\${curr_dt}.*/!d" "/data/logs/\${dd_log}"
     else
-        sed -i "/^\${pre_dt}.*/!d" "/data/logs/\${dd_log}"
+          echo "测试2\${dd_log}"
+#         sed -i "/^\${pre_dt}.*/!d" "/data/logs/\${dd_log}"
     fi
 done
 if [ \${DDBOT_VER} = "0.5" ];then
@@ -265,7 +267,7 @@ sed -i "/\(jd_joy_reward.js\|jd_carnivalcity.js\|jd_xtg.js\|jd_blueCoin.js\)/s/s
 echo "https://t.me/ddMutualHelp 建了一个互助池的群，有问题可进该群。"
 sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.com\/api/g" $(grep "share.turinglabs.net" -rl /scripts/*.js)
 sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
-
+##12点25分测试一下提交
 echo "25 12 * * * cd /scripts && sleep \$((RANDOM % 400)); sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
 
 #根据EXCLUDE_CRON配置的关键字剔除相关任务 EXCLUDE_CRON="cfd,joy"
