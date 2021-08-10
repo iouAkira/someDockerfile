@@ -266,7 +266,7 @@ echo "https://t.me/ddMutualHelp 建了一个互助池的群，有问题可进该
 sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.com\/api/g" $(grep "share.turinglabs.net" -rl /scripts/*.js)
 sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
 
-echo "40 00 * * * cd /scripts && sleep \$((RANDOM % 400)); sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
+echo "25 12 * * * cd /scripts && sleep \$((RANDOM % 400)); sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
 
 #根据EXCLUDE_CRON配置的关键字剔除相关任务 EXCLUDE_CRON="cfd,joy"
 if [ $EXCLUDE_CRON ]; then
