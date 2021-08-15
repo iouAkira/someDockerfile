@@ -29,10 +29,10 @@ if [ "$(arch)" == "x86_64" ]; then
   if [ $? -ne 0 ] ;then
     cp /jds/dd_scripts/bot/ddBot-amd64 /usr/local/bin/ddBot
 
-    ddP=$(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}')
+    ddP=$(ps -ef | grep -w "ddBot" | grep -v "grep\|webapi]" | awk '{print $1}')
     if [ "$ddP" != "" ];then
       echo "停止ddBot......"
-      eval $(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print "kill "$1}')
+      eval $(ps -ef | grep -w "ddBot" | grep -v "grep\|webapi]" | awk '{print "kill "$1}')
       echo "启动ddBot......"
       ddBot >>"$LOGS_DIR/dd_bot.log" 2>&1 &
     fi
@@ -44,10 +44,10 @@ elif [ "$(arch)" == "aarch64" ]; then
   if [ $? -ne 0 ] ;then
     cp /jds/dd_scripts/bot/ddBot-arm64 /usr/local/bin/ddBot
 
-    ddP=$(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}')
+    ddP=$(ps -ef | grep -w "ddBot" | grep -v "grep\|webapi]" | awk '{print $1}')
     if [ "$ddP" != "" ];then
       echo "停止ddBot......"
-      eval $(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print "kill "$1}')
+      eval $(ps -ef | grep -w "ddBot" | grep -v "grep\|webapi]" | awk '{print "kill "$1}')
       echo "启动ddBot......"
       ddBot >>"$LOGS_DIR/dd_bot.log" 2>&1 &
     fi
@@ -59,10 +59,10 @@ else
   if [ $? -ne 0 ] ;then
     cp /jds/dd_scripts/bot/ddBot-arm /usr/local/bin/ddBot
 
-    ddP=$(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print $1}')
+    ddP=$(ps -ef | grep -w "ddBot" | grep -v "grep\|webapi]" | awk '{print $1}')
     if [ "$ddP" != "" ];then
       echo "停止ddBot......"
-      eval $(ps -ef | grep -w "ddBot" | grep -v "grep\|]" | awk '{print "kill "$1}')
+      eval $(ps -ef | grep -w "ddBot" | grep -v "grep\|webapi]" | awk '{print "kill "$1}')
       echo "启动ddBot......"
       ddBot >>"$LOGS_DIR/dd_bot.log" 2>&1 &
     fi
