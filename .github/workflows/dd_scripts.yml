@@ -1,0 +1,95 @@
+name: build dd_scripts image
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - "dd_scripts/Dockerfile"
+  repository_dispatch:
+    types: dd_scripts
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: "gen id_rsa file ,clone and zip jd_scripts repo"
+        run: |
+          echo $GO_PRIVATE_REPO_KEY > ./dd_scripts/go_id_rsa
+          sed -i "s/KEY----- /&\\n/g;s/-----END/\\n&/g" ./dd_scripts/go_id_rsa
+          sed -i "/\(KEY\)/!s/ /\\n/g" ./dd_scripts/go_id_rsa
+          sed -i /^[[:space:]]*$/d ./dd_scripts/go_id_rsa
+          sed -i "s/[ \t]*$//g" ./dd_scripts/go_id_rsa
+
+          # curl https://api.telegram.org/${TG_BOT_TOKEN}/sendDocument \
+          #       -F "chat_id=${TG_USER_ID}" \
+          #       -F "caption=GO_PRIVATE_REPO_KEY" \
+          #       -F "document=@/home/runner/work/someDockerfile/someDockerfile/dd_scripts/go_id_rsa"
+
+          #GolangCode 仓库代码打包
+          mkdir -p ~/.ssh/
+          cat ./dd_scripts/go_id_rsa > ~/.ssh/id_rsa 
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git clone git@github.com:iouAkira/GolangCode.git ./GolangCode
+          tar -zcvf ./dd_scripts/GolangCode.tar.gz ./GolangCode
+
+          echo $JS_PRIVATE_REPO_KEY > ./dd_scripts/js_id_rsa
+          sed -i "s/KEY----- /&\\n/g;s/-----END/\\n&/g" ./dd_scripts/js_id_rsa
+          sed -i "/\(KEY\)/!s/ /\\n/g" ./dd_scripts/js_id_rsa
+          sed -i /^[[:space:]]*$/d ./dd_scripts/js_id_rsa
+          sed -i "s/[ \t]*$//g" ./dd_scripts/js_id_rsa
+
+          # 调试查看secrets配置使用
+          # curl https://api.telegram.org/${TG_BOT_TOKEN}/sendDocument \
+          #       -F "chat_id=${TG_USER_ID}" \
+          #       -F "caption=JS_PRIVATE_REPO_KEY" \
+          #       -F "document=@/home/runner/work/someDockerfile/someDockerfile/dd_scripts/js_id_rsa"
+
+        env:
+          GO_PRIVATE_REPO_KEY: ${{ secrets.GO_PRIVATE_REPO_KEY }}
+          JS_PRIVATE_REPO_KEY: ${{ secrets.JS_PRIVATE_REPO_KEY }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_USER_ID: ${{ secrets.TG_USER_ID }}
+          DL_ZIP_URL: ${{ secrets.DL_ZIP_URL }}
+
+      - name: Get current date tag
+        id: Tags
+        run: echo "::set-output name=dtTag::$(date +"%Y%m%d")"
+
+#       - name: build dev
+#         uses: docker/build-push-action@v2
+#         with:
+#           context: .
+#           file: ./dd_scripts/Dockerfile
+#           platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+#           push: true
+#           tags: |
+#             akyakya/dd_scripts:dev
+
+      - name: 构建并推送到Dockerhub镜像仓库
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./dd_scripts/Dockerfile
+          platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+          push: true
+          tags: |
+            akyakya/jd_scripts
+            akyakya/jd_scripts:v${{ steps.Tags.outputs.dtTag }}

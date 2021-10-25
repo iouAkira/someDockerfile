@@ -11,7 +11,7 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 ```
 ### 创建一个目录`ews-v2`用于存放备份配置等数据，迁移重装的时候只需要备份整个ews-v2目录即可
-需要新建的目录文件结构参考如下:
+需要新建的目录文件结构参考如下:(cust.sh)启动容器里面的efb前一步做的自定义相关操作，用不到的不需要创建和配置
 ```
 ews-v2
 ├── blueset.telegram
@@ -19,18 +19,24 @@ ews-v2
 ├── blueset.wechat
 │   ├── config.yaml
 ├── config.yaml
+├── cust.sh
 └── docker-compose.yml
 ```
 - `ews-v2/docker-compose.yml` 参考内容如下：
 ```yaml
-ews_v2:
-    image: akyakya/efb-v2
-    container_name: ews-v2
-    restart: always
-    volumes:
-        - .:/root/.ehforwarderbot/profiles/default/
-        - /etc/localtime:/etc/localtime:ro
-        - /etc/timezone:/etc/timezone:ro
+ews:
+  image: akyakya/efb-v2
+  container_name: ews
+  restart: always
+  volumes:
+    - .:/root/.ehforwarderbot/profiles/default/
+    - ./cust.sh:/cust/cust.sh
+    # - /etc/localtime:/etc/localtime:ro
+    # - /etc/timezone:/etc/timezone:ro
+  extra_hosts:
+    - "mainhost:172.17.0.1"
+  environment:
+    - CUST_SHELL_FILE=/cust/cust.sh
 ```
 - `ews-v2/config.yaml` 参考内容如下：
 ```yaml

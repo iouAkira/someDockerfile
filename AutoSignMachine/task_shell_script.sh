@@ -93,6 +93,7 @@ if [ $ENABLE_UNICOM ]; then
       pwds=$(cat ~/.AutoSignMachine/.env | grep UNICOM_PASSWORD | sed -n "s/.*'\(.*\)'.*/\1/p")
       appids=$(cat ~/.AutoSignMachine/.env | grep UNICOM_APPID | sed -n "s/.*'\(.*\)'.*/\1/p")
       bookReadFlows=$(cat ~/.AutoSignMachine/.env | grep ENABLE_BOOK_READ | sed -n "s/.*'\(.*\)'.*/\1/p")
+      goodIndexs=$(cat ~/.AutoSignMachine/.env | grep GOOD_INDEX | sed -n "s/.*'\(.*\)'.*/\1/p")
       i=1
       bookReadFlowAccs=""
       for username in $(cat ~/.AutoSignMachine/.env | grep UNICOM_USERNAME | sed -n "s/.*'\(.*\)'.*/\1/p" | sed "s/,/ /g"); do
@@ -112,11 +113,13 @@ if [ $ENABLE_UNICOM ]; then
         pwd=$(echo "$pwds" | cut -d ',' -f$i)
         appid="$(echo "$appids" | cut -d ',' -f$i)"
         bookReadFlow="$(echo "$bookReadFlows" | cut -d ',' -f$i)"
+        goodIndex="$(echo "$goodIndexs" | cut -d ',' -f$i)"
         #echo $appid
         echo "UNICOM_USERNAME = '$username'" >/"$sub_dir"/config/.env
         echo "UNICOM_PASSWORD = '$pwd'" >>/"$sub_dir"/config/.env
         echo "UNICOM_APPID = '$appid'" >>/"$sub_dir"/config/.env
         echo "ASYNC_TASKS = true" >>/"$sub_dir"/config/.env
+        echo "GOOD_INDEX = '$goodIndex'" >>/"$sub_dir"/config/.env
         echo "*/30 7-22 * * * sleep \$((RANDOM % 10)); node /$sub_dir/index.js unicom >> /logs/unicom${username:7:4}.log 2>&1 &" >>${mergedListFile}
         if [[ -n "${bookReadFlow}" && "${bookReadFlow}" == "true" ]]; then
           if [ "$bookReadFlowAccs" == "" ]; then
@@ -127,7 +130,7 @@ if [ $ENABLE_UNICOM ]; then
         fi
         i=$(expr $i + 1)
       done
-      echo "17 10,16 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyBookRead10doDraw ${bookReadFlowAccs} >> /logs/seq_book_read.log 2>&1 &" >>${mergedListFile}
+      # echo "17 10,16 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyBookRead10doDraw ${bookReadFlowAccs} >> /logs/seq_book_read.log 2>&1 &" >>${mergedListFile}
     elif [ $UNICOM_TRYRUN_MODE ]; then
       echo "联通配置了UNICOM_TRYRUN_NODE参数，所以定时任务以tryrun模式生成"
       minute=$((RANDOM % 10 + 4))
@@ -170,22 +173,22 @@ else
   echo "未配置启用unicom签到任务环境变量ENABLE_UNICOM，故不添加unicom定时任务..."
 fi
 
-if [ -z "${otherRewardVideo}" ]; then
-  #为所有账户执行 dailyOtherRewardVideo 大水任务，执行方式单次单账户执行（耗时长，易出错）
-  echo "$((RANDOM % 30)) 1,10 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyOtherRewardVideo >> /logs/otherRewardVideo.log 2>&1 &" >>$mergedListFile
-else
-  echo "${otherRewardVideo} sh /AutoSignMachine/SequentialTryRunJob.sh dailyOtherRewardVideo >> /logs/otherRewardVideo.log 2>&1 &" >>$mergedListFile
-fi
+# if [ -z "${otherRewardVideo}" ]; then
+#   #为所有账户执行 dailyOtherRewardVideo 大水任务，执行方式单次单账户执行（耗时长，易出错）
+#   echo "$((RANDOM % 30)) 1,10 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyOtherRewardVideo >> /logs/otherRewardVideo.log 2>&1 &" >>$mergedListFile
+# else
+#   echo "${otherRewardVideo} sh /AutoSignMachine/SequentialTryRunJob.sh dailyOtherRewardVideo >> /logs/otherRewardVideo.log 2>&1 &" >>$mergedListFile
+# fi
 
 #为所有账户执行所有任务，执行方式单次单账户单任务执行 all 里面排除了jflottery，dailyOtherRewardVideo，playiosgame，dailygameIntegral，dailyBookRead10doDraw
 #20点的时候查缺补漏
-echo "01 20 * * * sh /AutoSignMachine/SequentialTryRunJob.sh all >> /logs/all.log 2>&1 &" >>$mergedListFile
+#echo "01 20 * * * sh /AutoSignMachine/SequentialTryRunJob.sh all >> /logs/all.log 2>&1 &" >>$mergedListFile
 #为所有账户执行 jflottery 看脸任务，执行方式单次单账户执行（玄学时间点）
-echo "29 6 * * * sh /AutoSignMachine/SequentialTryRunJob.sh jflottery >> /logs/jflottery.log 2>&1 &" >>$mergedListFile
+#echo "29 6 * * * sh /AutoSignMachine/SequentialTryRunJob.sh jflottery >> /logs/jflottery.log 2>&1 &" >>$mergedListFile
 #为所有账户执行 playiosgame 任务，执行方式单次单账户执行（耗时长）
-echo "$((RANDOM % 30)) 7,12 * * * sh /AutoSignMachine/SequentialTryRunJob.sh playiosgame >> /logs/playiosgame.log 2>&1 &" >>$mergedListFile
+#echo "$((RANDOM % 30)) 7,12 * * * sh /AutoSignMachine/SequentialTryRunJob.sh playiosgame >> /logs/playiosgame.log 2>&1 &" >>$mergedListFile
 #为所有账户执行 dailygameIntegral 任务，执行方式单次单账户执行（耗时长）
-echo "$((RANDOM % 30)) 9,14 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailygameIntegral >> /logs/dailygameIntegral.log 2>&1 &" >>$mergedListFile
+#echo "$((RANDOM % 30)) 9,14 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailygameIntegral >> /logs/dailygameIntegral.log 2>&1 &" >>$mergedListFile
 #为所有账户执行 dailyBookRead10doDraw 任务，执行方式单次单账户执行（耗时长，看需要在自定shell里面加开启）
 #echo "$((RANDOM % 30)) 15,19 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyBookRead10doDraw >> /logs/dailyBookRead10doDraw.log 2>&1 &" >>$mergedListFile
 
@@ -196,9 +199,9 @@ echo "默认任务里面不执行dailyBookRead10doDraw"
 for taskFile in $(ls ~/.AutoSignMachine/ | grep taskFile_unicom_1 | tr "\n" " ");do
 	echo "${taskFile}"
   sed -i "s/dailyBookRead10doDraw\",\"taskState\":0/dailyBookRead10doDraw\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
-  sed -i "s/dailyOtherRewardVideo\",\"taskState\":0/dailyOtherRewardVideo\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
-  sed -i "s/playiosgame\",\"taskState\":0/playiosgame\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
-  sed -i "s/dailygameIntegral\",\"taskState\":0/dailygameIntegral\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
+  #sed -i "s/dailyOtherRewardVideo\",\"taskState\":0/dailyOtherRewardVideo\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
+  #sed -i "s/playiosgame\",\"taskState\":0/playiosgame\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
+  #sed -i "s/dailygameIntegral\",\"taskState\":0/dailygameIntegral\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
 done
 
 echo "判断是否配置自定义shell执行脚本..."

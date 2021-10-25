@@ -1,0 +1,74 @@
+name: Compile ddBot
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - "ddbot"
+  repository_dispatch:
+    types: ddbot
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with: 
+        token: ${{ github.token }}
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+
+    - name: "gen id_rsa file ,clone golang repo"
+      run: |
+        echo $GO_PRIVATE_REPO_KEY > ./dd_scripts/go_id_rsa
+        sed -i "s/KEY----- /&\\n/g;s/-----END/\\n&/g" ./dd_scripts/go_id_rsa
+        sed -i "/\(KEY\)/!s/ /\\n/g" ./dd_scripts/go_id_rsa
+        sed -i /^[[:space:]]*$/d ./dd_scripts/go_id_rsa
+        sed -i "s/[ \t]*$//g" ./dd_scripts/go_id_rsa
+
+        mkdir -p ~/.ssh/
+        cat ./dd_scripts/go_id_rsa > ~/.ssh/id_rsa 
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+        git clone git@github.com:iouAkira/GolangCode.git ~/GolangCode
+        rm -rf ./dd_scripts/go_id_rsa
+
+      env:
+        GO_PRIVATE_REPO_KEY: ${{ secrets.GO_PRIVATE_REPO_KEY }}
+
+    - name: Compile
+      run: |
+        cd ~/GolangCode/ddbot
+        
+        export CGO_ENABLED=0
+        export GOOS=linux
+        
+        export GOARCH=amd64
+        go build -o ddBot-amd64 ddBot.go
+        
+        export GOARCH=arm64 
+        go build -o ddBot-arm64 ddBot.go
+        
+        export GOARCH=arm 
+        go build -o ddBot-arm ddBot.go
+
+    - name: Commit files
+      run: |
+        ls -l
+        cp -rf ~/GolangCode/ddbot/ddBot-* ./dd_scripts/bot/
+        rm -rf ~/GolangCode
+        git config --local user.email "e.akimoto.akira@gmail.com"
+        git config --local user.name "Github-Action"
+        git commit -m "Compile ddBot by github action" -a
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: master
