@@ -223,7 +223,7 @@ else
 fi
 
 echo "第7步增加 |ts 任务日志输出时间戳..."
-sed -i "/\( ts\| |ts\|| ts\)/!s/>>/\|ts >>/g" $mergedListFile
+sed -i "/\(ddBot\| ts\| |ts\|| ts\)/!s/>>/\|ts >>/g" $mergedListFile
 
 sed -i "/\(>&1 &\|> &1 &\)/!s/>&1/>\&1 \&/g" $mergedListFile
 
