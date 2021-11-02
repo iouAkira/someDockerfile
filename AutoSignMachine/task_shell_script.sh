@@ -31,36 +31,6 @@ else
   fi
 fi
 
-# echo "增加一个莫名其妙的脚本"
-# (
-#   cat <<EOF
-# #!/bin/sh
-# set -e
-
-# if [ "\$1" ]; then
-#   JOBS=\$1
-# else
-#   echo "执行SequentialTryRunJob.sh请正确传入参数。"
-#   echo "示例: 第一个参数为要执行的jobs，多个用,隔开，第二个参数为账户目录多个用,隔开，第二个参数不则自动取/根目录下的账户/asm****目录"
-#   echo "sh SequentialTryRunJob.sh job1,job2 /asm7225,/asm7123"
-#   exit 0
-# fi
-
-# if [ "\$2" ]; then
-#   for acc in \$(echo "\$2" | sed "s/,/ /g"); do
-#     echo "正在为\${acc}账户,执行\${JOBS}任务..."
-#     node "\${acc}"/index.js unicom --tryrun --tasks "\$JOBS"
-#   done
-# else
-
-#   for acc in \$(ls / | grep asm | tr "\n" " "); do
-#     echo "正在为/\${acc}账户,执行\${JOBS}任务..."
-#     node /"\${acc}"/index.js unicom --tryrun --tasks "\$JOBS"
-#   done
-# fi
-
-# EOF
-# ) >/AutoSignMachine/SequentialTryRunJob.sh
 
 mergedListFile="/AutoSignMachine/merged_list_file.sh"
 envFile="/root/.AutoSignMachine/.env"
@@ -130,14 +100,12 @@ if [ $ENABLE_UNICOM ]; then
         fi
         i=$(expr $i + 1)
       done
-      # echo "17 10,16 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyBookRead10doDraw ${bookReadFlowAccs} >> /logs/seq_book_read.log 2>&1 &" >>${mergedListFile}
     elif [ $UNICOM_TRYRUN_MODE ]; then
       echo "联通配置了UNICOM_TRYRUN_NODE参数，所以定时任务以tryrun模式生成"
       minute=$((RANDOM % 10 + 4))
       hour=8
       n_hour="$(date +%H)"
       n_minute="$(date +%M)"
-      #job_interval=6
       for job in $(awk '/scheduler.regTask/{getline a;print a}' /AutoSignMachine/commands/tasks/unicom/unicom.js | sed "/\//d" | sed "s/\( \|,\|\"\|\\t\)//g" | tr "\n" " "); do
 
         minute2=$(expr $minute + $((RANDOM % 10 + 3)))
@@ -173,24 +141,6 @@ else
   echo "未配置启用unicom签到任务环境变量ENABLE_UNICOM，故不添加unicom定时任务..."
 fi
 
-# if [ -z "${otherRewardVideo}" ]; then
-#   #为所有账户执行 dailyOtherRewardVideo 大水任务，执行方式单次单账户执行（耗时长，易出错）
-#   echo "$((RANDOM % 30)) 1,10 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyOtherRewardVideo >> /logs/otherRewardVideo.log 2>&1 &" >>$mergedListFile
-# else
-#   echo "${otherRewardVideo} sh /AutoSignMachine/SequentialTryRunJob.sh dailyOtherRewardVideo >> /logs/otherRewardVideo.log 2>&1 &" >>$mergedListFile
-# fi
-
-#为所有账户执行所有任务，执行方式单次单账户单任务执行 all 里面排除了jflottery，dailyOtherRewardVideo，playiosgame，dailygameIntegral，dailyBookRead10doDraw
-#20点的时候查缺补漏
-#echo "01 20 * * * sh /AutoSignMachine/SequentialTryRunJob.sh all >> /logs/all.log 2>&1 &" >>$mergedListFile
-#为所有账户执行 jflottery 看脸任务，执行方式单次单账户执行（玄学时间点）
-#echo "29 6 * * * sh /AutoSignMachine/SequentialTryRunJob.sh jflottery >> /logs/jflottery.log 2>&1 &" >>$mergedListFile
-#为所有账户执行 playiosgame 任务，执行方式单次单账户执行（耗时长）
-#echo "$((RANDOM % 30)) 7,12 * * * sh /AutoSignMachine/SequentialTryRunJob.sh playiosgame >> /logs/playiosgame.log 2>&1 &" >>$mergedListFile
-#为所有账户执行 dailygameIntegral 任务，执行方式单次单账户执行（耗时长）
-#echo "$((RANDOM % 30)) 9,14 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailygameIntegral >> /logs/dailygameIntegral.log 2>&1 &" >>$mergedListFile
-#为所有账户执行 dailyBookRead10doDraw 任务，执行方式单次单账户执行（耗时长，看需要在自定shell里面加开启）
-#echo "$((RANDOM % 30)) 15,19 * * * sh /AutoSignMachine/SequentialTryRunJob.sh dailyBookRead10doDraw >> /logs/dailyBookRead10doDraw.log 2>&1 &" >>$mergedListFile
 
 echo "增加默认脚本更新任务..."
 echo "55 */1 * * * docker_entrypoint.sh >> /logs/default_task.log 2>&1" >>$mergedListFile
@@ -199,9 +149,7 @@ echo "默认任务里面不执行dailyBookRead10doDraw"
 for taskFile in $(ls ~/.AutoSignMachine/ | grep taskFile_unicom_1 | tr "\n" " ");do
 	echo "${taskFile}"
   sed -i "s/dailyBookRead10doDraw\",\"taskState\":0/dailyBookRead10doDraw\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
-  #sed -i "s/dailyOtherRewardVideo\",\"taskState\":0/dailyOtherRewardVideo\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
-  #sed -i "s/playiosgame\",\"taskState\":0/playiosgame\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
-  #sed -i "s/dailygameIntegral\",\"taskState\":0/dailygameIntegral\",\"taskState\":1/g" ~/.AutoSignMachine/${taskFile}
+
 done
 
 echo "判断是否配置自定义shell执行脚本..."
@@ -227,15 +175,6 @@ else
   fi
 fi
 
-#echo "判断是否配置了随即延迟参数..."
-#if [ "$RANDOM_DELAY_MAX" ]; then
-#  if [ "$RANDOM_DELAY_MAX" -ge 1 ]; then
-#    echo "已设置随机延迟为 $RANDOM_DELAY_MAX , 设置延迟任务中..."
-#    sed -i "/node/sleep \$((RANDOM % \$RANDOM_DELAY_MAX)) && node/g" $mergedListFile
-#  fi
-#else
-#  echo "未配置随即延迟对应的环境变量，故不设置延迟任务..."
-#fi
 
 echo "增加 |ts 任务日志输出时间戳..."
 sed -i "/\( ts\| |ts\|| ts\)/!s/>>/\|ts >>/g" $mergedListFile
