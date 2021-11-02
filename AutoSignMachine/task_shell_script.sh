@@ -120,7 +120,7 @@ if [ $ENABLE_UNICOM ]; then
         echo "UNICOM_APPID = '$appid'" >>/"$sub_dir"/config/.env
         echo "ASYNC_TASKS = true" >>/"$sub_dir"/config/.env
         echo "GOOD_INDEX = '$goodIndex'" >>/"$sub_dir"/config/.env
-        echo "*/30 7-22 * * * sleep \$((RANDOM % 10)); node /$sub_dir/index.js unicom >> /logs/unicom${username:7:4}.log 2>&1 &" >>${mergedListFile}
+        echo "6 8,17 * * * sleep \$((RANDOM % 10)); node /$sub_dir/index.js unicom >> /logs/unicom${username:7:4}.log 2>&1 &" >>${mergedListFile}
         if [[ -n "${bookReadFlow}" && "${bookReadFlow}" == "true" ]]; then
           if [ "$bookReadFlowAccs" == "" ]; then
             bookReadFlowAccs="/${sub_dir}"
