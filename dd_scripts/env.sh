@@ -23,9 +23,9 @@ export RANDOM_DELAY_MAX=20
 # export RENEW_UA="JD4iPhone/167761 (iPhone; iOS 15.0; Scale/3.00)"
 # export RENEW_SLEEP="N"
 #环境变量名 QYWX_AM依次填入 corpid,corpsecret,touser(注:多个成员ID使用|隔开),agentid,消息类型(选填,不填默认文本消息类型)
-export QYWX_AM="ww40df9bb76c016fdd,xFKdV9g1TMpu2lH2czbF5fU-H_CnDMpQYW_WlBiEk4U,@N,1000002"
-# export QYWX_AM="ww40df9bb76c016fdd,xFKdV9g1TMpu2lH2czbF5fU-H_CnDMpQYW_WlBiEk4U,@N|jd_RgxgkRLNcfqM@LOF|jd_eScTMMDvNXZG@LOF|FangHaiXi|Juan@LOF|zhengxy@LOF|@N|@N|@N|FangHaiXi|summerBuChiCong|elaineChen|XiangFeiZi|@N|YinWei|LanLan|211fa89ee309c048d05990c0386ae78b|YuQin|ZhuangLiQin|yuyu0521@LOF|YinWei|@N|elaineChen,1000002"
-export QYWX_AM_LOF="ww986ff3b882539e31,00VRGFSOP7Z9IERupbB8S40xFEr9f8tAPOFOLK71fMM,@N,1000002"
+export QYWX_AM="corpid,corpsecret,touser"
+# export QYWX_AM="corpid,corpsecret,touser"
+export QYWX_AM_LOF="corpid,corpsecret,touser"
 #取消订阅配置
 export UN_SUBSCRIBES="100&100&iPhone12&Apple京东自营旗舰店"
 #签到领现金兑换红包
