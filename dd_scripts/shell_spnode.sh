@@ -7,7 +7,17 @@ fi
 
 first=$1
 cmd=$*
-#echo ${cmd/$1/}
+# 判断命令是否需要执行混淆后的js脚本
+if [ -n "$(echo $cmd | grep ".js_hx")" ]; then
+    if [ $DEFAULT_EXEC_HX_SCRIPT=="Y" ]; then
+        cmd=$(echo $cmd | sed s/.js_hx/.js/g)
+        echo "执行混淆后的js脚本命令为【$cmd】"
+    else
+        echo '该仓库定时执行的为加密脚本，退出执行。如需启用请配置【export DEFAULT_EXEC_HX_SCRIPT="Y"】'
+        exit 0
+    fi
+fi
+# 指令交给node后台执行
 if [ "$1" == "conc" ]; then
     for job in $(cat $COOKIE_LIST | grep -v "#" | paste -s -d ' '); do
         {
@@ -24,22 +34,6 @@ elif [ -n "$(echo $first | sed -n "/^[0-9]\+$/p")" ]; then
             export JD_COOKIE=$(cat $COOKIE_LIST | grep -v "#\|^$" | sed -n "${first}p") && node ${cmd/$1/}
         } &
     fi
-elif [ -n "$(echo $first | sed -n "/[0-9]p/p")" ]; then
-    if [ "$2" == "all" ]; then
-        for job in $(ls *_*.js | grep -v "JS_*\|JD_DailyBonus\|JD_extra_cookie\|USER_AGENTS\|jd_crazy_joy\|jd_beauty" | sed "s/.js//g" | tr "\n" " "); do
-            export JD_COOKIE=$(cat $COOKIE_LIST | grep -v "#\|^$" | sed -n "${startl},999p" | paste -s -d '&') && node ${job} | tee -a "${LOGS_DIR}/${job}.log"
-        done
-    elif [[ "$2" =~ "smiek_jd_zdjr" ]]; then
-        startl=$(echo ${first} | sed -n "s/\(.*\)p/\1/p")
-        {
-            export JD_COOKIE=$(cat $COOKIE_LIST | sed "s/\(#pt_key\|# pt_key\)/pt_key/" | grep -v "#\|^$" | sed -n "${startl},999p" | paste -s -d '&') && node ${cmd/$1/}
-        } &
-    else
-        startl=$(echo ${first} | sed -n "s/\(.*\)p/\1/p")
-        {
-            export JD_COOKIE=$(cat $COOKIE_LIST | grep -v "#\|^$" | sed -n "${startl},999p" | paste -s -d '&') && node ${cmd/$1/}
-        } &
-    fi
 elif [ -n "$(cat $COOKIE_LIST | grep "pt_pin=$first")" ]; then
     if [ "$2" == "all" ]; then
         for job in $(ls *_*.js | grep -v "JS_*\|JD_DailyBonus\|JD_extra_cookie\|USER_AGENTS\|jd_crazy_joy\|jd_beauty" | sed "s/.js//g" | tr "\n" " "); do
@@ -50,10 +44,6 @@ elif [ -n "$(cat $COOKIE_LIST | grep "pt_pin=$first")" ]; then
             export JD_COOKIE=$(cat $COOKIE_LIST | grep "pt_pin=$first") && node ${cmd/$1/}
         } &
     fi
-elif [[ "$1" =~ "smiek_jd_zdjr" ]]; then
-    {
-        export JD_COOKIE=$(cat $COOKIE_LIST | sed "s/\(#pt_key\|# pt_key\)/pt_key/" | grep -v "#\|^$" | paste -s -d '&') && node $*
-    } &
 else
     {
         export JD_COOKIE=$(cat $COOKIE_LIST | grep -v "#\|^$" | paste -s -d '&') && node $*
