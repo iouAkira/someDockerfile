@@ -9,9 +9,8 @@ first=$1
 cmd=$*
 # 判断命令是否需要执行混淆后的js脚本
 if [ -n "$(echo $cmd | grep ".js_hx")" ]; then
-    if [ $DEFAULT_EXEC_HX_SCRIPT=="Y" ]; then
+    if [ $DEFAULT_EXEC_HX_SCRIPT == "Y" ]; then
         cmd=$(echo $cmd | sed s/.js_hx/.js/g)
-        echo "执行混淆后的js脚本命令为【$cmd】"
     else
         echo '该仓库定时执行的为加密脚本，退出执行。如需启用请配置【export DEFAULT_EXEC_HX_SCRIPT="Y"】'
         exit 0
@@ -31,6 +30,7 @@ elif [ -n "$(echo $first | sed -n "/^[0-9]\+$/p")" ]; then
         done
     else
         {
+            echo "执行混淆后的js脚本命令为[node ${cmd/$1/}]"
             export JD_COOKIE=$(cat $COOKIE_LIST | grep -v "#\|^$" | sed -n "${first}p") && node ${cmd/$1/}
         } &
     fi
@@ -40,12 +40,14 @@ elif [ -n "$(cat $COOKIE_LIST | grep "pt_pin=$first")" ]; then
             export JD_COOKIE=$(cat $COOKIE_LIST | grep -v "#\|^$" | sed -n "${first}p" | paste -s -d '&') && node ${job} | tee -a "${LOGS_DIR}/${job}.log"
         done
     else
-        {
+        {   
+            echo "执行混淆后的js脚本命令为[node ${cmd/$1/}]"
             export JD_COOKIE=$(cat $COOKIE_LIST | grep "pt_pin=$first") && node ${cmd/$1/}
         } &
     fi
 else
     {
+        echo "执行混淆后的js脚本命令为[node ${cmd}]"
         export JD_COOKIE=$(cat $COOKIE_LIST | grep -v "#\|^$" | paste -s -d '&') && node $cmd
     } &
 fi
