@@ -30,7 +30,7 @@ elif [ -n "$(echo $first | sed -n "/^[0-9]\+$/p")" ]; then
         done
     else
         {
-            echo "执行混淆后的js脚本命令为[node ${cmd/$1/}]"
+            echo "执行混淆后的js脚本命令为[node${cmd/$1/}]"
             export JD_COOKIE=$(cat $COOKIE_LIST | grep -v "#\|^$" | sed -n "${first}p") && node ${cmd/$1/}
         } &
     fi
@@ -41,7 +41,7 @@ elif [ -n "$(cat $COOKIE_LIST | grep "pt_pin=$first")" ]; then
         done
     else
         {   
-            echo "执行混淆后的js脚本命令为[node ${cmd/$1/}]"
+            echo "执行混淆后的js脚本命令为[node${cmd/$1/}]"
             export JD_COOKIE=$(cat $COOKIE_LIST | grep "pt_pin=$first") && node ${cmd/$1/}
         } &
     fi
