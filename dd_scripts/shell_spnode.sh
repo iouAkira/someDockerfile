@@ -46,6 +46,6 @@ elif [ -n "$(cat $COOKIE_LIST | grep "pt_pin=$first")" ]; then
     fi
 else
     {
-        export JD_COOKIE=$(cat $COOKIE_LIST | grep -v "#\|^$" | paste -s -d '&') && node $*
+        export JD_COOKIE=$(cat $COOKIE_LIST | grep -v "#\|^$" | paste -s -d '&') && node $cmd
     } &
 fi
