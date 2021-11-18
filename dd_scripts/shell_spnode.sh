@@ -8,10 +8,9 @@ fi
 first=$1
 cmd=$*
 # 判断命令是否需要执行混淆后的js脚本
-if [ -n "$(echo $cmd | grep ".js_hx")" ]; then
-    if [ $DEFAULT_EXEC_HX_SCRIPT == "Y" ]; then
+if [ -n "$(echo $cmd | grep "_hx.js")" ]; then
+    if [ $DEFAULT_EXEC_HX_SCRIPT ] && [ $DEFAULT_EXEC_HX_SCRIPT == "Y" ]; then
         echo "配置了 DEFAULT_EXEC_HX_SCRIPT=Y，混淆脚本执行命令继续..."
-        cmd=$(echo $cmd | sed s/.js_hx/.js/g)
     else
         echo '执行的为混淆脚本，退出执行。如需启用请配置【export DEFAULT_EXEC_HX_SCRIPT="Y"】'
         exit 0
