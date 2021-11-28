@@ -254,14 +254,14 @@ fi
 echo "第7步判断是否存在自定义任务任务列表并追加..."
 if [ "$CUSTOM_LIST_FILE" ]; then
   echo "└──您配置了自定义任务文件：$CUSTOM_LIST_FILE，自定义任务类型为：$CUSTOM_LIST_MERGE_TYPE..."
-  if [ -f "$customListFile" ]; then
+  if [ -f "$CUSTOM_LIST_FILE" ]; then
     if [ "$CUSTOM_LIST_MERGE_TYPE" == "append" ]; then
       echo "└──合并默认定时任务文件：$DEFAULT_LIST_FILE 和 自定义定时任务文件：$CUSTOM_LIST_FILE"
       echo -e "" >>$DD_CRON_FILE_PATH
-      cat "$customListFile" >>$DD_CRON_FILE_PATH
+      cat "$CUSTOM_LIST_FILE" >>$DD_CRON_FILE_PATH
     elif [ "$CUSTOM_LIST_MERGE_TYPE" == "overwrite" ]; then
       echo "└──配置了自定义任务文件：$CUSTOM_LIST_FILE，自定义任务类型为：$CUSTOM_LIST_MERGE_TYPE..."
-      cat "$customListFile" >$DD_CRON_FILE_PATH
+      cat "$CUSTOM_LIST_FILE" >$DD_CRON_FILE_PATH
     else
       echo "└──配置配置了错误的自定义定时任务类型：$CUSTOM_LIST_MERGE_TYPE，自定义任务类型为只能为append或者overwrite..."
     fi
