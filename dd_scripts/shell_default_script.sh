@@ -144,6 +144,24 @@ chmod +x /usr/local/bin/spnode
 echo "将仓库的genCodeConf.list配置同步到到${GEN_CODE_LIST}..."
 cat /jds/dd_scripts/genCodeConf.list >${GEN_CODE_LIST}
 
+
+
+#同步自定义脚本文件里面脚本任务
+if [ -n "$(ls /data/custom_scripts/*_*.js)" ]; then
+    cp -f /data/custom_scripts/*_*.js /scripts
+    cd /data/custom_scripts/
+    for scriptFile in $(ls *_*.js | tr "\n" " "); do
+        if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
+            cp $scriptFile /scripts
+            if [[ -z "$(crontab -l | grep $scriptFile)" && -z $1 ]]; then
+                echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
+                spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+            fi
+            echo "#custom_scripts保存文件任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$DD_CRON_FILE_PATH
+            echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
+        fi
+    done
+fi
 ###定时任务相关处理
 echo "定义定时任务合并处理用到的文件路径..."
 DD_CRON_FILE_PATH="/scripts/merged_list_file.sh"
@@ -158,7 +176,7 @@ findDirCronFile() {
     echo "[$DD_CRON_FILE_PATH]   开始查找$findDir目录下脚本文件内的crontab任务定义..."
     for scriptFile in $(ls -l $findDir | grep "^-" | awk '{print $9}' | tr "\n" " "); do
         cron=$(sed -n "s/.*crontab=[\"\|']\(.*\)[\"\|'].*/\1/p" "$findDir/$scriptFile")
-        if [ "$cron" != "" ] && [ "$(echo $excludeFile | grep "$scriptFile")" == "" ]; then
+        if [ "$cron" != "" ] && [ "$(echo $EXCLUDE_CRON | grep "$scriptFile")" == "" ]; then
             cronName=$(sed -n "s/.*new Env([\"\|']\(.*\)[\"\|']).*/\1/p" "$findDir/$scriptFile")
             # echo "      #$cronName($findDir/$scriptFile)"
             # echo "      $cron node $findDir/$scriptFile >> $logDir/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &"
@@ -215,6 +233,26 @@ else
   fi
 fi
 
+#同步自定义脚本文件里面脚本任务
+if [ -n "$(ls /data/custom_scripts/*_*.js)" ]; then
+    cp -f /data/custom_scripts/*_*.js /scripts
+    cd /data/custom_scripts/
+    for scriptFile in $(ls *_*.js | tr "\n" " "); do
+        cron=$(sed -n "s/.*crontab=[\"\|']\(.*\)[\"\|'].*/\1/p" "$findDir/$scriptFile")
+        if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
+          cp $scriptFile /scripts
+          if [[ -z "$(cat $DD_CRON_FILE_PATH | grep $scriptFile)" && -z $1 ]]; then
+              echo "#custom_scripts保存文件任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$DD_CRON_FILE_PATH
+              echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
+          fi
+        elif [ "$cron" != "" ] && [ "$(cat $DD_CRON_FILE_PATH | grep "$scriptFile")" == "" ]; then then
+            echo "#$cronName($findDir/$scriptFile)" >>$DD_CRON_FILE_PATH
+            echo "$cron node $findDir/$scriptFile >>$logDir/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
+            echo "" >>$DD_CRON_FILE_PATH
+        fi 
+    done
+fi
+
 #根据EXCLUDE_CRON配置的关键字剔除相关任务 EXCLUDE_CRON="cfd,joy"
 echo "第6步根据EXCLUDE_CRON配置的关键字剔除相关任务..."
 if [ $EXCLUDE_CRON ]; then
@@ -250,6 +288,7 @@ if [ "$CUSTOM_LIST_FILE" ]; then
 else
   echo "└──当前只使用了默认定时任务文件 $DEFAULT_LIST_FILE ..."
 fi
+
 echo "#↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ [$SCRIPTS_REPO_BASE_DIR] 仓库任务列表 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑#" >>$DD_CRON_FILE_PATH
 
 echo "增加 |ts 任务日志输出时间戳..."

@@ -109,22 +109,22 @@ cp /jds/dd_scripts/genCodeConf.list "$GEN_CODE_LIST"
 #     done
 # fi
 
-#同步自定义脚本文件里面脚本任务
-if [ -n "$(ls /data/custom_scripts/*_*.js)" ]; then
-    cp -f /data/custom_scripts/*_*.js /scripts
-    cd /data/custom_scripts/
-    for scriptFile in $(ls *_*.js | tr "\n" " "); do
-        if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
-            cp $scriptFile /scripts
-            if [[ -z "$(crontab -l | grep $scriptFile)" && -z $1 ]]; then
-                echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
-            fi
-            echo "#custom_scripts保存文件任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
-            echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
-        fi
-    done
-fi
+# #同步自定义脚本文件里面脚本任务
+# if [ -n "$(ls /data/custom_scripts/*_*.js)" ]; then
+#     cp -f /data/custom_scripts/*_*.js /scripts
+#     cd /data/custom_scripts/
+#     for scriptFile in $(ls *_*.js | tr "\n" " "); do
+#         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
+#             cp $scriptFile /scripts
+#             if [[ -z "$(crontab -l | grep $scriptFile)" && -z $1 ]]; then
+#                 echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
+#                 spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
+#             fi
+#             echo "#custom_scripts保存文件任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$mergedListFile
+#             echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$mergedListFile
+#         fi
+#     done
+# fi
 
 echo "附加功能4，拉取@curtinlv的 JD-Script仓库的代码，并增加相关任务"
 if [ ! -d "/data/cust_repo/curtinlv/" ]; then
