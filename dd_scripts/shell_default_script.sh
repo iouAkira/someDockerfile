@@ -245,7 +245,7 @@ if [ -n "$(ls /data/custom_scripts/*_*.js)" ]; then
               echo "#custom_scripts保存文件任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$DD_CRON_FILE_PATH
               echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
           fi
-        elif [ "$cron" != "" ] && [ "$(cat $DD_CRON_FILE_PATH | grep "$scriptFile")" == "" ]; then then
+        elif [ "$cron" != "" ] && [ "$(cat $DD_CRON_FILE_PATH | grep "$scriptFile")" == "" ]; then
             echo "#$cronName($findDir/$scriptFile)" >>$DD_CRON_FILE_PATH
             echo "$cron node $findDir/$scriptFile >>$logDir/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
             echo "" >>$DD_CRON_FILE_PATH
