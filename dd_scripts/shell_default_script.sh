@@ -272,6 +272,7 @@ else
   echo "└──当前只使用了默认定时任务文件 $DEFAULT_LIST_FILE ..."
 fi
 
+echo "" >>$DD_CRON_FILE_PATH
 echo "#↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ [$SCRIPTS_REPO_BASE_DIR] 仓库任务列表 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑#" >>$DD_CRON_FILE_PATH
 
 echo "增加 |ts 任务日志输出时间戳..."
