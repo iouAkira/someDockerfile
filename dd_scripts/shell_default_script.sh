@@ -238,7 +238,6 @@ if [ -n "$(ls /data/custom_scripts/*_*.js)" ]; then
     cp -f /data/custom_scripts/*_*.js /scripts
     cd /data/custom_scripts/
     for scriptFile in $(ls *_*.js | tr "\n" " "); do
-        cron=$(sed -n "s/.*crontab=[\"\|']\(.*\)[\"\|'].*/\1/p" "$findDir/$scriptFile")
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
           cp $scriptFile /scripts
           if [[ -z "$(cat $DD_CRON_FILE_PATH | grep $scriptFile)" && -z $1 ]]; then
@@ -246,7 +245,7 @@ if [ -n "$(ls /data/custom_scripts/*_*.js)" ]; then
               echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
               echo "" >>$DD_CRON_FILE_PATH
           fi
-        elif [ "$cron" != "" ] && [ "$(cat $DD_CRON_FILE_PATH | grep "$scriptFile")" == "" ]; then
+        elif [ -n "$(sed -n "s/.*crontab=[\"\|']\(.*\)[\"\|'].*/\1/p" "$scriptFile")" ] && [ "$(cat $DD_CRON_FILE_PATH | grep "$scriptFile")" == "" ]; then
             cp $scriptFile /scripts
             echo "#$cronName($scriptFile)" >>$DD_CRON_FILE_PATH
             echo "$cron spnode /scripts/$scriptFile >>$logDir/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
