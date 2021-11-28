@@ -229,7 +229,7 @@ if [ -n "$(ls /data/custom_scripts/*_*.js)" ]; then
           fi
         elif [ -n "$(sed -n "s/.*crontab=[\"\|']\(.*\)[\"\|'].*/\1/p" "$scriptFile")" ] && [ "$(cat $DD_CRON_FILE_PATH | grep "$scriptFile")" == "" ]; then
             cp $scriptFile /scripts
-            echo "#$cronName($scriptFile)" >>$DD_CRON_FILE_PATH
+            echo "#$cronName($scriptFile)--custom_scripts保存文件任务" >>$DD_CRON_FILE_PATH
             echo "$cron spnode /scripts/$scriptFile >>$logDir/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
             echo "" >>$DD_CRON_FILE_PATH
         fi 
