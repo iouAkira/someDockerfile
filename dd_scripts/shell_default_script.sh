@@ -134,7 +134,7 @@ if [ ! -d /scripts/otherRepo ]; then
   cd /scripts && git reset --hard a38137a7defd1a41a5f5438ef8fe0d5becff1982
 fi
 ################################脚本仓库更新/初始化操作 end ################################
-
+SCRIPTS_REPO_BASE_DIR=/scripts
 ###同步docker仓库里面更新的相关文件
 echo "将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
 cat /jds/dd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
@@ -145,41 +145,57 @@ echo "将仓库的genCodeConf.list配置同步到到${GEN_CODE_LIST}..."
 cat /jds/dd_scripts/genCodeConf.list >${GEN_CODE_LIST}
 
 ###定时任务相关处理
-echo "第1步定义定时任务合并处理用到的文件路径..."
-defaultListFile="/scripts/docker/$DEFAULT_LIST_FILE"
-echo "└──默认文件定时任务文件路径为 ${defaultListFile}"
-if [ "$CUSTOM_LIST_FILE" ]; then
-  customListFile="$CUSTOM_LIST_FILE"
-  echo "└──自定义定时任务文件路径为 ${customListFile}"
-fi
-mergedListFile="/scripts/docker/merged_list_file.sh"
-echo "└──合并后定时任务文件路径为 ${mergedListFile}"
+echo "定义定时任务合并处理用到的文件路径..."
+DD_CRON_FILE_PATH="/scripts/docker/merged_list_file.sh"
+echo "└──合并后定时任务文件路径为 ${DD_CRON_FILE_PATH}"
+echo "添加默认更新仓库的定时任务..."
+echo "21 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$DD_CRON_FILE_PATH
+echo "添加到并后定时任务文件..."
+# 查找指定目录下脚本内的定时任务配置信息
+findDirCronFile() {
+    if [ $1 ]; then
+        findDir=$SCRIPTS_REPO_BASE_DIR/$1
+    else
+        findDir=$SCRIPTS_REPO_BASE_DIR
+    fi
+    echo "[$DD_CRON_FILE_PATH]   开始查找$findDir目录下脚本文件内的crontab任务定义..."
+    for scriptFile in $(ls -l $findDir | grep "^-" | awk '{print $9}' | tr "\n" " "); do
+        cron=$(sed -n "s/.*crontab=[\"\|']\(.*\)[\"\|'].*/\1/p" "$findDir/$scriptFile")
+        if [ "$cron" != "" ] && [ "$(echo $excludeFile | grep "$scriptFile")" == "" ]; then
+            cronName=$(sed -n "s/.*new Env([\"\|']\(.*\)[\"\|']).*/\1/p" "$findDir/$scriptFile")
+            # echo "      #$cronName($findDir/$scriptFile)"
+            # echo "      $cron node $findDir/$scriptFile >> $logDir/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &"
+            echo "#$cronName($findDir/$scriptFile)" >>$DD_CRON_FILE_PATH
+            echo "$cron node $findDir/$scriptFile >>$logDir/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
+            echo "" >>$DD_CRON_FILE_PATH
+            CRONFILES="$CRONFILES\|$scriptFile"
+        fi
+    done
+}
 
-echo "第2步将默认定时任务列表添加到并后定时任务文件..."
-cat "$defaultListFile" >$mergedListFile
+# 循环查找dd_scripts仓库目录下的脚本文件夹
+cd $SCRIPTS_REPO_BASE_DIR
 
-echo "第3步判断是否配置了默认脚本更新任务..."
-if [ $(grep -c "default_task.sh" $mergedListFile) -eq '0' ]; then
-  echo "└──合并后的定时任务文件，未包含必须的默认定时任务，增加默认定时任务..."
-  echo -e >>$mergedListFile
-  echo "21 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
-else
-  sed -i "/default_task.sh/d" $mergedListFile
-  echo "#脚本追加默认定时任务" >>$mergedListFile
-  echo "21 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
-fi
+echo "#↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ [$SCRIPTS_REPO_BASE_DIR] 仓库任务列表 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓#" >$DD_CRON_FILE_PATH
+echo "" >>$DD_CRON_FILE_PATH
+for scriptDir in $(ls -l $SCRIPTS_REPO_BASE_DIR | grep "^d" | grep "dd" | awk '{print $9}' | tr "\n" " "); do
+    findDirCronFile $scriptDir
+done
 
-echo "第4步判断是否配置了随即延迟参数..."
+echo "[$DD_CRON_FILE_PATH]   "
+findDirCronFile
+
+echo "判断是否配置了随即延迟参数..."
 if [ "$RANDOM_DELAY_MAX" ]; then
   if [ "$RANDOM_DELAY_MAX" -ge 1 ]; then
     echo "└──已设置随机延迟为 $RANDOM_DELAY_MAX , 设置延迟任务中..."
-    sed -i "/\(jd_xtg.js\|jd_carnivalcity.js\|jd_blueCoin.js\|jd_joy\|jd_task\|jd_car_exchange.js\|docker_entrypoint.sh\)/!s/node/sleep \$((RANDOM % \$RANDOM_DELAY_MAX)); node/g" $mergedListFile
+    sed -i "/\(jd_xtg.js\|jd_carnivalcity.js\|jd_blueCoin.js\|jd_joy\|jd_task\|jd_car_exchange.js\|docker_entrypoint.sh\)/!s/node/sleep \$((RANDOM % \$RANDOM_DELAY_MAX)); node/g" $DD_CRON_FILE_PATH
   fi
 else
   echo "└──未配置随即延迟对应的环境变量，故不设置延迟任务..."
 fi
 
-echo "第5步判断是否配置自定义shell执行脚本..."
+echo "判断是否配置自定义shell执行脚本..."
 if [ 0"$CUSTOM_SHELL_FILE" = "0" ]; then
   echo "└──未配置自定shell脚本文件，跳过执行。"
 else
@@ -187,7 +203,7 @@ else
     echo "└──自定义shell脚本为远程脚本，开始下在自定义远程脚本${CUSTOM_SHELL_FILE}。"
     wget -O /jds/shell_mod.sh "$CUSTOM_SHELL_FILE"
     echo "└──下载完成，开始执行..."
-    echo "#远程自定义shell脚本追加定时任务" >>$mergedListFile
+    echo "#远程自定义shell脚本追加定时任务" >>$DD_CRON_FILE_PATH
     sh /jds/shell_mod.sh
     echo "└──自定义远程shell脚本下载并执行结束。"
   else
@@ -205,13 +221,13 @@ fi
 echo "第6步根据EXCLUDE_CRON配置的关键字剔除相关任务..."
 if [ $EXCLUDE_CRON ]; then
     for kw in $(echo $EXCLUDE_CRON | tr "," " "); do
-        matchCron=$(cat ${mergedListFile} | grep "$kw")
+        matchCron=$(cat ${DD_CRON_FILE_PATH} | grep "$kw")
         if [ -z "$matchCron" ]; then
             echo "关键词 ${kw} 未匹配到任务"
         else
             echo "根据关键词 ${kw} 剔除的任务..."
             echo "$matchCron"
-            sed -i '/'"${kw}"'/d' ${mergedListFile}
+            sed -i '/'"${kw}"'/d' ${DD_CRON_FILE_PATH}
         fi
     done
 fi
@@ -222,11 +238,11 @@ if [ "$CUSTOM_LIST_FILE" ]; then
   if [ -f "$customListFile" ]; then
     if [ "$CUSTOM_LIST_MERGE_TYPE" == "append" ]; then
       echo "└──合并默认定时任务文件：$DEFAULT_LIST_FILE 和 自定义定时任务文件：$CUSTOM_LIST_FILE"
-      echo -e "" >>$mergedListFile
-      cat "$customListFile" >>$mergedListFile
+      echo -e "" >>$DD_CRON_FILE_PATH
+      cat "$customListFile" >>$DD_CRON_FILE_PATH
     elif [ "$CUSTOM_LIST_MERGE_TYPE" == "overwrite" ]; then
       echo "└──配置了自定义任务文件：$CUSTOM_LIST_FILE，自定义任务类型为：$CUSTOM_LIST_MERGE_TYPE..."
-      cat "$customListFile" >$mergedListFile
+      cat "$customListFile" >$DD_CRON_FILE_PATH
     else
       echo "└──配置配置了错误的自定义定时任务类型：$CUSTOM_LIST_MERGE_TYPE，自定义任务类型为只能为append或者overwrite..."
     fi
@@ -236,14 +252,10 @@ if [ "$CUSTOM_LIST_FILE" ]; then
 else
   echo "└──当前只使用了默认定时任务文件 $DEFAULT_LIST_FILE ..."
 fi
+echo "#↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ [$SCRIPTS_REPO_BASE_DIR] 仓库任务列表 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑#" >>$DD_CRON_FILE_PATH
 
-echo "第8步增加 |ts 任务日志输出时间戳..."
-sed -i "/\(ddBot\| ts\| |ts\|| ts\)/!s/>>/\|ts >>/g" $mergedListFile
-
-sed -i "/\(>&1 &\|> &1 &\)/!s/>&1/>\&1 \&/g" $mergedListFile
-
-# echo "第9步对比合并加载最新的定时任务文件..."
-# crontab -l >/scripts/befor_cronlist.sh
+echo "增加 |ts 任务日志输出时间戳..."
+sed -i "/\(ddBot\| ts\| |ts\|| ts\)/!s/>>/\|ts >>/g" $DD_CRON_FILE_PATH
 
 echo "增加清理日志，提交互助码到助力池脚本。（测试中）"
 (
@@ -266,37 +278,21 @@ EOF
 
 echo "最后加载最新的附加功能定时任务文件..."
 echo "└──替换任务列表的node指令为spnode"
-sed -i "s/ node / spnode /g" $mergedListFile
-#sed -i "/jd_carnivalcity/s/>>/>/g" $mergedListFile
-echo "添加一些可以并发启动的脚本"
-sed -i "/\(jd_joy_reward.js\|jd_carnivalcity.js\|jd_xtg.js\|jd_blueCoin.js\)/s/spnode/spnode conc/g" $mergedListFile
-#因为主助力池关闭了，所以替换助力池链接，该池仅限本docker执行，不影响本地助力，不改变原作者的助力方案
-#使用本docker，如果本地没有配置助力码环境的变量的会自动上传助力码到助力池，如果本地配置了则不上传。
-echo "https://t.me/ddMutualHelp 建了一个互助池的群，有问题可进该群。"
-sed -i "s/http\:\/\/share.turinglabs.net\/api\/v3/https\:\/\/sharecode.akyakya.com\/api/g" $(grep "share.turinglabs.net" -rl /scripts/*.js)
-sed -i "s/\/scripts\/logs\//\/data\/logs\//g" $mergedListFile
+sed -i "s/ node / spnode /g" $DD_CRON_FILE_PATH
+
 ##12点55分测试一下提交
-#echo "35 17 * * * cd /scripts && sleep \$((RANDOM % 400)); sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
-echo "20 23 * * * cd /scripts && sleep \$((RANDOM % 400)); sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$mergedListFile
+#echo "35 17 * * * cd /scripts && sleep \$((RANDOM % 400)); sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$DD_CRON_FILE_PATH
+echo "20 23 * * * cd /scripts && sleep \$((RANDOM % 400)); sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$DD_CRON_FILE_PATH
+
+echo "#每3天的23:50分清理一次日志(互助码不清理，proc_file.sh对该文件进行了去重) " >>$DD_CRON_FILE_PATH
+echo "50 23 */3 * * find /data/logs -name '*.log' | grep -v 'sharecodeCollection' | xargs rm -rf " >>$DD_CRON_FILE_PATH
+echo "#收集助力码 " >>$DD_CRON_FILE_PATH
+echo "30 * * * * sh +x /scripts/docker/auto_help.sh collect >> /data/logs/auto_help_collect.log 2>&1 " >>$DD_CRON_FILE_PATH
+echo "#导到所有互助码 " >>$DD_CRON_FILE_PATH
+echo "23 7 * * * node /scripts/jd_get_share_code.js >> /data/logs/jd_get_share_code.log 2>&1 " >>$DD_CRON_FILE_PATH
 
 # 生效定时任务
-crontab $mergedListFile
+crontab $DD_CRON_FILE_PATH
 
 echo "替换auto_help查找导出互助码日志的路径"
 sed -i "s/\/scripts\/logs/\/data\/logs/g" /scripts/docker/auto_help.sh
-
-# echo "第11步打包脚本文件到/scripts/logs/scripts.tar.gz"
-# apk add tar
-# tar -zcvf /scripts/logs/scripts.tar.gz --exclude=scripts/node_modules --exclude=scripts/logs/*.log  --exclude=scripts/logs/*.gz /scripts
-
-echo "附加额外特殊任务处理jd_crazy_joy_coin。。。"
-if [ "$ENABLE_CRZAY_JOY_HOLD" ]; then
-  echo "配置了启用jd_crazy_joy_coin挂机任务，默认重启"
-  eval $(ps -ef | grep "jd_crazy" | grep -v "grep" | awk '{print "kill "$1}')
-  echo '' >/data/logs/jd_crazy_joy_coin.log
-  spnode /scripts/jd_crazy_joy_coin.js | ts >>/data/logs/jd_crazy_joy_coin.log 2>&1 &
-  echo "jd_crazy_joy_coin重启完成"
-else
-    echo "未启用jd_crazy_joy_coin挂机任务，不处理"
-    eval $(ps -ef | grep "jd_crazy" | grep -v "grep" | awk '{print "kill "$1}')
-fi
