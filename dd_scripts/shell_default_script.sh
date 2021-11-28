@@ -146,7 +146,7 @@ cat /jds/dd_scripts/genCodeConf.list >${GEN_CODE_LIST}
 
 ###定时任务相关处理
 echo "定义定时任务合并处理用到的文件路径..."
-DD_CRON_FILE_PATH="/scripts/docker/merged_list_file.sh"
+DD_CRON_FILE_PATH="/scripts/merged_list_file.sh"
 echo "└──合并后定时任务文件路径为 ${DD_CRON_FILE_PATH}"
 echo "添加默认更新仓库的定时任务..."
 echo "21 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$DD_CRON_FILE_PATH
@@ -287,12 +287,7 @@ echo "20 23 * * * cd /scripts && sleep \$((RANDOM % 400)); sh submitShareCode.sh
 echo "#每3天的23:50分清理一次日志(互助码不清理，proc_file.sh对该文件进行了去重) " >>$DD_CRON_FILE_PATH
 echo "50 23 */3 * * find /data/logs -name '*.log' | grep -v 'sharecodeCollection' | xargs rm -rf " >>$DD_CRON_FILE_PATH
 echo "#收集助力码 " >>$DD_CRON_FILE_PATH
-echo "30 * * * * sh +x /scripts/docker/auto_help.sh collect >> /data/logs/auto_help_collect.log 2>&1 " >>$DD_CRON_FILE_PATH
-echo "#导到所有互助码 " >>$DD_CRON_FILE_PATH
-echo "23 7 * * * node /scripts/jd_get_share_code.js >> /data/logs/jd_get_share_code.log 2>&1 " >>$DD_CRON_FILE_PATH
+echo "30 * * * * sh +x /scripts/utils/auto_help.sh collect >> /data/logs/auto_help_collect.log 2>&1 " >>$DD_CRON_FILE_PATH
 
 # 生效定时任务
 crontab $DD_CRON_FILE_PATH
-
-echo "替换auto_help查找导出互助码日志的路径"
-sed -i "s/\/scripts\/logs/\/data\/logs/g" /scripts/docker/auto_help.sh
