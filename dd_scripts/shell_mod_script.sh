@@ -5,7 +5,7 @@ if [ -d "/data/rebateBot/" ]; then
     sh execBot.sh
 fi
 
-mergedListFile="/scripts/docker/merged_list_file.sh"
+mergedListFile="/scripts/merged_list_file.sh"
 
 echo "附加功能1，使用jds仓库的genCodeConf.list文件"
 cp /jds/dd_scripts/genCodeConf.list "$GEN_CODE_LIST"

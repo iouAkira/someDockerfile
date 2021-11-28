@@ -148,9 +148,6 @@ cat /jds/dd_scripts/genCodeConf.list >${GEN_CODE_LIST}
 echo "定义定时任务合并处理用到的文件路径..."
 DD_CRON_FILE_PATH="/scripts/merged_list_file.sh"
 echo "└──合并后定时任务文件路径为 ${DD_CRON_FILE_PATH}"
-echo "添加默认更新仓库的定时任务..."
-echo "21 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$DD_CRON_FILE_PATH
-echo "添加到并后定时任务文件..."
 # 查找指定目录下脚本内的定时任务配置信息
 findDirCronFile() {
     if [ $1 ]; then
@@ -177,7 +174,8 @@ findDirCronFile() {
 cd $SCRIPTS_REPO_BASE_DIR
 
 echo "#↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ [$SCRIPTS_REPO_BASE_DIR] 仓库任务列表 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓#" >$DD_CRON_FILE_PATH
-echo "" >>$DD_CRON_FILE_PATH
+echo "添加默认更新仓库的定时任务..."
+echo "21 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$DD_CRON_FILE_PATH
 for scriptDir in $(ls -l $SCRIPTS_REPO_BASE_DIR | grep "^d" | grep "dd" | awk '{print $9}' | tr "\n" " "); do
     findDirCronFile $scriptDir
 done
