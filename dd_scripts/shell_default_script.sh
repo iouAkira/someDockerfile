@@ -144,24 +144,6 @@ chmod +x /usr/local/bin/spnode
 echo "将仓库的genCodeConf.list配置同步到到${GEN_CODE_LIST}..."
 cat /jds/dd_scripts/genCodeConf.list >${GEN_CODE_LIST}
 
-
-
-#同步自定义脚本文件里面脚本任务
-if [ -n "$(ls /data/custom_scripts/*_*.js)" ]; then
-    cp -f /data/custom_scripts/*_*.js /scripts
-    cd /data/custom_scripts/
-    for scriptFile in $(ls *_*.js | tr "\n" " "); do
-        if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
-            cp $scriptFile /scripts
-            if [[ -z "$(crontab -l | grep $scriptFile)" && -z $1 ]]; then
-                echo "发现以前crontab里面不存在的任务，先跑为敬 $scriptFile"
-                spnode /scripts/$scriptFile | ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &
-            fi
-            echo "#custom_scripts保存文件任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$DD_CRON_FILE_PATH
-            echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
-        fi
-    done
-fi
 ###定时任务相关处理
 echo "定义定时任务合并处理用到的文件路径..."
 DD_CRON_FILE_PATH="/scripts/merged_list_file.sh"
