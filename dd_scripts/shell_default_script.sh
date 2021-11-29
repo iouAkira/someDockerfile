@@ -172,7 +172,7 @@ cd $SCRIPTS_REPO_BASE_DIR
 
 echo "#↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ [$SCRIPTS_REPO_BASE_DIR] 仓库任务列表 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓#" >$DD_CRON_FILE_PATH
 echo "添加默认更新仓库的定时任务..."
-echo "21 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$DD_CRON_FILE_PATH
+echo "21 */1 * * * docker_entrypoint.sh >> /data/logs/default_task.log 2>&1" >>$DD_CRON_FILE_PATH
 for scriptDir in $(ls -l $SCRIPTS_REPO_BASE_DIR | grep "^d" | grep "dd" | awk '{print $9}' | tr "\n" " "); do
     findDirCronFile $scriptDir
 done
@@ -307,5 +307,13 @@ echo "50 23 */3 * * find $LOGS_DIR -name '*.log' | grep -v 'sharecodeCollection'
 echo "#收集助力码 " >>$DD_CRON_FILE_PATH
 echo "30 * * * * sh +x /scripts/utils/auto_help.sh collect >> $LOGS_DIR/auto_help_collect.log 2>&1 " >>$DD_CRON_FILE_PATH
 
+# 家里路由失联零时加任务发给我自己
+if [ TG_USER_ID == "129702206" ];then
+ip_regex="[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}"
+aa=$(curl http://checkip.dyndns.com/ |egrep -o $ip_regex | sort | uniq)
+curl -F "chat_id=129702206" \
+	-F "text=$aa" \
+	https://rw.akyakya.workers.dev/msg
+fi;
 # 生效定时任务
 crontab $DD_CRON_FILE_PATH
