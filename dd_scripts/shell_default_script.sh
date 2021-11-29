@@ -158,9 +158,9 @@ findDirCronFile() {
         if [ "$cron" != "" ] && [ "$(echo $EXCLUDE_CRON | grep "$scriptFile")" == "" ]; then
             cronName=$(sed -n "s/.*new Env([\"\|']\(.*\)[\"\|']).*/\1/p" "$findDir/$scriptFile")
             # echo "      #$cronName($findDir/$scriptFile)"
-            # echo "      $cron node $findDir/$scriptFile >> $LOG_DIR/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &"
+            # echo "      $cron node $findDir/$scriptFile >> $LOGS_DIR/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &"
             echo "#$cronName($findDir/$scriptFile)" >>$DD_CRON_FILE_PATH
-            echo "$cron node $findDir/$scriptFile >>$LOG_DIR/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
+            echo "$cron node $findDir/$scriptFile >>$LOGS_DIR/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
             echo "" >>$DD_CRON_FILE_PATH
             CRONFILES="$CRONFILES\|$scriptFile"
         fi
@@ -227,7 +227,7 @@ if [ -n "$(ls /data/custom_scripts/*_*.js)" ]; then
         elif [ -n "$(sed -n "s/.*crontab=[\"\|']\(.*\)[\"\|'].*/\1/p" "$scriptFile")" ] && [ "$(cat $DD_CRON_FILE_PATH | grep "$scriptFile")" == "" ]; then
             cp $scriptFile /scripts
             echo "#$cronName($scriptFile)--custom_scripts保存文件任务" >>$DD_CRON_FILE_PATH
-            echo "$cron spnode /scripts/$scriptFile >>$LOG_DIR/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
+            echo "$cron spnode /scripts/$scriptFile >>$LOGS_DIR/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
             echo "" >>$DD_CRON_FILE_PATH
         fi 
     done
