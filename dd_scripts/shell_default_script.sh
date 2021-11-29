@@ -20,6 +20,9 @@ if [ -d "/data" ]; then
   fi
 fi
 
+SCRIPTS_REPO_BASE_DIR=/scripts
+LOGS_DIR=/data/logs
+
 ###判断平台架构使用对应平台版本的ddBot
 echo "目前只构建三个平台（and64,arm64,arm）的ddBot，其他架构平台暂未发现使用者，如果有欢迎上报，并且只知道arch为x86_64(amd64)，aarch64(arm64)所以其他的就归到arm上"
 if [ "$(arch)" == "x86_64" ]; then
@@ -91,11 +94,10 @@ fi
 [ -f /scripts/package.json ] && before_package_json=$(cat /scripts/package.json)
 
 ###仓库更新相关
-if [ -d /scripts/otherRepo ]; then
-  echo "防止更新冲突，还原本地修改。。。"
-  git -C /scripts reset --hard
-  ddBot -up syncRepo
-fi
+echo "防止更新冲突，还原本地修改。。。"
+git -C /scripts reset --hard
+ddBot -up syncRepo
+
 
 if [ $? -ne 0 ]; then
   echo "更新仓库代码出错❌，跳过"
@@ -128,13 +130,8 @@ else
   fi
 fi
 
-##兼容镜像未更新未使用整合仓库的
-if [ ! -d /scripts/otherRepo ]; then
-  echo -e "000" >>/root/.ssh/id_rsa
-  cd /scripts && git reset --hard a38137a7defd1a41a5f5438ef8fe0d5becff1982
-fi
+
 ################################脚本仓库更新/初始化操作 end ################################
-SCRIPTS_REPO_BASE_DIR=/scripts
 ###同步docker仓库里面更新的相关文件
 echo "将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
 cat /jds/dd_scripts/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
@@ -161,9 +158,9 @@ findDirCronFile() {
         if [ "$cron" != "" ] && [ "$(echo $EXCLUDE_CRON | grep "$scriptFile")" == "" ]; then
             cronName=$(sed -n "s/.*new Env([\"\|']\(.*\)[\"\|']).*/\1/p" "$findDir/$scriptFile")
             # echo "      #$cronName($findDir/$scriptFile)"
-            # echo "      $cron node $findDir/$scriptFile >> $logDir/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &"
+            # echo "      $cron node $findDir/$scriptFile >> $LOG_DIR/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &"
             echo "#$cronName($findDir/$scriptFile)" >>$DD_CRON_FILE_PATH
-            echo "$cron node $findDir/$scriptFile >>$logDir/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
+            echo "$cron node $findDir/$scriptFile >>$LOG_DIR/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
             echo "" >>$DD_CRON_FILE_PATH
             CRONFILES="$CRONFILES\|$scriptFile"
         fi
@@ -224,13 +221,13 @@ if [ -n "$(ls /data/custom_scripts/*_*.js)" ]; then
           cp $scriptFile /scripts
           if [[ -z "$(cat $DD_CRON_FILE_PATH | grep $scriptFile)" && -z $1 ]]; then
               echo "#custom_scripts保存文件任务-$(sed -n "s/.*new Env('\(.*\)').*/\1/p" $scriptFile)($scriptFile)" >>$DD_CRON_FILE_PATH
-              echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>/data/logs/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
+              echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile |ts >>$LOGS_DIR/$(echo $scriptFile | sed "s/.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
               echo "" >>$DD_CRON_FILE_PATH
           fi
         elif [ -n "$(sed -n "s/.*crontab=[\"\|']\(.*\)[\"\|'].*/\1/p" "$scriptFile")" ] && [ "$(cat $DD_CRON_FILE_PATH | grep "$scriptFile")" == "" ]; then
             cp $scriptFile /scripts
             echo "#$cronName($scriptFile)--custom_scripts保存文件任务" >>$DD_CRON_FILE_PATH
-            echo "$cron spnode /scripts/$scriptFile >>$logDir/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
+            echo "$cron spnode /scripts/$scriptFile >>$LOG_DIR/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
             echo "" >>$DD_CRON_FILE_PATH
         fi 
     done
@@ -302,13 +299,13 @@ echo "└──替换任务列表的node指令为spnode"
 sed -i "s/ node / spnode /g" $DD_CRON_FILE_PATH
 
 ##12点55分测试一下提交
-#echo "35 17 * * * cd /scripts && sleep \$((RANDOM % 400)); sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$DD_CRON_FILE_PATH
-echo "20 23 * * * cd /scripts && sleep \$((RANDOM % 400)); sh submitShareCode.sh >> /data/logs/submitCode.log 2>&1 & " >>$DD_CRON_FILE_PATH
+#echo "35 17 * * * cd /scripts && sleep \$((RANDOM % 400)); sh submitShareCode.sh >> $LOGS_DIR/submitCode.log 2>&1 & " >>$DD_CRON_FILE_PATH
+echo "20 23 * * * cd /scripts && sleep \$((RANDOM % 400)); sh submitShareCode.sh >> $LOGS_DIR/submitCode.log 2>&1 & " >>$DD_CRON_FILE_PATH
 
 echo "#每3天的23:50分清理一次日志(互助码不清理，proc_file.sh对该文件进行了去重) " >>$DD_CRON_FILE_PATH
-echo "50 23 */3 * * find /data/logs -name '*.log' | grep -v 'sharecodeCollection' | xargs rm -rf " >>$DD_CRON_FILE_PATH
+echo "50 23 */3 * * find $LOGS_DIR -name '*.log' | grep -v 'sharecodeCollection' | xargs rm -rf " >>$DD_CRON_FILE_PATH
 echo "#收集助力码 " >>$DD_CRON_FILE_PATH
-echo "30 * * * * sh +x /scripts/utils/auto_help.sh collect >> /data/logs/auto_help_collect.log 2>&1 " >>$DD_CRON_FILE_PATH
+echo "30 * * * * sh +x /scripts/utils/auto_help.sh collect >> $LOGS_DIR/auto_help_collect.log 2>&1 " >>$DD_CRON_FILE_PATH
 
 # 生效定时任务
 crontab $DD_CRON_FILE_PATH
