@@ -308,12 +308,13 @@ echo "#收集助力码 " >>$DD_CRON_FILE_PATH
 echo "30 * * * * sh +x /scripts/utils/auto_help.sh collect >> $LOGS_DIR/auto_help_collect.log 2>&1 " >>$DD_CRON_FILE_PATH
 
 # 家里路由失联零时加任务发给我自己
-if [ TG_USER_ID == "129702206" ];then
-ip_regex="[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}"
-aa=$(curl http://checkip.dyndns.com/ |egrep -o $ip_regex | sort | uniq)
-curl -F "chat_id=129702206" \
-	-F "text=$aa" \
-	https://rw.akyakya.workers.dev/msg
-fi;
+if [ TG_USER_ID == "129702206" ]; then
+    ip_regex="[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}"
+    aa=$(curl http://checkip.dyndns.com/ | egrep -o $ip_regex | sort | uniq)
+    curl -F "chat_id=129702206" \
+        -F "text=$aa" \
+        https://tmp.akyakya.workers.dev/msg
+fi
+
 # 生效定时任务
 crontab $DD_CRON_FILE_PATH
