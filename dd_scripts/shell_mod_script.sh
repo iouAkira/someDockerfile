@@ -126,15 +126,15 @@ cp /jds/dd_scripts/genCodeConf.list "$GEN_CODE_LIST"
 #     done
 # fi
 
-echo "附加功能4，拉取@curtinlv的 JD-Script仓库的代码，并增加相关任务"
-if [ ! -d "/data/cust_repo/curtinlv/" ]; then
-    echo "未检查到@curtinlv的会员开卡仓库脚本，初始化下载相关脚本..."
-    git clone https://github.com/curtinlv/JD-Script.git /data/cust_repo/curtinlv
-else
-    echo "更新@curtinlv的会员开卡脚本相关文件..."
-    git -C /data/cust_repo/curtinlv reset --hard
-    git -C /data/cust_repo/curtinlv pull --rebase
-fi
+# echo "附加功能4，拉取@curtinlv的 JD-Script仓库的代码，并增加相关任务"
+# if [ ! -d "/data/cust_repo/curtinlv/" ]; then
+#     echo "未检查到@curtinlv的会员开卡仓库脚本，初始化下载相关脚本..."
+#     git clone https://github.com/curtinlv/JD-Script.git /data/cust_repo/curtinlv
+# else
+#     echo "更新@curtinlv的会员开卡脚本相关文件..."
+#     git -C /data/cust_repo/curtinlv reset --hard
+#     git -C /data/cust_repo/curtinlv pull --rebase
+# fi
 
 # if type pip3 >/dev/null 2>&1; then
 #     echo "会员开卡脚本需环境经存在，跳过安装依赖环境"
@@ -147,26 +147,26 @@ fi
 #     pip3 install requests
 # fi
 
-cd /data/cust_repo/curtinlv/OpenCard
-rn=1
-for ck in $(cat /data/cookies.list | grep -v "//" | tr "\n" " "); do
-    if [ ${#ck} -gt 10 ];then
-        if [ $rn == 1 ]; then
-            echo "账号$rn【$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")】$ck" >/data/cust_repo/curtinlv/JDCookies.txt
-            sed -i "/qjd_zlzh =/s/= \(.*\)/= ['$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_qjd.py
-            # sed -i "/zlzh =/s/= \(.*\)/= ['$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_zjd.py
-            # sed -i "/cash_zlzh =/s/= \(.*\)/= ['$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_cashHelp.py
-        else
-            if [ $rn == 2 ] || [ $rn == 3 ]; then
-                sed -i "/qjd_zlzh =/s/]/'$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_qjd.py
-                # sed -i "/zlzh =/s/]/'$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_zjd.py
-                # sed -i "/cash_zlzh =/s/]/'$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_cashHelp.py
-            fi
-            echo "账号$rn【$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")】$ck" >>/data/cust_repo/curtinlv/JDCookies.txt
-        fi
-        rn=$(expr $rn + 1)
-    fi
-done
+# cd /data/cust_repo/curtinlv/OpenCard
+# rn=1
+# for ck in $(cat /data/cookies.list | grep -v "//" | tr "\n" " "); do
+#     if [ ${#ck} -gt 10 ];then
+#         if [ $rn == 1 ]; then
+#             echo "账号$rn【$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")】$ck" >/data/cust_repo/curtinlv/JDCookies.txt
+#             sed -i "/qjd_zlzh =/s/= \(.*\)/= ['$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_qjd.py
+#             # sed -i "/zlzh =/s/= \(.*\)/= ['$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_zjd.py
+#             # sed -i "/cash_zlzh =/s/= \(.*\)/= ['$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_cashHelp.py
+#         else
+#             if [ $rn == 2 ] || [ $rn == 3 ]; then
+#                 sed -i "/qjd_zlzh =/s/]/'$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_qjd.py
+#                 # sed -i "/zlzh =/s/]/'$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_zjd.py
+#                 # sed -i "/cash_zlzh =/s/]/'$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")',]/g" /data/cust_repo/curtinlv/jd_cashHelp.py
+#             fi
+#             echo "账号$rn【$(echo $ck | sed -n "s/.*pt_pin=\(.*\)\;/\1/p")】$ck" >>/data/cust_repo/curtinlv/JDCookies.txt
+#         fi
+#         rn=$(expr $rn + 1)
+#     fi
+# done
 # OpenCardCookies=$(cat /data/cookies.list | grep -v "#\|jd_WUUpyT\|jd_SgGoap\|620311248_" | tr "\n" "&" | sed "s/&$//")
 # sed -i "/JD_COOKIE =/s/= \(.*\)/= '$OpenCardCookies'/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
 # sed -i "/openCardBean =/s/= \(.*\)/= 20/g" /data/cust_repo/curtinlv/OpenCard/OpenCardConfig.ini
@@ -179,12 +179,12 @@ done
 # echo "05 0,7,23 * * * cd /data/cust_repo/curtinlv && python3 jd_zjd.py |ts >>/data/logs/jd_zjd.log 2>&1 &" >>$mergedListFile
 
 # echo "#curtinlv抢京豆" >>$mergedListFile
-echo "11 0 * * * cd /data/cust_repo/curtinlv && python3 jd_qjd.py |ts >>/data/logs/jd_qjd.log 2>&1 &" >>$mergedListFile
+# echo "11 0 * * * cd /data/cust_repo/curtinlv && python3 jd_qjd.py |ts >>/data/logs/jd_qjd.log 2>&1 &" >>$mergedListFile
 
-echo "#curtinlv东东超市兑换" >>$mergedListFile
-sed -i "/coinToBeans =/s/''/'京豆包'/g" /data/cust_repo/curtinlv/jd_blueCoin.py
-sed -i "/blueCoin_Cc = /s/False/True/g" /data/cust_repo/curtinlv/jd_blueCoin.py
-echo "59 23 * * * cd /data/cust_repo/curtinlv && python3 jd_blueCoin.py |ts >>/data/logs/jd_blueCoinPy.log 2>&1 &" >>$mergedListFile
+# echo "#curtinlv东东超市兑换" >>$mergedListFile
+# sed -i "/coinToBeans =/s/''/'京豆包'/g" /data/cust_repo/curtinlv/jd_blueCoin.py
+# sed -i "/blueCoin_Cc = /s/False/True/g" /data/cust_repo/curtinlv/jd_blueCoin.py
+# echo "59 23 * * * cd /data/cust_repo/curtinlv && python3 jd_blueCoin.py |ts >>/data/logs/jd_blueCoinPy.log 2>&1 &" >>$mergedListFile
 
 # echo "#curtinlv的会员开卡仓库任务 " >>$mergedListFile
 # echo "2 8,15 * * * cd /data/cust_repo/curtinlv/OpenCard && python3 jd_OpenCard.py |ts >>/data/logs/jd_OpenCard.log 2>&1 &" >>$mergedListFile
