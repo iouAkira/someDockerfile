@@ -294,6 +294,19 @@ fi
 EOF
 ) >/scripts/submitShareCode.sh
 
+echo "增加kcron kill 指定关键字的任务"
+(
+  cat <<EOF
+#!/bin/sh
+set -e
+
+if [ $1 ];then
+  kill -9  \$(ps -ef | grep "$1" | grep -v "grep" | awk '{print \$1}')
+fi
+EOF
+) >/usr/local/bin/kcron
+chmod +x /usr/local/bin/kcron
+
 echo "最后加载最新的附加功能定时任务文件..."
 echo "└──替换任务列表的node指令为spnode"
 sed -i "s/ node / spnode /g" $DD_CRON_FILE_PATH
