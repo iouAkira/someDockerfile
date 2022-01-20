@@ -300,7 +300,7 @@ echo "增加kcron kill 指定关键字的任务"
 #!/bin/sh
 set -e
 
-ps -eo pid,user,etime,args | grep "\$1" | grep -v "\/ts"
+ps -eo pid,user,etime,args | grep "\$1" | grep -v "\/ts" | grep -v "grep" 
 
 if [ \$1 ];then
   kill -9  \$(ps -ef | grep "\$1" | grep -v "grep" | awk '{print \$1}')
