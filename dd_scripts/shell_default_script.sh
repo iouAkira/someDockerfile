@@ -214,7 +214,7 @@ fi
 
 #同步自定义脚本文件里面脚本任务
 if [ -n "$(ls /data/custom_scripts/*_*.js)" ]; then
-    cp -f /data/custom_scripts/*_*.js /scripts
+    cp -f /data/custom_scripts/jd_*.js /scripts
     cd /data/custom_scripts/
     for scriptFile in $(ls *_*.js | tr "\n" " "); do
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
