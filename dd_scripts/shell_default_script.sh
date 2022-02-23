@@ -217,6 +217,7 @@ if [ -n "$(ls /data/custom_scripts/*_*.js)" ]; then
     cp -f /data/custom_scripts/jd_*.js /scripts
     cd /data/custom_scripts/
     for scriptFile in $(ls *_*.js | tr "\n" " "); do
+        echo "dev $scriptFile"
         if [ -n "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile)" ]; then
           cp $scriptFile /scripts
           if [[ -z "$(cat $DD_CRON_FILE_PATH | grep $scriptFile)" && -z $1 ]]; then
@@ -227,7 +228,7 @@ if [ -n "$(ls /data/custom_scripts/*_*.js)" ]; then
         elif [ -n "$(sed -n "s/.*crontab=[\"\|']\(.*\)[\"\|'].*/\1/p" "$scriptFile")" ] && [ "$(cat $DD_CRON_FILE_PATH | grep "$scriptFile")" == "" ]; then
             cp $scriptFile /scripts
             echo "#$cronName($scriptFile)--custom_scripts保存文件任务" >>$DD_CRON_FILE_PATH
-            echo "$cron spnode /scripts/$scriptFile >>$LOGS_DIR/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
+            echo "$(sed -n "s/.*cronexpr=\"\(.*\)\".*/\1/p" $scriptFile) spnode /scripts/$scriptFile >>$LOGS_DIR/$(echo $scriptFile | sed "s/\.js/.log/g") 2>&1 &" >>$DD_CRON_FILE_PATH
             echo "" >>$DD_CRON_FILE_PATH
         fi 
     done
