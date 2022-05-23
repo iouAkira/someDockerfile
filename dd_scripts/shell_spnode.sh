@@ -23,6 +23,12 @@ if [ "$1" == "conc" ]; then
             export JD_COOKIE=$job && node ${cmd/$1/}
         } &
     done
+elif [ "$1" == "concs" ]; then
+    for job in $(cat $COOKIE_LIST | grep -v "#" | paste -s -d ' '); do
+        {
+            export JD_COOKIE=$job && sleep $(RANDOM % 120) && node ${cmd/$1/}
+        } &
+    done
 elif [ -n "$(echo $first | sed -n "/^[0-9]\+$/p")" ]; then
     if [ "$2" == "all" ]; then
         for job in $(ls *_*.js | grep -v "JS_*\|JD_DailyBonus\|JD_extra_cookie\|USER_AGENTS\|jd_crazy_joy\|jd_beauty" | sed "s/.js//g" | tr "\n" " "); do
