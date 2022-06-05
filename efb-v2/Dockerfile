@@ -8,6 +8,8 @@ RUN set -ex \
         && apk add --no-cache udns \
         && apk add --no-cache --virtual .run-deps \
         ca-certificates \
+        gcc \
+        g++ \
         ffmpeg \
         libmagic \
         tiff \
@@ -15,8 +17,6 @@ RUN set -ex \
         freetype \
         lcms2 \
         openjpeg \
-        gcc \
-        g++ \
         py3-olefile \
         openblas \
         py3-numpy \
