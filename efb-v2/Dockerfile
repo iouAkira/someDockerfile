@@ -45,7 +45,7 @@ RUN set -ex \
 COPY ./efb-v2/docker_entrypoint.sh /usr/local/bin/
 
 RUN set -ex \
-        && pip3 install --upgrade pip \
+        # && pip3 install --upgrade pip \
         && pip3 install --upgrade setuptools==57.5.0 \
         && pip3 install ehforwarderbot \
         && pip3 install efb-telegram-master \
