@@ -16,6 +16,7 @@ RUN set -ex \
         lcms2 \
         openjpeg \
         gcc \
+        g++ \
         py3-olefile \
         openblas \
         py3-numpy \
