@@ -153,7 +153,7 @@ findDirCronFile() {
         findDir=$SCRIPTS_REPO_BASE_DIR
     fi
     echo "[$DD_CRON_FILE_PATH]   开始查找$findDir目录下脚本文件内的crontab任务定义..."
-    for scriptFile in $(ls -l $findDir | grep "^-" | awk '{print $9}' | tr "\n" " "); do
+    for scriptFile in $(ls -l $findDir | grep "^-" | grep -v "core\." | awk '{print $9}' | tr "\n" " "); do
         cron=$(sed -n "s/.*crontab=[\"\|']\(.*\)[\"\|'].*/\1/p" "$findDir/$scriptFile")
         if [ "$cron" != "" ] && [ "$(echo $EXCLUDE_CRON | grep "$scriptFile")" == "" ]; then
             cronName=$(sed -n "s/.*new Env([\"\|']\(.*\)[\"\|']).*/\1/p" "$findDir/$scriptFile")
