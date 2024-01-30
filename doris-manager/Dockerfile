@@ -5,6 +5,9 @@ FROM centos:7 AS build
 # COPY ./selectdb-doris-2.0.4-b01-bin-x64.tar.gz /opt/software/
 # COPY ./doris-manager-23.11.3-x64-bin.tar.gz /opt/software/
 # COPY ./apache-doris-2.0.4-bin-x64.tar.gz /opt/software/
+RUN yum update -y \
+    && yum install -y wget
+    
 RUN wget -O /opt/software/selectdb-doris-2.0.4-b01-bin-x64.tar.gz -c https://doris-build-1308700295.cos.ap-beijing.myqcloud.com/enterprise-doris-release-output/selectdb-doris-2.0.4-b01-bin-x64.tar.gz
 RUN wget -O /opt/software/doris-manager-23.11.3-x64-bin.tar.gz -c https://selectdb-doris-1308700295.cos.ap-beijing.myqcloud.com/doris-manager/release/23.11.3/doris-manager-23.11.3-x64-bin.tar.gz
 RUN wget -O /opt/software/apache-doris-2.0.4-bin-x64.tar.gz -c https://apache-doris-releases.oss-accelerate.aliyuncs.com/apache-doris-2.0.4-bin-x64.tar.gz
