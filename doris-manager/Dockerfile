@@ -31,7 +31,7 @@ COPY --from=build /opt/software/selectdb-doris-2.0.4-b01-bin-x64.tar.gz /opt/sof
 COPY --from=build /opt/software/doris-manager /opt/app/doris-manager
 
 # 镜像启动命令脚本
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY ./doris-manager/Dockerfile/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN yum update -y \
     && yum install -y cronie \
     && chmod +x /usr/local/bin/entrypoint.sh
