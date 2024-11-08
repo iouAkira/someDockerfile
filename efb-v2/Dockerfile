@@ -26,7 +26,6 @@ RUN set -ex \
         py3-pip \
         py3-cryptography \
         py3-decorator \ 
-        pipx \
         git \
         jpeg-dev \
         zlib-dev \
@@ -48,12 +47,13 @@ RUN set -ex \
 COPY ./efb-v2/docker_entrypoint.sh /usr/local/bin/
 
 RUN set -ex \
-        && pipx install ehforwarderbot --include-deps\
-        && pipx install efb-telegram-master --include-deps\
-        && pipx install efb-wechat-slave --include-deps\
-        && pipx install efb-qq-slave --include-deps\
-        && pipx install lottie --include-deps\
-        && pipx install cairosvg --include-deps\
+        && pip3 install --upgrade pip --break-system-packages \
+        && pip3 install ehforwarderbot --break-system-packages \
+        && pip3 install efb-telegram-master --break-system-packages \
+        && pip3 install efb-wechat-slave --break-system-packages \
+        && pip3 install efb-qq-slave --break-system-packages \
+        && pip3 install lottie --break-system-packages \
+        && pip3 install cairosvg --break-system-packages \
         && cd / \
         && mkdir /cust \
         && chmod +x /usr/local/bin/docker_entrypoint.sh
