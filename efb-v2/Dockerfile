@@ -48,12 +48,12 @@ RUN set -ex \
 COPY ./efb-v2/docker_entrypoint.sh /usr/local/bin/
 
 RUN set -ex \
-        && pipx install ehforwarderbot \
-        && pipx install efb-telegram-master \
-        && pipx install efb-wechat-slave \
-        && pipx install efb-qq-slave \
-        && pipx install lottie \
-        && pipx install cairosvg \
+        && pipx install ehforwarderbot --include-deps\
+        && pipx install efb-telegram-master --include-deps\
+        && pipx install efb-wechat-slave --include-deps\
+        && pipx install efb-qq-slave --include-deps\
+        && pipx install lottie --include-deps\
+        && pipx install cairosvg --include-deps\
         && cd / \
         && mkdir /cust \
         && chmod +x /usr/local/bin/docker_entrypoint.sh
