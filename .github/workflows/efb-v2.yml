@@ -31,7 +31,7 @@ jobs:
 
       - name: Get current date tag
         id: Tags
-        run: echo "{dtTag}={$(date +\"%Y%m%d%H\")}" >> $GITHUB_OUTPUT
+        run: echo "::set-output name=dtTag::$(date +"%Y%m%d%H")"
         
       - name: 构建并推送到Dockerhub和ghcr.io镜像仓库
         uses: docker/build-push-action@v2
