@@ -5,6 +5,7 @@
 ## 待办
 
 ## 感谢
+[![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source")
 <a target="_blank" href="https://jb.gg/OpenSourceSupport"><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg" style="border-radius: 5px;" width="10%">
 
 ## 许可
