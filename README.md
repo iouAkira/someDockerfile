@@ -1,4 +1,34 @@
-一些自定义Docker镜像的Dockerfile文件及使用
+# SomeDockerfile
+
+这是一个包含多个自定义 Docker 镜像的 Dockerfile 文件集合，用于快速部署各种服务和工具。
+
+## 项目结构
+
+### 自动化脚本
+- `jd_scripts`: 京东自动化脚本
+- `dd_scripts`: 签到脚本集合
+- `AutoSignMachine`: 自动签到机器
+
+### 网络服务
+- `frp`: 内网穿透工具
+- `cfddns.py`: Cloudflare DDNS 动态域名解析脚本
+- `cloudreve`: 云存储服务
+
+### 社交媒体和通讯
+- `telegram-cli`: Telegram 命令行客户端
+- `efb-v1` 和 `efb-v2`: Telegram 机器人框架
+- `gclone-tg-bot`: Google Drive 克隆 Telegram 机器人
+
+### 其他工具
+- `unlockNeteaseMusic`: 网易云音乐解锁服务
+- `valine-admin`: 评论系统管理工具
+- `gd-utils`: Google Drive 实用工具集
+- `hugo`: 静态网站生成器
+- `doris-manager`: Doris 数据库管理工具
+
+## 使用说明
+
+每个目录下都包含相应的 Dockerfile 和使用说明，请参考具体目录下的文档。
 
 ## 更新日志
 
