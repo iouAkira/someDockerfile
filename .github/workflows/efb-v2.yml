@@ -1,14 +1,12 @@
 name: 构建efb-v2 Docker镜像
 
+
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
-    paths:
-      - "efb-v2/Dockerfile"
-  repository_dispatch:
-    types: efb-v2
+    inputs:
+      version:
+        description: '请输入版本号 (例如: 1.0.0)'
+        required: true
 
 jobs:
   build-and-push:
