@@ -4,6 +4,9 @@
 
 ## 项目结构
 
+### 数据可视化
+- `mcp-server-chart`: AntV MCP 图表服务，支持 SSE 和 Streamable 两种传输模式
+
 ### 自动化脚本
 - `jd_scripts`: 京东自动化脚本
 - `dd_scripts`: 签到脚本集合
@@ -30,7 +33,20 @@
 
 每个目录下都包含相应的 Dockerfile 和使用说明，请参考具体目录下的文档。
 
+### mcp-server-chart 使用示例
+
+```bash
+# 使用默认的 SSE 模式
+docker run <image-name>
+
+# 使用 Streamable 模式
+docker run <image-name> streamable
+```
+
 ## 更新日志
+
+### 2024-03-xx
+- 新增 mcp-server-chart 服务支持
 
 ## 待办
 
