@@ -35,13 +35,10 @@ ENV LANG=zh_CN.UTF-8 \
 WORKDIR /app
 
 # 复制 package.json 和 package-lock.json
-COPY package*.json ./
-
+COPY ./gpt-vis-ssr/package*.json ./
+COPY ./gpt-vis-ssr/index.js ./
 # 安装依赖
 RUN npm install
-
-# 复制项目文件
-COPY ./gpt-vis-ssr .
 
 # 暴露端口（根据你的应用需要调整）
 EXPOSE 3000
