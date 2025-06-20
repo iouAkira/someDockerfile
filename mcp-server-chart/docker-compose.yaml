@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  mcp-server-chart:
+    image: akyakya/mcp-server-chart
+    ports:
+      - 5112:5112
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Shanghai
+      - VIS_REQUEST_SERVER=http://gpt-vis-ssr:3000/render
+    command: ['streamable']
+    depends_on:
+      - gpt-vis-ssr
+  gpt-vis-ssr:
+    image: akyakya/gpt-vis-ssr
+    # ports:
+    #   - 3000:3000
+    volumes:
+      - ./images:/app/public/images
+    environment:
+      - NODE_ENV=production
+      - TZ=Asia/Shanghai
+    restart: unless-stopped
