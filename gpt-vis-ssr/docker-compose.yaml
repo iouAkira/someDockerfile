@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  gpt-vis-ssr:
+    image: ghcr.io/luler/gpt_vis_ssr:latest
+    ports:
+      - 3000:3000
+    volumes:
+      - ./images:/app/public/images
+    environment:
+      - NODE_ENV=production
+      - TZ=Asia/Shanghai
+    restart: unless-stopped
