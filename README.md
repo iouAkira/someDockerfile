@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/iouakira-somedockerfile-badge.png)](https://mseep.ai/app/iouakira-somedockerfile)
+
 # SomeDockerfile
 
 这是一个包含多个自定义 Docker 镜像的 Dockerfile 文件集合，用于快速部署各种服务和工具。
