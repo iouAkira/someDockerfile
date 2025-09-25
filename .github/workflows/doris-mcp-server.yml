@@ -45,4 +45,4 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           # 关键步骤：将提取的版本号传递给 Dockerfile 中的 ARG
           build-args: |
-            APP_VERSION=${{ steps.meta.outputs.tags }}
+            APP_VERSION=${{ github.event.inputs.version }}
