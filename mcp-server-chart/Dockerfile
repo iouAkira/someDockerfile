@@ -7,7 +7,6 @@ RUN npm install -g @antv/mcp-server-chart
 # 暴露服务运行的端口
 EXPOSE 1122
 
-# ENTRYPOINT 保持不变
-ENTRYPOINT ["mcp-server-chart"]
+ENTRYPOINT ["mcp-server-chart", "--host", "0.0.0.0", "--port", "1122", "--transport"]
 
-CMD ["--transport=streamable", "--host", "0.0.0.0"]
+CMD ["streamable"]
