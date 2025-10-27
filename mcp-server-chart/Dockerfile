@@ -8,7 +8,7 @@ RUN npm install -g @antv/mcp-server-chart
 EXPOSE 1122
 
 # 设置入口点命令，固定 transport 参数
-ENTRYPOINT ["mcp-server-chart", "--transport"]
+ENTRYPOINT ["mcp-server-chart", "--transport", "--host", "0.0.0.0", "--port", "1122"]
 
 # 设置默认参数为 SSE 模式
 CMD ["streamable"]
